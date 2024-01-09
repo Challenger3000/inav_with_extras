@@ -1691,6 +1691,9 @@ static bool osdDrawSingleElement(uint8_t item)
             if (osdRssi < osdConfig()->rssi_alarm) {
                 TEXT_ATTRIBUTES_ADD_BLINK(elemAttr);
             }
+
+            displayWriteChar(osdDisplayPort, 10, 10, '█');
+            
             break;
         }
 
