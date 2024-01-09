@@ -1692,7 +1692,11 @@ static bool osdDrawSingleElement(uint8_t item)
                 TEXT_ATTRIBUTES_ADD_BLINK(elemAttr);
             }
 
-            displayWriteChar(osdDisplayPort, 10, 10, 'A');
+            char bufDISP[30];
+            strncpy(bufDISP, "Test message example", OSD_HEADING_GRAPH_WIDTH);
+            bufDISP[29] = '\0';
+            displayWrite(osdDisplayPort, 1, 1, bufDISP);
+            // displayWriteChar(osdDisplayPort, 10, 10, 'A');
             
             break;
         }
