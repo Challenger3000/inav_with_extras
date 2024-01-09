@@ -1693,7 +1693,7 @@ static bool osdDrawSingleElement(uint8_t item)
             }
 
             char bufDISP[30];
-            strncpy(bufDISP, "Test message example", 30);
+            strcpy(bufDISP, "Test message example");
             bufDISP[29] = '\0';
             displayWrite(osdDisplayPort, 1, 1, bufDISP);
             // displayWriteChar(osdDisplayPort, 10, 10, 'A');
