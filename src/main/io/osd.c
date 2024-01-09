@@ -1693,7 +1693,7 @@ static bool osdDrawSingleElement(uint8_t item)
             }
 
             char bufDISP[30];
-            strncpy(bufDISP, "Test message example", OSD_HEADING_GRAPH_WIDTH);
+            strncpy(bufDISP, "Test message example", 30);
             bufDISP[29] = '\0';
             displayWrite(osdDisplayPort, 1, 1, bufDISP);
             // displayWriteChar(osdDisplayPort, 10, 10, 'A');
