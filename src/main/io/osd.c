@@ -1692,7 +1692,7 @@ static bool osdDrawSingleElement(uint8_t item)
                 TEXT_ATTRIBUTES_ADD_BLINK(elemAttr);
             }
 
-            displayWriteChar(osdDisplayPort, 10, 10, '█');
+            displayWriteChar(osdDisplayPort, 10, 10, 'A');
             
             break;
         }
