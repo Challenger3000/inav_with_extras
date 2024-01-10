@@ -1677,6 +1677,7 @@ void osdDisplaySwitchIndicator(const char *swName, int rcValue, char *buff) {
 
 
 char serial_text[30];
+serialPort_t *osd_serial_Port = NULL;
 
 void init_rerial_osd(void){
 
@@ -1691,7 +1692,7 @@ void init_rerial_osd(void){
     //         (tristateWithDefaultOnIsActive(rxConfig->halfDuplex) ? SERIAL_BIDIR : 0)
     // );
     portOptions_t osd_serial_portOptions = SERIAL_NOT_INVERTED | SERIAL_STOPBITS_1 | SERIAL_PARITY_NO;
-    serialPort_t *osd_serial_Port = NULL;
+
     osd_serial_Port = openSerialPort(SERIAL_PORT_USART6, FUNCTION_UNUSED_3, NULL, NULL, baudRates[BAUD_115200], MODE_RXTX, osd_serial_portOptions);
     strcpy(serial_text, "TEST MESSAGE EXAMPLE 2");
     serialWrite(osd_serial_Port, 69);
