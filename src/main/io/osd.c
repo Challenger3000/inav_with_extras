@@ -73,6 +73,8 @@
 #include "io/vtx_string.h"
 
 #include "io/serial.h"
+#include "drivers/serial.h"
+#include "blackbox_io.h"
 
 #include "fc/config.h"
 #include "fc/controlrate_profile.h"
@@ -1693,6 +1695,11 @@ void init_rerial_osd(void){
     osd_serial_Port = openSerialPort(SERIAL_PORT_USART6, FUNCTION_UNUSED_3, NULL, NULL, baudRates[BAUD_115200], MODE_RXTX, osd_serial_portOptions);
     strcpy(serial_text, "TEST MESSAGE EXAMPLE 2");
     serialWrite(osd_serial_Port, 69);
+    blackboxWrite('T');
+    blackboxWrite('E');
+    blackboxWrite('S');
+    blackboxWrite('T');
+    
 }
 
 static bool osdDrawSingleElement(uint8_t item)
@@ -1721,7 +1728,12 @@ static bool osdDrawSingleElement(uint8_t item)
             // bufDISP[29] = '\0';
             displayWrite(osdDisplayPort, 1, 1, serial_text);
             serialWrite(osd_serial_Port, 0x69);
-            // displayWriteChar(osdDisplayPort, 10, 10, 'A');
+
+            blackboxWrite('H');
+            blackboxWrite('E');
+            blackboxWrite('L');
+            blackboxWrite('P');
+            blackboxWrite(' ');
             
             break;
         }
