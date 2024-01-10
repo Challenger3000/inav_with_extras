@@ -71,6 +71,7 @@
 #include "io/displayport_msp_bf_compat.h"
 #include "io/vtx.h"
 #include "io/vtx_string.h"
+
 #include "io/serial.h"
 
 #include "fc/config.h"
@@ -1676,7 +1677,22 @@ void osdDisplaySwitchIndicator(const char *swName, int rcValue, char *buff) {
 char serial_text[30];
 
 void init_rerial_osd(void){
+
+    // fportPort = openSerialPort(portConfig->identifier,
+    //     FUNCTION_RX_SERIAL,
+    //     fportDataReceive,
+    //     NULL,
+    //     FPORT_BAUDRATE,
+    //     MODE_RXTX,
+    //     FPORT_PORT_OPTIONS |
+    //         (rxConfig->serialrx_inverted ? 0 : SERIAL_INVERTED) |
+    //         (tristateWithDefaultOnIsActive(rxConfig->halfDuplex) ? SERIAL_BIDIR : 0)
+    // );
+    portOptions_t osd_serial_portOptions = SERIAL_NOT_INVERTED | SERIAL_STOPBITS_1 | SERIAL_PARITY_NO;
+    serialPort_t *osd_serial_Port = NULL;
+    osd_serial_Port = openSerialPort(SERIAL_PORT_USART6, FUNCTION_UNUSED_3, NULL, NULL, baudRates[BAUD_115200], MODE_RXTX, osd_serial_portOptions);
     strcpy(serial_text, "TEST MESSAGE EXAMPLE 2");
+    serialWrite(osd_serial_Port, 69);
 }
 
 static bool osdDrawSingleElement(uint8_t item)
@@ -1704,6 +1720,7 @@ static bool osdDrawSingleElement(uint8_t item)
             // strcpy(bufDISP, "Test message example");
             // bufDISP[29] = '\0';
             displayWrite(osdDisplayPort, 1, 1, serial_text);
+            serialWrite(osd_serial_Port, 0x69);
             // displayWriteChar(osdDisplayPort, 10, 10, 'A');
             
             break;
