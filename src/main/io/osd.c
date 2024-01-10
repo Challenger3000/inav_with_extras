@@ -71,6 +71,7 @@
 #include "io/displayport_msp_bf_compat.h"
 #include "io/vtx.h"
 #include "io/vtx_string.h"
+#include "io/serial.h"
 
 #include "fc/config.h"
 #include "fc/controlrate_profile.h"
@@ -1671,6 +1672,13 @@ void osdDisplaySwitchIndicator(const char *swName, int rcValue, char *buff) {
     buff[ptr] = '\0';
 }
 
+
+char serial_text[30];
+
+void init_rerial_osd(void){
+    strcpy(serial_text, "TEST MESSAGE EXAMPLE 2");
+}
+
 static bool osdDrawSingleElement(uint8_t item)
 {
     uint16_t pos = osdLayoutsConfig()->item_pos[currentLayout][item];
@@ -1695,7 +1703,7 @@ static bool osdDrawSingleElement(uint8_t item)
             // char bufDISP[30];
             // strcpy(bufDISP, "Test message example");
             // bufDISP[29] = '\0';
-            displayWrite(osdDisplayPort, 1, 1, "TEST MESSAGE EXAMPLE");
+            displayWrite(osdDisplayPort, 1, 1, serial_text);
             // displayWriteChar(osdDisplayPort, 10, 10, 'A');
             
             break;
@@ -4215,6 +4223,7 @@ void osdInit(displayPort_t *osdDisplayPortToUse)
 
     armState = ARMING_FLAG(ARMED);
     osdCompleteAsyncInitialization();
+    init_rerial_osd();
 }
 
 static void osdResetStats(void)
