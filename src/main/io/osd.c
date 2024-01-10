@@ -74,7 +74,7 @@
 
 #include "io/serial.h"
 #include "drivers/serial.h"
-#include "blackbox_io.h"
+#include "blackbox/blackbox_io.h"
 
 #include "fc/config.h"
 #include "fc/controlrate_profile.h"
