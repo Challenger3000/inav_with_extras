@@ -1733,9 +1733,9 @@ static bool osdDrawSingleElement(uint8_t item)
             }else{
                 displayWrite(osdDisplayPort, 1, 1, "FAILIURE");
             }
-            displayWrite(osdDisplayPort, 1, 1, serial_text);
             // displayWrite(osdDisplayPort, 1, 1, serial_text);
-            serialWrite(osd_serial_Port, 0x69);
+            // displayWrite(osdDisplayPort, 1, 1, serial_text);
+            // serialWrite(osd_serial_Port, 0x69);
 
             // blackboxWrite('H');
             // blackboxWrite('E');
