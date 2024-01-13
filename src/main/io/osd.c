@@ -1694,7 +1694,7 @@ void init_rerial_osd(void){
     portOptions_t osd_serial_portOptions = SERIAL_NOT_INVERTED | SERIAL_STOPBITS_1 | SERIAL_PARITY_NO;
 
     osd_serial_Port = openSerialPort(SERIAL_PORT_USART6, FUNCTION_UNUSED_3, NULL, NULL, baudRates[BAUD_115200], MODE_RXTX, osd_serial_portOptions);
-    strcpy(serial_text, "TEST MESSAGE EXAMPLE");
+    strcpy(serial_text, "TEST MESSAGE EXAMPLE AAAAAAAAA");
     serialWrite(osd_serial_Port, 69);
     // blackboxWrite('T');
     // blackboxWrite('E');
