@@ -72,7 +72,7 @@
 #include "io/vtx.h"
 #include "io/vtx_string.h"
 
-#include "io/serial.h"
+// #include "io/serial.h"
 #include "drivers/serial.h"
 // #include "blackbox/blackbox_io.h"
 
@@ -1729,7 +1729,8 @@ static bool osdDrawSingleElement(uint8_t item)
             // bufDISP[29] = '\0';
             serial_text[23] = serialRead(osd_serial_Port);
             if(serialRead(osd_serial_Port) > 128){
-                displayWrite(osdDisplayPort, 1, 1, "SUCCES");
+                displayWrite(osdDisplayPort, 1, 1, "SUCCES  ");
+                serialPrint();
             }else{
                 displayWrite(osdDisplayPort, 1, 1, "FAILIURE");
             }
