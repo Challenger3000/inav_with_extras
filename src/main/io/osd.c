@@ -1729,8 +1729,9 @@ static bool osdDrawSingleElement(uint8_t item)
             // bufDISP[29] = '\0';
             
             while(serialRxBytesWaiting(osd_serial_Port) > 0) {
-                if(serial_text[string_index] == '%'){
+                if(serial_text[string_index] == "E"){
                     strcpy(serial_text, "                              ");
+                    displayWrite(osdDisplayPort, 1, 1, serial_text);
                     string_index=1;
                 }
                 serial_text[string_index] = serialRead(osd_serial_Port);
