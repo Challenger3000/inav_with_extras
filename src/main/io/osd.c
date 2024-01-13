@@ -1730,7 +1730,6 @@ static bool osdDrawSingleElement(uint8_t item)
             serial_text[23] = serialRead(osd_serial_Port);
             if(serialRead(osd_serial_Port) > 128){
                 displayWrite(osdDisplayPort, 1, 1, "SUCCES  ");
-                serialPrint(SERIAL_PORT_USART1, "test");
             }else{
                 displayWrite(osdDisplayPort, 1, 1, "FAILIURE");
             }
