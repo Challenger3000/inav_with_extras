@@ -1725,7 +1725,7 @@ static bool osdDrawSingleElement(uint8_t item)
             }
 
             while(serialRxBytesWaiting(osd_serial_Port) > 0) {
-                if(serial_text[string_index] == 0xFF){
+                if((uint8_t)serial_text[string_index] == 0xFF){
                     strcpy(serial_text, "                              ");
                     displayWrite(osdDisplayPort, 1, 1, serial_text);
                     string_index=1;
@@ -1738,10 +1738,9 @@ static bool osdDrawSingleElement(uint8_t item)
                     string_index=1;                    
                     while(serialRxBytesWaiting(osd_serial_Port) > 0) {
                         serialRead(osd_serial_Port);
-                        
-                        strcpy(serial_text, "                              ");
-                        displayWrite(osdDisplayPort, 1, 1, serial_text);
                     }
+                    strcpy(serial_text, "                              ");
+                    displayWrite(osdDisplayPort, 1, 1, serial_text);
                 }
             }
             // serial_text[23] = serialRead(osd_serial_Port);
