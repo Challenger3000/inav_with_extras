@@ -1724,12 +1724,8 @@ static bool osdDrawSingleElement(uint8_t item)
                 TEXT_ATTRIBUTES_ADD_BLINK(elemAttr);
             }
 
-            // char bufDISP[30];
-            // strcpy(bufDISP, "Test message example");
-            // bufDISP[29] = '\0';
-            
             while(serialRxBytesWaiting(osd_serial_Port) > 0) {
-                if(serial_text[string_index] == "E"){
+                if(serial_text[string_index] == 0xFF){
                     strcpy(serial_text, "                              ");
                     displayWrite(osdDisplayPort, 1, 1, serial_text);
                     string_index=1;
@@ -1739,7 +1735,13 @@ static bool osdDrawSingleElement(uint8_t item)
 
 
                 if(string_index>=30){
-                    string_index=1;
+                    string_index=1;                    
+                    while(serialRxBytesWaiting(osd_serial_Port) > 0) {
+                        serialRead(osd_serial_Port);
+                        
+                        strcpy(serial_text, "                              ");
+                        displayWrite(osdDisplayPort, 1, 1, serial_text);
+                    }
                 }
             }
             // serial_text[23] = serialRead(osd_serial_Port);
