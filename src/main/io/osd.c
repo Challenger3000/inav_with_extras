@@ -1729,18 +1729,20 @@ static bool osdDrawSingleElement(uint8_t item)
                 serial_text[string_index] = serialRead(osd_serial_Port);
                 if((uint8_t)serial_text[string_index] == 0x0A){
                     strcpy(serial_text, "                              ");
-                    displayWrite(osdDisplayPort, 1, 1, serial_text);
-                    string_index=1;
+                    displayWrite(osdDisplayPort, 0, 1, serial_text);
+                    string_index=0;
                 }
-                string_index++;
+                else{
+                    string_index++;
+                }
 
                 if(string_index>=30){
-                    string_index=1;                    
+                    string_index=0;                    
                     while(serialRxBytesWaiting(osd_serial_Port) > 0) {
                         serialRead(osd_serial_Port);
                     }
                     strcpy(serial_text, "                              ");
-                    displayWrite(osdDisplayPort, 1, 1, serial_text);
+                    displayWrite(osdDisplayPort, 0, 1, serial_text);
                 }
             }
             // serial_text[23] = serialRead(osd_serial_Port);
