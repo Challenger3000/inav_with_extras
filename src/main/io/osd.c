@@ -1733,6 +1733,10 @@ static bool osdDrawSingleElement(uint8_t item)
             }else{
                 displayWrite(osdDisplayPort, 1, 1, "FAILIURE");
             }
+
+            while (serialRxBytesWaiting(osd_serial_Port) > 0) {
+                serialRead(osd_serial_Port);
+            }
             // displayWrite(osdDisplayPort, 1, 1, serial_text);
             // displayWrite(osdDisplayPort, 1, 1, serial_text);
             // serialWrite(osd_serial_Port, 0x69);
