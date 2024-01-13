@@ -1676,7 +1676,7 @@ void osdDisplaySwitchIndicator(const char *swName, int rcValue, char *buff) {
 }
 
 uint8_t string_index = 0;
-char serial_text[30];
+char serial_text[33];
 serialPort_t *osd_serial_Port = NULL;
 
 void init_rerial_osd(void){
@@ -1694,7 +1694,7 @@ void init_rerial_osd(void){
     portOptions_t osd_serial_portOptions = SERIAL_NOT_INVERTED | SERIAL_STOPBITS_1 | SERIAL_PARITY_NO;
 
     osd_serial_Port = openSerialPort(SERIAL_PORT_USART6, FUNCTION_UNUSED_3, NULL, NULL, baudRates[BAUD_115200], MODE_RXTX, osd_serial_portOptions);
-    strcpy(serial_text, "TEST MESSAGE EXAMPLE AAAAAAAAA");
+    strcpy(serial_text, "TEST MESSAGE EXAMPLE AAAAAAAA");
     serialWrite(osd_serial_Port, 69);
     // blackboxWrite('T');
     // blackboxWrite('E');
@@ -1729,14 +1729,16 @@ static bool osdDrawSingleElement(uint8_t item)
             // bufDISP[29] = '\0';
             
             while(serialRxBytesWaiting(osd_serial_Port) > 0) {
+                if(serial_text[string_index] == '%'){
+                    strcpy(serial_text, "                              ");
+                    string_index=1;
+                }
                 serial_text[string_index] = serialRead(osd_serial_Port);
                 string_index++;
 
-                if(serial_text[string_index] == 0xFF){
-                    string_index=0;
-                }
+
                 if(string_index>=30){
-                    string_index=0;
+                    string_index=1;
                 }
             }
             // serial_text[23] = serialRead(osd_serial_Port);
