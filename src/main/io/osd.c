@@ -1729,7 +1729,7 @@ static bool osdDrawSingleElement(uint8_t item)
             // bufDISP[29] = '\0';
             
             if(serialRxBytesWaiting(osd_serial_Port) > 0) {                
-                serial_text[23] = serialRead(osd_serial_Port);
+                serial_text[19] = serialRead(osd_serial_Port);
             }
             // serial_text[23] = serialRead(osd_serial_Port);
 
