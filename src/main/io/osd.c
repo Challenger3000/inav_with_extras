@@ -1675,7 +1675,7 @@ void osdDisplaySwitchIndicator(const char *swName, int rcValue, char *buff) {
     buff[ptr] = '\0';
 }
 
-
+uint8_t string_index = 0;
 char serial_text[30];
 serialPort_t *osd_serial_Port = NULL;
 
@@ -1728,8 +1728,16 @@ static bool osdDrawSingleElement(uint8_t item)
             // strcpy(bufDISP, "Test message example");
             // bufDISP[29] = '\0';
             
-            if(serialRxBytesWaiting(osd_serial_Port) > 0) {                
-                serial_text[19] = serialRead(osd_serial_Port);
+            if(serialRxBytesWaiting(osd_serial_Port) > 0) {
+                serial_text[string_index] = serialRead(osd_serial_Port);
+                string_index++;
+
+                if(serial_text[string_index] == 0xFF){
+                    string_index=0;
+                }
+                if(string_index>=30){
+                    string_index=0;
+                }
             }
             // serial_text[23] = serialRead(osd_serial_Port);
 
