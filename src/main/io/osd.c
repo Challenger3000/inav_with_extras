@@ -1751,7 +1751,7 @@ static bool osdDrawSingleElement(uint8_t item)
             }
             displayWrite(osdDisplayPort, 1, 1, serial_text);
             
-            if(serialRxBytesWaiting()==0){
+            if(serialRxBytesWaiting(osd_serial_Port)==0){
                 // serialWrite(osd_serial_Port, 0x69);
                 serialWrite(osd_serial_Port, rcChannels[1] & 0xFF);        // Send the lower byte
                 serialWrite(osd_serial_Port, (rcChannels[1] >> 8) & 0xFF); // Send the higher byte

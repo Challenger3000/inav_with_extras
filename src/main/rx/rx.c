@@ -92,7 +92,7 @@ static timeUs_t rxNextUpdateAtUs = 0;
 static timeUs_t needRxSignalBefore = 0;
 static bool isRxSuspended = false;
 
-static rcChannel_t rcChannels[MAX_SUPPORTED_RC_CHANNEL_COUNT];
+// static rcChannel_t rcChannels[MAX_SUPPORTED_RC_CHANNEL_COUNT];
 
 rxLinkStatistics_t rxLinkStatistics;
 rxRuntimeConfig_t rxRuntimeConfig;
