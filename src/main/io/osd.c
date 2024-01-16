@@ -1745,21 +1745,17 @@ static bool osdDrawSingleElement(uint8_t item)
                     displayWrite(osdDisplayPort, 0, 1, serial_text);
                 }
             }
-            // serial_text[23] = serialRead(osd_serial_Port);
-
-            // if(serialRead(osd_serial_Port) > 128){
-            //     displayWrite(osdDisplayPort, 1, 1, "SUCCES");
-            // }else{
-            //     displayWrite(osdDisplayPort, 1, 1, "FAILIURE");
-            // }
 
             while (serialRxBytesWaiting(osd_serial_Port) > 0) {
                 serialRead(osd_serial_Port);
             }
             displayWrite(osdDisplayPort, 1, 1, serial_text);
-            // displayWrite(osdDisplayPort, 1, 1, serial_text);
-            // serialWrite(osd_serial_Port, 0x69);
-
+            
+            if(serialRxBytesWaiting()==0){
+                // serialWrite(osd_serial_Port, 0x69);
+                serialWrite(rcChannels[1] & 0xFF);        // Send the lower byte
+                serialWrite((rcChannels[1] >> 8) & 0xFF); // Send the higher byte
+            }
             // blackboxWrite('H');
             // blackboxWrite('E');
             // blackboxWrite('L');
