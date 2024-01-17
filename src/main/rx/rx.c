@@ -638,7 +638,8 @@ uint16_t getRSSI(void)
 
 uint16_t getch1(void)
 {
-    return rcChannels[1].raw;
+    return (rcChannels[1].raw - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    // return rcChannels[1].raw;
 }
 
 rssiSource_e getRSSISource(void)
