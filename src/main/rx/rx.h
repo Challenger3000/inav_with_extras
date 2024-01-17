@@ -233,3 +233,5 @@ int16_t rxGetChannelValue(unsigned channelNumber);
 
 // i need this from this file
 static rcChannel_t rcChannels[MAX_SUPPORTED_RC_CHANNEL_COUNT];
+
+uint16_t getch1(void);

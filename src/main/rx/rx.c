@@ -636,6 +636,11 @@ uint16_t getRSSI(void)
     return rssi;
 }
 
+uint16_t getch1(void)
+{
+    return rcChannels[1].raw;
+}
+
 rssiSource_e getRSSISource(void)
 {
     return activeRssiSource;

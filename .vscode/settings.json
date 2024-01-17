@@ -8,7 +8,8 @@
         "bus.h": "c",
         "serial.h": "c",
         "blackbox_encoding.h": "c",
-        "rx.h": "c"
+        "rx.h": "c",
+        "mavlink.h": "c"
     },
     "editor.tabSize": 4,
     "editor.insertSpaces": true,
