@@ -638,8 +638,14 @@ uint16_t getRSSI(void)
 
 uint16_t getch1(void)
 {
-    return (rcChannels[1].raw - 173) * 255 / (1637);
-    // return rcChannels[1].raw;
+
+    // Map each channel value to 8 bits
+    uint8_t ch1 = (rcChannels[1].raw - 173) * 255 / 1637;
+    uint8_t ch2 = (rcChannels[2].raw - 173) * 255 / 1637;
+
+    // Pack the two 8-bit values into a single 16-bit value
+    return ((uint16_t)ch1 << 8) | ch2;
+
 }
 
 rssiSource_e getRSSISource(void)
