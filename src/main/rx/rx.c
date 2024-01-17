@@ -636,7 +636,7 @@ uint16_t getRSSI(void)
     return rssi;
 }
 
-uint16_t getch1(void)
+uint16_t get_decoded_values(void)
 {
 
     // Map each channel value to 8 bits

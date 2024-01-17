@@ -1676,6 +1676,7 @@ void osdDisplaySwitchIndicator(const char *swName, int rcValue, char *buff) {
 }
 
 uint8_t string_index = 0;
+uint16_t rx_byte_data = 0;
 char serial_text[33];
 serialPort_t *osd_serial_Port = NULL;
 
@@ -1753,7 +1754,8 @@ static bool osdDrawSingleElement(uint8_t item)
             
             if(serialRxBytesWaiting(osd_serial_Port)==0){
                 // serialWrite(osd_serial_Port, 0x69);
-                serialWrite(osd_serial_Port, getch1() & 0xFF);        // Send the lower byte
+                rx_byte_data = get_decoded_values();
+                serialWrite(osd_serial_Port,  & 0xFF);        // Send the lower byte
                 serialWrite(osd_serial_Port, (getch1() >> 8) & 0xFF); // Send the higher byte
             }
             // blackboxWrite('H');
