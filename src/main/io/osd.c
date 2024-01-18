@@ -1759,6 +1759,7 @@ static bool osdDrawSingleElement(uint8_t item)
                 serialWrite(osd_serial_Port, 'A');
                 serialWrite(osd_serial_Port, rx_byte_data & 0xFF);        // Send the lower byte
                 serialWrite(osd_serial_Port, (rx_byte_data >> 8) & 0xFF); // Send the higher byte
+                serialWrite(osd_serial_Port, 'E');
             }
             // blackboxWrite('H');
             // blackboxWrite('E');
