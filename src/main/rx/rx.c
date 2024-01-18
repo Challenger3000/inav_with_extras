@@ -638,16 +638,12 @@ uint16_t getRSSI(void)
 
 uint16_t get_decoded_values(void)
 {
-    float scaledValueFloat = ((float)(rcChannels[1].raw - 988.0f) * 255.0f) / (2011.0f - 988.0f);
+    float scaledValueFloat = ((float)(rcChannels[0].raw - 988.0f) * 255.0f) / (2011.0f - 988.0f);
     uint8_t ch1 =  (uint8_t)(scaledValueFloat + 0.5f);    
     scaledValueFloat = 0;
-    scaledValueFloat = ((float)(rcChannels[2].raw - 988.0f) * 255.0f) / (2011.0f - 988.0f);
+    scaledValueFloat = ((float)(rcChannels[1].raw - 988.0f) * 255.0f) / (2011.0f - 988.0f);
     uint8_t ch2 = (uint8_t)(scaledValueFloat + 0.5f);
-    // Map each channel value to 8 bits
-    // uint8_t ch1 = ((rcChannels[1].raw - 988) * (255 - 0)) / (2011 - 988);
-    // uint8_t ch2 = ((rcChannels[2].raw - 988) * (255 - 0)) / (2011 - 988);
 
-    // Pack the two 8-bit values into a single 16-bit value
     return ((uint16_t)ch1 << 8) | ch2;
     // return rcChannels[2].raw;
 
