@@ -640,7 +640,8 @@ uint16_t get_decoded_values(void)
 {
     float scaledValueFloat = ((float)(rcChannels[1].raw - 988.0f) * 255.0f) / (2011.0f - 988.0f);
     uint8_t ch1 =  (uint8_t)(scaledValueFloat + 0.5f);    
-    float scaledValueFloat = ((float)(rcChannels[2].raw - 988.0f) * 255.0f) / (2011.0f - 988.0f);
+    scaledValueFloat = 0;
+    scaledValueFloat = ((float)(rcChannels[2].raw - 988.0f) * 255.0f) / (2011.0f - 988.0f);
     uint8_t ch2 = (uint8_t)(scaledValueFloat + 0.5f);
     // Map each channel value to 8 bits
     // uint8_t ch1 = ((rcChannels[1].raw - 988) * (255 - 0)) / (2011 - 988);
