@@ -640,8 +640,8 @@ uint16_t get_decoded_values(void)
 {
 
     // Map each channel value to 8 bits
-    uint8_t ch1 = 0 + ((rcChannels[1].raw - 988) * (255 - 0)) / (2011 - 988);
-    uint8_t ch2 = 0 + ((rcChannels[2].raw - 988) * (255 - 0)) / (2011 - 988);
+    uint8_t ch1 = (uint8_t)((float)((rcChannels[1].raw - 988) * (float)(255 - 0)) / (float)(2011 - 988));
+    uint8_t ch2 = (uint8_t)((float)((rcChannels[2].raw - 988) * (float)(255 - 0)) / (float)(2011 - 988));
 
     // Pack the two 8-bit values into a single 16-bit value
     return ((uint16_t)ch1 << 8) | ch2;
