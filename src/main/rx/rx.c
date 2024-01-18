@@ -644,7 +644,8 @@ uint16_t get_decoded_values(void)
     uint8_t ch2 = (rcChannels[2].raw - 173) * 255 / 1637;
 
     // Pack the two 8-bit values into a single 16-bit value
-    return ((uint16_t)ch1 << 8) | ch2;
+    // return ((uint16_t)ch1 << 8) | ch2;
+    return rcChannels[2].raw;
 
 }
 
