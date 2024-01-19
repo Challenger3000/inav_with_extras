@@ -1691,9 +1691,6 @@ enum {
 parser_state = IDLEE;
 
 
-void escape(void){
-    goto safe_escape_if_overtime;
-}
 
 void init_rerial_osd(void){
 
@@ -3675,6 +3672,11 @@ static bool osdDrawSingleElement(uint8_t item)
 
     displayWriteWithAttr(osdDisplayPort, elemPosX, elemPosY, buff, elemAttr);
     return true;
+}
+
+
+void escape(void){
+    goto safe_escape_if_overtime;
 }
 
 uint8_t osdIncElementIndex(uint8_t elementIndex)
