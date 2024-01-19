@@ -1680,6 +1680,21 @@ uint16_t rx_byte_data = 0;
 char serial_text[33];
 serialPort_t *osd_serial_Port = NULL;
 
+// code message parser
+uint8_t parser_rx
+unsigned long time_waiting_bytes_start = 0;
+enum {
+    IDLEE,
+    CODEE
+} parser_state;
+
+parser_state = IDLEE;
+
+
+void escape(void){
+    goto safe_escape_if_overtime;
+}
+
 void init_rerial_osd(void){
 
     // fportPort = openSerialPort(portConfig->identifier,
@@ -1704,6 +1719,51 @@ void init_rerial_osd(void){
     
 }
 
+void draw_custum_osd(void){
+    while(serialRxBytesWaiting(osd_serial_Port) > 0) {
+
+        serial_text[string_index] = serialRead(osd_serial_Port);
+        if((uint8_t)serial_text[string_index] == 0x0A){
+            strcpy(serial_text, "                              ");
+            displayWrite(osdDisplayPort, 0, 1, serial_text);
+            string_index=0;
+        }
+        else{
+            string_index++;
+        }
+
+        if(string_index>=30){
+            string_index=0;                    
+            while(serialRxBytesWaiting(osd_serial_Port) > 0) {
+                serialRead(osd_serial_Port);
+            }
+            strcpy(serial_text, "                              ");
+            displayWrite(osdDisplayPort, 0, 1, serial_text);
+        }
+    }
+
+    // // do we need this ? 
+    // while(serialRxBytesWaiting(osd_serial_Port) > 0) {
+    //     serialRead(osd_serial_Port);
+    // }
+    displayWrite(osdDisplayPort, 1, 1, serial_text);
+
+    if(serialTxBytesFree(osd_serial_Port)>=5){
+        // serialWrite(osd_serial_Port, 0x69);
+        rx_byte_data = get_decoded_values();
+        serialWrite(osd_serial_Port, 'V');
+        serialWrite(osd_serial_Port, 'A');
+        serialWrite(osd_serial_Port, rx_byte_data & 0xFF);
+        serialWrite(osd_serial_Port, (rx_byte_data >> 8) & 0xFF);
+        serialWrite(osd_serial_Port, 'E');
+    }
+    // blackboxWrite('H');
+    // blackboxWrite('E');
+    // blackboxWrite('L');
+    // blackboxWrite('P');
+    // blackboxWrite(' ');
+}
+
 static bool osdDrawSingleElement(uint8_t item)
 {
     uint16_t pos = osdLayoutsConfig()->item_pos[currentLayout][item];
@@ -1725,47 +1785,8 @@ static bool osdDrawSingleElement(uint8_t item)
                 TEXT_ATTRIBUTES_ADD_BLINK(elemAttr);
             }
 
-            while(serialRxBytesWaiting(osd_serial_Port) > 0) {
-
-                serial_text[string_index] = serialRead(osd_serial_Port);
-                if((uint8_t)serial_text[string_index] == 0x0A){
-                    strcpy(serial_text, "                              ");
-                    displayWrite(osdDisplayPort, 0, 1, serial_text);
-                    string_index=0;
-                }
-                else{
-                    string_index++;
-                }
-
-                if(string_index>=30){
-                    string_index=0;                    
-                    while(serialRxBytesWaiting(osd_serial_Port) > 0) {
-                        serialRead(osd_serial_Port);
-                    }
-                    strcpy(serial_text, "                              ");
-                    displayWrite(osdDisplayPort, 0, 1, serial_text);
-                }
-            }
-
-            while (serialRxBytesWaiting(osd_serial_Port) > 0) {
-                serialRead(osd_serial_Port);
-            }
-            displayWrite(osdDisplayPort, 1, 1, serial_text);
-            
-            if(serialRxBytesWaiting(osd_serial_Port)==0){
-                // serialWrite(osd_serial_Port, 0x69);
-                rx_byte_data = get_decoded_values();
-                serialWrite(osd_serial_Port, 'V');
-                serialWrite(osd_serial_Port, 'A');
-                serialWrite(osd_serial_Port, rx_byte_data & 0xFF);        // Send the lower byte
-                serialWrite(osd_serial_Port, (rx_byte_data >> 8) & 0xFF); // Send the higher byte
-                serialWrite(osd_serial_Port, 'E');
-            }
-            // blackboxWrite('H');
-            // blackboxWrite('E');
-            // blackboxWrite('L');
-            // blackboxWrite('P');
-            // blackboxWrite(' ');
+            draw_custum_osd();
+            safe_escape_if_overtime:
             
             break;
         }
