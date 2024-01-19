@@ -1729,7 +1729,7 @@ void draw_custum_osd(void){
             peek = serialRead(osd_serial_Port);
             if(peek == 0x69){
                 parser_state = CODEE;
-                break;
+                return;
             }
             serial_text[string_index] = peek;
             if((uint8_t)serial_text[string_index] == 0x0A){
@@ -1748,13 +1748,13 @@ void draw_custum_osd(void){
                     peek = serialRead(osd_serial_Port);
                     if(peek == 0x69){
                         parser_state = CODEE;
-                        break;
+                        return;
                     }
                 }
                 strcpy(serial_text, "                              ");
                 displayWrite(osdDisplayPort, 0, 1, serial_text);
             }
-        }
+        }else
         if (parser_state == CODEE){
             if(parser_rx_code_index<10){
                 if(parser_rx_code_index_two < 1){
