@@ -1680,7 +1680,7 @@ uint8_t peek = 0;
 uint8_t string_index = 0;
 uint16_t rx_byte_data = 0;
 
-char one_char = 0;
+char one_char[33];
 char serial_text[33];
 serialPort_t *osd_serial_Port = NULL;
 
@@ -1713,6 +1713,7 @@ void init_rerial_osd(void){
 
     osd_serial_Port = openSerialPort(SERIAL_PORT_USART6, FUNCTION_UNUSED_3, NULL, NULL, baudRates[BAUD_115200], MODE_RXTX, osd_serial_portOptions);
     strcpy(serial_text, "TEST MESSAGE EXAMPLE AAAAAAAA");
+    strcpy(one_char, "                             ");
     serialWrite(osd_serial_Port, 69);
     // blackboxWrite('T');
     // blackboxWrite('E');
@@ -1757,18 +1758,19 @@ void draw_custum_osd(void){
         if (parser_state == CODEE){
             if(parser_rx_code_index<10){
                 if(parser_rx_code_index_two < 1){
-                    one_char = serialRead(osd_serial_Port);
-                    displayWrite(osdDisplayPort, parser_rx_code_position, 0, one_char);
+                    one_char[parser_rx_code_position] = serialRead(osd_serial_Port);
+                    // displayWrite(osdDisplayPort, parser_rx_code_position, 0, one_char);
                     parser_rx_code_position++;
                     parser_rx_code_index_two++;
                 }else{
-                    one_char = serialRead(osd_serial_Port);
-                    displayWrite(osdDisplayPort, parser_rx_code_position, 0, one_char);
+                    one_char[parser_rx_code_position] = serialRead(osd_serial_Port);
+                    // displayWrite(osdDisplayPort, parser_rx_code_position, 0, one_char);
                     parser_rx_code_position++;
                     parser_rx_code_index_two = 0;
                     parser_rx_code_index++;
                 }
             }else{
+                displayWrite(osdDisplayPort, 0, 0, one_char);
                 parser_rx_code_position = 0;
                 parser_rx_code_index = 0;
                 parser_rx_code_index_two = 0;
