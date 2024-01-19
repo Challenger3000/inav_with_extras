@@ -1683,13 +1683,12 @@ serialPort_t *osd_serial_Port = NULL;
 // code message parser
 uint8_t parser_rx;
 unsigned long time_waiting_bytes_start = 0;
-enum {
+typedef enum {
     IDLEE,
     CODEE
 } parser_states;
 
 parser_states parser_state = IDLEE;
-
 
 
 void init_rerial_osd(void){
