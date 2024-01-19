@@ -1729,7 +1729,7 @@ void draw_custum_osd(void){
             peek = serialRead(osd_serial_Port);
             if(peek == 0x69){
                 parser_state = CODEE;
-                return;
+                break;
             }
             serial_text[string_index] = peek;
             if((uint8_t)serial_text[string_index] == 0x0A){
@@ -1748,34 +1748,29 @@ void draw_custum_osd(void){
                     peek = serialRead(osd_serial_Port);
                     if(peek == 0x69){
                         parser_state = CODEE;
-                        return;
+                        break;
                     }
                 }
                 strcpy(serial_text, "                              ");
                 displayWrite(osdDisplayPort, 0, 1, serial_text);
             }
-        }else
-        if (parser_state == CODEE){
-            if(parser_rx_code_index<10){
-                if(parser_rx_code_index_two < 1){
-                    one_char[parser_rx_code_position] = serialRead(osd_serial_Port);
-                    // displayWrite(osdDisplayPort, parser_rx_code_position, 0, one_char);
-                    parser_rx_code_position++;
-                    parser_rx_code_index_two++;
-                }else{
-                    one_char[parser_rx_code_position] = serialRead(osd_serial_Port);
-                    // displayWrite(osdDisplayPort, parser_rx_code_position, 0, one_char);
-                    parser_rx_code_position++;
-                    parser_rx_code_index_two = 0;
-                    parser_rx_code_index++;
+        }else if (parser_state == CODEE){
+            one_char[parser_rx_code_index] = serialRead(osd_serial_Port);
+            displayWrite(osdDisplayPort, 0, 0, one_char);
+            parser_rx_code_index++;
+
+
+            if(parser_rx_code_index>=30){
+                string_index=0;                    
+                while(serialRxBytesWaiting(osd_serial_Port) > 0) {                    
+                    serialRead(osd_serial_Port);
                 }
-            }else{
-                displayWrite(osdDisplayPort, 0, 0, one_char);
-                parser_rx_code_position = 0;
                 parser_rx_code_index = 0;
-                parser_rx_code_index_two = 0;
                 parser_state = IDLEE;
+                displayWrite(osdDisplayPort, 0, 0, one_char);
             }
+
+
         }
         
 
