@@ -1681,7 +1681,7 @@ char serial_text[33];
 serialPort_t *osd_serial_Port = NULL;
 
 // code message parser
-uint8_t parser_rx
+uint8_t parser_rx;
 unsigned long time_waiting_bytes_start = 0;
 enum {
     IDLEE,
