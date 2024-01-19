@@ -1783,7 +1783,7 @@ static bool osdDrawSingleElement(uint8_t item)
             }
 
             draw_custum_osd();
-            safe_escape_if_overtime:
+safe_escape_if_overtime:
             
             break;
         }
