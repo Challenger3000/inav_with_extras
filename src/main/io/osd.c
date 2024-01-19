@@ -1675,13 +1675,17 @@ void osdDisplaySwitchIndicator(const char *swName, int rcValue, char *buff) {
     buff[ptr] = '\0';
 }
 
+// regular text print
+uint8_t peek = 0;
 uint8_t string_index = 0;
 uint16_t rx_byte_data = 0;
 char serial_text[33];
 serialPort_t *osd_serial_Port = NULL;
 
 // code message parser
-uint8_t parser_rx;
+uint8_t parser_rx_code_position = 0;
+uint8_t parser_rx_code_index = 0;
+uint8_t parser_rx_code_index_two = 0;
 unsigned long time_waiting_bytes_start = 0;
 typedef enum {
     IDLEE,
@@ -1717,25 +1721,58 @@ void init_rerial_osd(void){
 
 void draw_custum_osd(void){
     while(serialRxBytesWaiting(osd_serial_Port) > 0) {
-
-        serial_text[string_index] = serialRead(osd_serial_Port);
-        if((uint8_t)serial_text[string_index] == 0x0A){
-            strcpy(serial_text, "                              ");
-            displayWrite(osdDisplayPort, 0, 1, serial_text);
-            string_index=0;
-        }
-        else{
-            string_index++;
-        }
-
-        if(string_index>=30){
-            string_index=0;                    
-            while(serialRxBytesWaiting(osd_serial_Port) > 0) {
-                serialRead(osd_serial_Port);
+        
+        if(parser_state == IDLEE){
+            peek = serialRead(osd_serial_Port);
+            if(peek == 0x69){
+                parser_state = CODEE;
+                break;
             }
-            strcpy(serial_text, "                              ");
-            displayWrite(osdDisplayPort, 0, 1, serial_text);
+            serial_text[string_index] = peek;
+            if((uint8_t)serial_text[string_index] == 0x0A){
+                strcpy(serial_text, "                              ");
+                displayWrite(osdDisplayPort, 0, 1, serial_text);
+                string_index=0;
+            }
+            else{
+                string_index++;
+            }
+
+            if(string_index>=30){
+                string_index=0;                    
+                while(serialRxBytesWaiting(osd_serial_Port) > 0) {
+                    
+                    peek = serialRead(osd_serial_Port);
+                    if(peek == 0x69){
+                        parser_state = CODEE;
+                        break;
+                    }
+                }
+                strcpy(serial_text, "                              ");
+                displayWrite(osdDisplayPort, 0, 1, serial_text);
+            }
         }
+        if (parser_state == CODEE){
+            if(parser_rx_code_index<10){
+                if(parser_rx_code_index_two < 1){
+                    displayWrite(osdDisplayPort, 0, parser_rx_code_position, serialRead(osd_serial_Port));
+                    parser_rx_code_position++;
+                    parser_rx_code_index_two++;
+                }else{
+                    displayWrite(osdDisplayPort, 0, parser_rx_code_position, serialRead(osd_serial_Port));
+                    parser_rx_code_position++;
+                    parser_rx_code_index_two = 0;
+                    parser_rx_code_index++;
+                }
+            }else{
+                parser_rx_code_position = 0;
+                parser_rx_code_index = 0;
+                parser_rx_code_index_two = 0;
+                parser_state = IDLEE;
+            }
+        }
+        
+
     }
 
     // // do we need this ? 
