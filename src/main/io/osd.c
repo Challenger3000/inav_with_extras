@@ -1686,9 +1686,9 @@ unsigned long time_waiting_bytes_start = 0;
 enum {
     IDLEE,
     CODEE
-} parser_state;
+} parser_states;
 
-parser_state = IDLEE;
+parser_states parser_state = IDLEE;
 
 
 
@@ -1783,7 +1783,6 @@ static bool osdDrawSingleElement(uint8_t item)
             }
 
             draw_custum_osd();
-safe_escape_if_overtime:
             
             break;
         }
@@ -3672,11 +3671,6 @@ safe_escape_if_overtime:
 
     displayWriteWithAttr(osdDisplayPort, elemPosX, elemPosY, buff, elemAttr);
     return true;
-}
-
-
-void escape(void){
-    goto safe_escape_if_overtime;
 }
 
 uint8_t osdIncElementIndex(uint8_t elementIndex)
