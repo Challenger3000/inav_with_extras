@@ -1777,8 +1777,8 @@ void draw_custum_osd(void){
     // // do we need this ? 
     // while(serialRxBytesWaiting(osd_serial_Port) > 0) {
     //     serialRead(osd_serial_Port);
-    // }
-    // displayWrite(osdDisplayPort, 1, 2, serial_text);
+    // }    
+    displayWrite(osdDisplayPort, 0, 2, serial_text);
 
     if(serialTxBytesFree(osd_serial_Port)>=5){
         // serialWrite(osd_serial_Port, 0x69);
