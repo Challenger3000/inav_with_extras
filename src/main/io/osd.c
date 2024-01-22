@@ -1745,7 +1745,7 @@ void draw_custum_osd(void){
             serial_text[string_index] = peek;
             if((uint8_t)serial_text[string_index] == 0x0A){
                 strcpy(serial_text, "                              ");
-                displayWrite(osdDisplayPort, elemPosX2, elemPosY2, serial_text);
+                displayWrite(osdDisplayPort, elemPosX2, elemPosY2+1, serial_text);
                 string_index=0;
             }
             else{
@@ -1763,7 +1763,7 @@ void draw_custum_osd(void){
                     }
                 }
                 strcpy(serial_text, "                              ");
-                displayWrite(osdDisplayPort, elemPosX2, elemPosY2, serial_text);
+                displayWrite(osdDisplayPort, elemPosX2, elemPosY2+1, serial_text);
             }
         }else if (parser_state == CODEE){
             one_char[parser_rx_code_index] = serialRead(osd_serial_Port);
@@ -1787,7 +1787,7 @@ void draw_custum_osd(void){
     // while(serialRxBytesWaiting(osd_serial_Port) > 0) {
     //     serialRead(osd_serial_Port);
     // }
-    displayWrite(osdDisplayPort, elemPosX2, elemPosY2, serial_text);
+    displayWrite(osdDisplayPort, elemPosX2, elemPosY2+1, serial_text);
 
     if(serialTxBytesFree(osd_serial_Port)>=5){
         // serialWrite(osd_serial_Port, 0x69);
