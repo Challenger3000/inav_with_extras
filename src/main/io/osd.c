@@ -1799,7 +1799,7 @@ void draw_custum_osd(void){
 
 static bool osdDrawSingleElement(uint8_t item)
 {
-    uint16_t pos = osdLayoutsConfig()->item_pos[currentLayout][item];
+    uint16_t position = osdLayoutsConfig.item_pos[0][OSD_GVAR_0];
     if (!OSD_VISIBLE(pos)) {
         return false;
     }
