@@ -1715,6 +1715,8 @@ void init_rerial_osd(void){
     strcpy(serial_text, "NO UART CONNECTION");
     strcpy(one_char, "                             ");
     serialWrite(osd_serial_Port, 69);
+    
+    displayWrite(osdDisplayPort, 0, 2, serial_text);
     // blackboxWrite('T');
     // blackboxWrite('E');
     // blackboxWrite('S');
