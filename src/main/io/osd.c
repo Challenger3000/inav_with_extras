@@ -1712,7 +1712,7 @@ void init_rerial_osd(void){
     portOptions_t osd_serial_portOptions = SERIAL_NOT_INVERTED | SERIAL_STOPBITS_1 | SERIAL_PARITY_NO;
 
     osd_serial_Port = openSerialPort(SERIAL_PORT_USART6, FUNCTION_UNUSED_3, NULL, NULL, baudRates[BAUD_115200], MODE_RXTX, osd_serial_portOptions);
-    strcpy(serial_text, "TEST MESSAGE EXAMPLE AAAAAAAA");
+    strcpy(serial_text, "NO MESS");
     strcpy(one_char, "                             ");
     serialWrite(osd_serial_Port, 69);
     // blackboxWrite('T');
@@ -1723,6 +1723,9 @@ void init_rerial_osd(void){
 }
 
 void draw_custum_osd(void){
+    uint16_t position = osdLayoutsConfig->item_pos[0][OSD_GVAR_0];
+    uint8_t x = position & 0x3F; // Extract x
+    uint8_t y = (position >> 6) & 0x3F; // Extract y
     while(serialRxBytesWaiting(osd_serial_Port) > 0) {
         
         if(parser_state == IDLEE){
@@ -1734,7 +1737,7 @@ void draw_custum_osd(void){
             serial_text[string_index] = peek;
             if((uint8_t)serial_text[string_index] == 0x0A){
                 strcpy(serial_text, "                              ");
-                displayWrite(osdDisplayPort, 0, 1, serial_text);
+                displayWrite(osdDisplayPort, 0, y, serial_text);
                 string_index=0;
             }
             else{
@@ -1752,11 +1755,11 @@ void draw_custum_osd(void){
                     }
                 }
                 strcpy(serial_text, "                              ");
-                displayWrite(osdDisplayPort, 0, 1, serial_text);
+                displayWrite(osdDisplayPort, 0, y, serial_text);
             }
         }else if (parser_state == CODEE){
             one_char[parser_rx_code_index] = serialRead(osd_serial_Port);
-            displayWrite(osdDisplayPort, 0, 0, one_char);
+            displayWrite(osdDisplayPort, 0, y, one_char);
             parser_rx_code_index++;
 
 
@@ -1767,20 +1770,16 @@ void draw_custum_osd(void){
                 }
                 parser_rx_code_index = 0;
                 parser_state = IDLEE;
-                displayWrite(osdDisplayPort, 0, 0, one_char);
+                displayWrite(osdDisplayPort, 0, y, one_char);
             }
-
-
         }
-        
-
     }
 
     // // do we need this ? 
     // while(serialRxBytesWaiting(osd_serial_Port) > 0) {
     //     serialRead(osd_serial_Port);
     // }
-    displayWrite(osdDisplayPort, 1, 1, serial_text);
+    displayWrite(osdDisplayPort, 1, y, serial_text);
 
     if(serialTxBytesFree(osd_serial_Port)>=5){
         // serialWrite(osd_serial_Port, 0x69);
@@ -1817,10 +1816,7 @@ static bool osdDrawSingleElement(uint8_t item)
             tfp_sprintf(buff + 1, "%2d", osdRssi);
             if (osdRssi < osdConfig()->rssi_alarm) {
                 TEXT_ATTRIBUTES_ADD_BLINK(elemAttr);
-            }
-
-            draw_custum_osd();
-            
+            }            
             break;
         }
 
@@ -3511,12 +3507,14 @@ static bool osdDrawSingleElement(uint8_t item)
 
     case OSD_GVAR_0:
     {
-        osdFormatGVar(buff, 0);
+        // osdFormatGVar(buff, 0);
+        draw_custum_osd();
         break;
     }
     case OSD_GVAR_1:
     {
-        osdFormatGVar(buff, 1);
+        // osdFormatGVar(buff, 1);        
+        draw_custum_osd();
         break;
     }
     case OSD_GVAR_2:

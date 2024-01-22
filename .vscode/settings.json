@@ -13,7 +13,8 @@
         "math.h": "c",
         "corecrt_math.h": "c",
         "time.h": "c",
-        "typeconversion.h": "c"
+        "typeconversion.h": "c",
+        "displayport_msp_bf_compat.h": "c"
     },
     "editor.tabSize": 4,
     "editor.insertSpaces": true,
