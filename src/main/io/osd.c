@@ -1725,10 +1725,10 @@ void init_rerial_osd(void){
 void draw_custum_osd(void){
 
 
-    uint16_t pos1 = osdLayoutsConfig()->item_pos[currentLayout][item];
+    uint16_t pos1 = osdLayoutsConfig()->item_pos[currentLayout][OSD_GVAR_0];
     uint8_t elemPosX1 = OSD_X(pos1);
     uint8_t elemPosY1 = OSD_Y(pos1);
-    uint16_t pos2 = osdLayoutsConfig()->item_pos[currentLayout][item];
+    uint16_t pos2 = osdLayoutsConfig()->item_pos[currentLayout][OSD_GVAR_1];
     uint8_t elemPosX2 = OSD_X(pos2);
     uint8_t elemPosY2 = OSD_Y(pos2);
 
