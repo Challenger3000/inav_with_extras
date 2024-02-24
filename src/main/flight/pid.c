@@ -65,12 +65,13 @@
 
 #include "programming/logic_condition.h"
 
+// debug of trajectory
 #include "fc/cli.h"
+#include "common/printf.h"
 
 uint32_t time_since_last_print = 0;
 
-float target_values[3];
-target_values = {0.0, 0.0, 0.0};
+float target_values[3] = {0.0, 0.0, 0.0};
 
 typedef struct {
     uint8_t axis;
@@ -1139,11 +1140,12 @@ void FAST_CODE pidController(float dT)
 
     if(micros() - time_since_last_print > 100000){
         time_since_last_print = micros();
-        char buffer[50];
-        sprintf(buffer, "Target values: %f, %f, %f\n", target_values[0], target_values[1], target_values[2]);
-        cliPrint(buffer);
 
+        char buffer[50];
+        tfp_snprintf(buffer, sizeof(buffer), "Target values: %f, %f, %f\n", target_values[0], target_values[1], target_values[2]);
+        cliPrint(buffer);
     }
+
 
     if ((FLIGHT_MODE(TURN_ASSISTANT) || navigationRequiresTurnAssistance()) && (FLIGHT_MODE(ANGLE_MODE) || FLIGHT_MODE(HORIZON_MODE))) {
         float bankAngleTarget = DECIDEGREES_TO_RADIANS(pidRcCommandToAngle(rcCommand[FD_ROLL], pidProfile()->max_angle_inclination[FD_ROLL]));

@@ -8,7 +8,11 @@
         "bus.h": "c",
         "config.h": "c",
         "pid.h": "c",
-        "serial.h": "c"
+        "serial.h": "c",
+        "asyncfatfs.h": "c",
+        "mixer_profile.h": "c",
+        "system.h": "c",
+        "bitarray.h": "c"
     },
     "editor.tabSize": 4,
     "editor.insertSpaces": true,
