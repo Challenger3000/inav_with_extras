@@ -65,6 +65,13 @@
 
 #include "programming/logic_condition.h"
 
+#include "fc/cli.h"
+
+uint32_t time_since_last_print = 0;
+
+float target_values[3];
+target_values = {0.0, 0.0, 0.0};
+
 typedef struct {
     uint8_t axis;
     float kP;   // Proportional gain
@@ -1122,12 +1129,20 @@ void FAST_CODE pidController(float dT)
         if (FLIGHT_MODE(ANGLE_MODE) || FLIGHT_MODE(HORIZON_MODE) || isFlightAxisAngleOverrideActive(axis)) {
             //If axis angle override, get the correct angle from Logic Conditions
             float angleTarget = getFlightAxisAngleOverride(axis, computePidLevelTarget(axis));
-
+            target_values[axis] = angleTarget;
             //Apply the Level PID controller
             pidLevel(angleTarget, &pidState[axis], axis, horizonRateMagnitude, dT);
             canUseFpvCameraMix = false;     // FPVANGLEMIX is incompatible with ANGLE/HORIZON
             levelingEnabled = true;
         }
+    }
+
+    if(micros() - time_since_last_print > 100000){
+        time_since_last_print = micros();
+        char buffer[50];
+        sprintf(buffer, "Target values: %f, %f, %f\n", target_values[0], target_values[1], target_values[2]);
+        cliPrint(buffer);
+
     }
 
     if ((FLIGHT_MODE(TURN_ASSISTANT) || navigationRequiresTurnAssistance()) && (FLIGHT_MODE(ANGLE_MODE) || FLIGHT_MODE(HORIZON_MODE))) {

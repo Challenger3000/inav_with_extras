@@ -4177,7 +4177,10 @@ void cliProcess(void)
             }
             for (; i < bufferIndex; i++)
                 cliWrite(cliBuffer[i]);
-        } else if (!bufferIndex && c == 4) {   // CTRL-D
+        } else if (!bufferIndex && c == ']') {   // :]
+            cliPrint("hello :]\n");
+            return;
+        }else if (!bufferIndex && c == 4) {   // CTRL-D
             cliExit(cliBuffer);
             return;
         } else if (c == 12) {                  // NewPage / CTRL-L
