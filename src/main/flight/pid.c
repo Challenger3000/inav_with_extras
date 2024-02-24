@@ -1138,7 +1138,7 @@ void FAST_CODE pidController(float dT)
         }
     }
 
-    if(micros() - time_since_last_print > 100000){
+    if(micros() - time_since_last_print > 100000 && micros() > 30000000){
         time_since_last_print = micros();
 
         char buffer[50];
