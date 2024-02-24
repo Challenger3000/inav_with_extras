@@ -1,0 +1,13 @@
+First time building...
+mkdir build
+cd build
+cmake ..
+make TMOTORF7V2
+
+Every consequtive build...
+make TMOTORF7V2
+
+
+
+
+make TMOTORF7V2 -Oskara 10inch drone

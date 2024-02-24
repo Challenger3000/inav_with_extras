@@ -1,0 +1,5 @@
+Variables:
+headingHoldTarget
+
+functions:
+getFlightAxisAngleOverride(FD_YAW, 0)
