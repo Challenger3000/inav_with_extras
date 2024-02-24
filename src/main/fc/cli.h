@@ -25,4 +25,4 @@ void cliProcess(void);
 struct serialPort_s;
 void cliEnter(struct serialPort_s *serialPort);
 
-static void cliPrint(const char *str); // need this on the outside 
+void cliPrint(const char *str); // need this on the outside 
