@@ -1130,7 +1130,7 @@ void FAST_CODE pidController(float dT)
         if (FLIGHT_MODE(ANGLE_MODE) || FLIGHT_MODE(HORIZON_MODE) || isFlightAxisAngleOverrideActive(axis)) {
             //If axis angle override, get the correct angle from Logic Conditions
             //Apply the Level PID controller
-            if(rxGetChannelValue_no_bs(AUX12) > 1900){
+            if(rxGetChannelValue_no_bs(AUX8) > 1900){
                 pidLevel(target_values[axis], &pidState[axis], axis, horizonRateMagnitude, dT);
             }else{
                 float angleTarget = getFlightAxisAngleOverride(axis, computePidLevelTarget(axis));
@@ -1148,7 +1148,7 @@ void FAST_CODE pidController(float dT)
 
         char buffer[50];
 
-        int channelValue = rxGetChannelValue_no_bs(AUX12);
+        int channelValue = rxGetChannelValue_no_bs(AUX8);
         tfp_snprintf(buffer, sizeof(buffer), "Channel value: %d\n", channelValue);
         cliPrint(buffer);
 
