@@ -1130,13 +1130,13 @@ void FAST_CODE pidController(float dT)
         if (FLIGHT_MODE(ANGLE_MODE) || FLIGHT_MODE(HORIZON_MODE) || isFlightAxisAngleOverrideActive(axis)) {
             //If axis angle override, get the correct angle from Logic Conditions
             //Apply the Level PID controller
-            if(rxGetChannelValue_no_bs(AUX8) > 1900){
-                pidLevel(target_values[axis], &pidState[axis], axis, horizonRateMagnitude, dT);
-            }else{
+            // if(rxGetChannelValue_no_bs(AUX8) > 1900){
+            //     pidLevel(target_values[axis], &pidState[axis], axis, horizonRateMagnitude, dT);
+            // }else{
                 float angleTarget = getFlightAxisAngleOverride(axis, computePidLevelTarget(axis));
                 target_values[axis] = angleTarget;
                 pidLevel(angleTarget, &pidState[axis], axis, horizonRateMagnitude, dT);
-            }
+            // }
 
             canUseFpvCameraMix = false;     // FPVANGLEMIX is incompatible with ANGLE/HORIZON
             levelingEnabled = true;
