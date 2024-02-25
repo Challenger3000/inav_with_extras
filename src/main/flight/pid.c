@@ -1129,19 +1129,39 @@ void FAST_CODE pidController(float dT)
     for (uint8_t axis = FD_ROLL; axis <= FD_PITCH; axis++) {
         if (FLIGHT_MODE(ANGLE_MODE) || FLIGHT_MODE(HORIZON_MODE) || isFlightAxisAngleOverrideActive(axis)) {
             //If axis angle override, get the correct angle from Logic Conditions
-            float angleTarget = getFlightAxisAngleOverride(axis, computePidLevelTarget(axis));
-            target_values[axis] = angleTarget;
             //Apply the Level PID controller
-            pidLevel(angleTarget, &pidState[axis], axis, horizonRateMagnitude, dT);
+            if(rxGetChannelValue_no_bs(AUX12) > 1900){
+                pidLevel(target_values[axis], &pidState[axis], axis, horizonRateMagnitude, dT);
+            }else{
+                float angleTarget = getFlightAxisAngleOverride(axis, computePidLevelTarget(axis));
+                target_values[axis] = angleTarget;
+                pidLevel(angleTarget, &pidState[axis], axis, horizonRateMagnitude, dT);
+            }
+
             canUseFpvCameraMix = false;     // FPVANGLEMIX is incompatible with ANGLE/HORIZON
             levelingEnabled = true;
         }
     }
 
-    if(micros() - time_since_last_print > 100000 && micros() > 30000000){
+    if(micros() - time_since_last_print > 1000000 && micros() > 40000000){
         time_since_last_print = micros();
 
         char buffer[50];
+
+        if (FLIGHT_MODE(HORIZON_MODE)) {
+            char buffer[50];
+            tfp_snprintf(buffer, sizeof(buffer), "Horizon mode is active\n");
+            cliPrint(buffer);
+        } else if (FLIGHT_MODE(ANGLE_MODE)) {
+            char buffer[50];
+            tfp_snprintf(buffer, sizeof(buffer), "Angle mode is active\n");
+            cliPrint(buffer);
+        } else {
+            char buffer[50];
+            tfp_snprintf(buffer, sizeof(buffer), "Neither Horizon nor Angle mode is active\n");
+            cliPrint(buffer);
+        }
+
         tfp_snprintf(buffer, sizeof(buffer), "Target values: %f, %f, %f\n", target_values[0], target_values[1], target_values[2]);
         cliPrint(buffer);
     }

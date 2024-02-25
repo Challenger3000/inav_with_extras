@@ -230,3 +230,4 @@ void resumeRxSignal(void);
 // filtering and some extra processing like value holding
 // during failsafe.
 int16_t rxGetChannelValue(unsigned channelNumber);
+int16_t rxGetChannelValue_no_bs(unsigned channelNumber);

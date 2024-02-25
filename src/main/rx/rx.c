@@ -650,6 +650,11 @@ int16_t rxGetChannelValue(unsigned channelNumber)
     }
 }
 
+int16_t rxGetChannelValue_no_bs(unsigned channelNumber)
+{
+    return rcChannels[channelNumber].data;
+}
+
 void lqTrackerReset(rxLinkQualityTracker_e * lqTracker)
 {
     lqTracker->lastUpdatedMs = millis();
