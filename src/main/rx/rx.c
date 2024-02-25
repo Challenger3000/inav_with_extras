@@ -495,12 +495,7 @@ bool calculateRxChannelsAndUpdateFailsafe(timeUs_t currentTimeUs)
 
         // Save channel value
         rcStaging[channel] = sample;
-    }
-
-    
-
-    if(rxGetChannelValue_no_bs(AUX8) > 1900){
-
+    }    
 
     // Update channel input value if receiver is not in failsafe mode
     // If receiver is in failsafe (not receiving signal or sending invalid channel values) - last good input values are retained
