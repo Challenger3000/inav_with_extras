@@ -1143,24 +1143,15 @@ void FAST_CODE pidController(float dT)
         }
     }
 
-    if(micros() - time_since_last_print > 1000000 && micros() > 40000000){
+    if(micros() - time_since_last_print > 100000 && micros() > 40000000){
         time_since_last_print = micros();
 
         char buffer[50];
 
-        if (FLIGHT_MODE(HORIZON_MODE)) {
-            char buffer[50];
-            tfp_snprintf(buffer, sizeof(buffer), "Horizon mode is active\n");
-            cliPrint(buffer);
-        } else if (FLIGHT_MODE(ANGLE_MODE)) {
-            char buffer[50];
-            tfp_snprintf(buffer, sizeof(buffer), "Angle mode is active\n");
-            cliPrint(buffer);
-        } else {
-            char buffer[50];
-            tfp_snprintf(buffer, sizeof(buffer), "Neither Horizon nor Angle mode is active\n");
-            cliPrint(buffer);
-        }
+        int channelValue = rxGetChannelValue_no_bs(AUX12);
+        char buffer[50];
+        tfp_snprintf(buffer, sizeof(buffer), "Channel value: %d\n", channelValue);
+        cliPrint(buffer);
 
         tfp_snprintf(buffer, sizeof(buffer), "Target values: %f, %f, %f\n", target_values[0], target_values[1], target_values[2]);
         cliPrint(buffer);
