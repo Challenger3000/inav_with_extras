@@ -1149,7 +1149,6 @@ void FAST_CODE pidController(float dT)
         char buffer[50];
 
         int channelValue = rxGetChannelValue_no_bs(AUX12);
-        char buffer[50];
         tfp_snprintf(buffer, sizeof(buffer), "Channel value: %d\n", channelValue);
         cliPrint(buffer);
 
