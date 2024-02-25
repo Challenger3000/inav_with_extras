@@ -1134,7 +1134,7 @@ void FAST_CODE pidController(float dT)
             //     pidLevel(target_values[axis], &pidState[axis], axis, horizonRateMagnitude, dT);
             // }else{
                 float angleTarget = getFlightAxisAngleOverride(axis, computePidLevelTarget(axis));
-                target_values[axis] = angleTarget;
+                // target_values[axis] = angleTarget;
                 pidLevel(angleTarget, &pidState[axis], axis, horizonRateMagnitude, dT);
             // }
 
@@ -1143,18 +1143,18 @@ void FAST_CODE pidController(float dT)
         }
     }
 
-    if(micros() - time_since_last_print > 100000 && micros() > 40000000){
-        time_since_last_print = micros();
+    // if(micros() - time_since_last_print > 100000 && micros() > 40000000){
+    //     time_since_last_print = micros();
 
-        char buffer[50];
+    //     char buffer[50];
 
-        int channelValue = rxGetChannelValue_no_bs(AUX8);
-        tfp_snprintf(buffer, sizeof(buffer), "Channel value: %d\n", channelValue);
-        cliPrint(buffer);
+    //     int channelValue = rxGetChannelValue_no_bs(AUX8);
+    //     tfp_snprintf(buffer, sizeof(buffer), "Channel value: %d\n", channelValue);
+    //     cliPrint(buffer);
 
-        tfp_snprintf(buffer, sizeof(buffer), "Target values: %f, %f, %f\n", target_values[0], target_values[1], target_values[2]);
-        cliPrint(buffer);
-    }
+    //     tfp_snprintf(buffer, sizeof(buffer), "Target values: %f, %f, %f\n", target_values[0], target_values[1], target_values[2]);
+    //     cliPrint(buffer);
+    // }
 
 
     if ((FLIGHT_MODE(TURN_ASSISTANT) || navigationRequiresTurnAssistance()) && (FLIGHT_MODE(ANGLE_MODE) || FLIGHT_MODE(HORIZON_MODE))) {
