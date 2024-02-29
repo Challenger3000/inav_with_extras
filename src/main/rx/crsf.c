@@ -40,6 +40,10 @@
 #include "rx/rx.h"
 #include "rx/crsf.h"
 
+// flyaway debugging
+rxConfig_t rxConfig_applied;
+
+
 #include "telemetry/crsf.h"
 #define CRSF_TIME_NEEDED_PER_FRAME_US   1100 // 700 ms + 400 ms for potential ad-hoc request
 #define CRSF_TIME_BETWEEN_FRAMES_US     6667 // At fastest, frames are sent by the transmitter every 6.667 milliseconds, 150 Hz
