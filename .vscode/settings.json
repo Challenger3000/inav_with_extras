@@ -16,7 +16,8 @@
         "type_traits": "cpp",
         "xtr1common": "cpp",
         "rx.h": "c",
-        "crsf.h": "c"
+        "crsf.h": "c",
+        "esc_sensor.h": "c"
     },
     "editor.tabSize": 4,
     "editor.insertSpaces": true,

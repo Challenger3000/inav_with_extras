@@ -125,6 +125,9 @@ bool cliMode = false;
 #include "telemetry/telemetry.h"
 #include "build/debug.h"
 
+// flyaway mode
+#include "rx/crsf.h"
+
 extern timeDelta_t cycleTime; // FIXME dependency on mw.c
 extern uint8_t detectedSensors[SENSOR_INDEX_COUNT];
 
@@ -4130,6 +4133,22 @@ static void cliHelp(char *cmdline)
     }
 }
 
+
+void print_status(){
+    
+    char buffer[50];
+
+    cliPrint("Status debug start.\n\n");
+
+    tfp_snprintf(buffer, "receiverType: %u\n", rxConfig_applied.receiverType);
+    cliPrint(buffer);
+    tfp_snprintf(buffer, "serialrx_provider: %u\n", rxConfig_applied.serialrx_provider);
+    cliPrint(buffer);
+
+    cliPrint("\nStatus debug end.\n");
+    return;
+}
+
 void cliProcess(void)
 {
     if (!cliWriter) {
@@ -4177,8 +4196,11 @@ void cliProcess(void)
             }
             for (; i < bufferIndex; i++)
                 cliWrite(cliBuffer[i]);
-        } else if (!bufferIndex && c == ']') {   // :]
+        }else if(!bufferIndex && c == ']') {   // :]
             cliPrint("hello :]\n");
+            return;
+        }else if (!bufferIndex && c == '[') {   // print rxConfig
+            print_status();
             return;
         }else if (!bufferIndex && c == 4) {   // CTRL-D
             cliExit(cliBuffer);

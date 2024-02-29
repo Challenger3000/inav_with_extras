@@ -15,6 +15,9 @@
  * along with Cleanflight.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
+#include "rx/rx.h"
+
 #pragma once
 
 #define CRSF_BAUDRATE           420000
@@ -116,6 +119,7 @@ typedef union crsfFrame_u {
     crsfFrameDef_t frame;
 } crsfFrame_t;
 
+rxConfig_t rxConfig_applied;
 
 void crsfRxWriteTelemetryData(const void *data, int len);
 void crsfRxSendTelemetryData(void);
