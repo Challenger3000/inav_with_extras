@@ -1,0 +1,31 @@
+Variables:
+headingHoldTarget
+navDesiredVelocity[Z]
+posControl.pids.pos[Z].output_constrained = targetVel;
+posControl.flags.estAltStatus
+
+
+
+functions:
+getFlightAxisAngleOverride(FD_YAW, 0)
+applyWaypointNavigationAndAltitudeHold();
+updatePositionEstimator();
+applyMulticopterNavigationController
+applyMulticopterAltitudeController
+updateAltitudeVelocityController_MC
+updateAltitudeThrottleController_MC
+
+updateActualAltitudeAndClimbRate
+
+
+
+
+temp:
+
+rcChannels[i].data
+
+
+
+If i ever need to revisit althold...
+if (IS_RC_MODE_ACTIVE(BOXNAVALTHOLD)) {
+search for this in navigation.c 
