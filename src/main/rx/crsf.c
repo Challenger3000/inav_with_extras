@@ -20,6 +20,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+// trajectory debug
+#include "fc/cli.h"
+#include "common/printf.h"
+
 #include "platform.h"
 #ifdef USE_SERIALRX_CRSF
 
@@ -296,12 +300,38 @@ void crsfRxSendTelemetryData(void)
             }
         }
         serialWriteBuf(serialPort, telemetryBuf, telemetryBufLen);
-        telemetryBufLen = 0; // reset telemetry buffer
+        telemetryBufLen = 0; // reset telemetry delayed_print_buffer
     }
 }
 
 bool crsfRxInit(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig)
 {
+
+
+
+    // Print fields of rxConfig
+    tfp_snprintf(delayed_print_tempBuffer, sizeof(delayed_print_tempBuffer), "receiverType: %u\n", rxConfig.receiverType);
+    strncat(delayed_print_buffer, delayed_print_tempBuffer, sizeof(delayed_print_buffer) - strlen(delayed_print_buffer) - 1);
+
+    // Assuming MAX_MAPPABLE_RX_INPUTS is a defined constant
+    for (int i = 0; i < MAX_MAPPABLE_RX_INPUTS; i++) {
+        tfp_snprintf(delayed_print_tempBuffer, sizeof(delayed_print_tempBuffer), "rcmap[%d]: %u\n", i, rxConfig.rcmap[i]);
+        strncat(delayed_print_buffer, delayed_print_tempBuffer, sizeof(delayed_print_buffer) - strlen(delayed_print_buffer) - 1);
+    }
+
+    tfp_snprintf(delayed_print_tempBuffer, sizeof(delayed_print_tempBuffer), "serialrx_provider: %u\n", rxConfig.serialrx_provider);
+    strncat(delayed_print_buffer, delayed_print_tempBuffer, sizeof(delayed_print_buffer) - strlen(delayed_print_buffer) - 1);
+
+    tfp_snprintf(delayed_print_tempBuffer, sizeof(delayed_print_tempBuffer), "serialrx_inverted: %u\n", rxConfig.serialrx_inverted);
+    strncat(delayed_print_buffer, delayed_print_tempBuffer, sizeof(delayed_print_buffer) - strlen(delayed_print_buffer) - 1);
+
+    tfp_snprintf(delayed_print_tempBuffer, sizeof(delayed_print_tempBuffer), "halfDuplex: %u\n", rxConfig.halfDuplex);
+    strncat(delayed_print_buffer, delayed_print_tempBuffer, sizeof(delayed_print_buffer) - strlen(delayed_print_buffer) - 1);
+
+    // Continue for the rest of the fields...
+
+    cliPrint(delayed_print_buffer);
+
     for (int ii = 0; ii < CRSF_MAX_CHANNEL; ++ii) {
         crsfChannelData[ii] = (16 * PWM_RANGE_MIDDLE) / 10 - 1408;
     }

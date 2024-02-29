@@ -65,7 +65,7 @@
 
 #include "programming/logic_condition.h"
 
-// debug of trajectory
+// trajectory debug
 #include "fc/cli.h"
 #include "common/printf.h"
 

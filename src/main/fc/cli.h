@@ -19,6 +19,10 @@
 
 extern bool cliMode;
 
+
+char delayed_print_buffer[1024]; 
+char delayed_print_tempBuffer[100];
+
 struct serialConfig_s;
 void cliInit(const struct serialConfig_s *serialConfig);
 void cliProcess(void);
