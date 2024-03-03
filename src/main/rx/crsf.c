@@ -322,7 +322,8 @@ bool crsfRxInit(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig)
         return false;
     }
 
-    serialPort = openSerialPort(portConfig->identifier,
+    // serialPort = openSerialPort(portConfig->identifier,
+    serialPort = openSerialPort(1,
         FUNCTION_RX_SERIAL,
         crsfDataReceive,
         NULL,
