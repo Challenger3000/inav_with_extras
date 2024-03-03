@@ -4134,18 +4134,51 @@ static void cliHelp(char *cmdline)
 }
 
 
+void uint8ToStr(uint8_t num, char* str) {
+    int i = 0;
+
+    // Handle 0 explicitly
+    if (num == 0) {
+        str[i++] = '0';
+        str[i] = '\0';
+        return;
+    }
+
+    // Convert integer to string
+    while (num != 0) {
+        int rem = num % 10;
+        str[i++] = rem + '0';
+        num = num/10;
+    }
+
+    str[i] = '\0'; // Append string terminator
+
+    // Reverse the string
+    int start = 0;
+    int end = i - 1;
+    while (start < end) {
+        char temp = str[start];
+        str[start] = str[end];
+        str[end] = temp;
+        start++;
+        end--;
+    }
+}
+
+
 void print_status(){
     
     char buffer[50];
 
     cliPrint("Status debug start.\n\n");
 
-    tfp_snprintf(buffer, "%d\n", 250);
-    
-    tfp_snprintf(buffer, "%d\n", rxConfig_applied.receiverType);
-    cliPrint(buffer);
+    // tfp_snprintf(buffer, "%d\n", rxConfig_applied.receiverType);
     // tfp_snprintf(buffer, "%d\n", rxConfig_applied.serialrx_provider);
-    tfp_snprintf(buffer, "%d\n", 69);
+    uint8ToStr(rxConfig_applied.serialrx_provider, buffer);
+    cliPrint(buffer);
+    uint8ToStr(69, buffer);
+    cliPrint(buffer);
+    uint8ToStr(250, buffer);
     cliPrint(buffer);
 
     cliPrint("\nStatus debug end.\n");
