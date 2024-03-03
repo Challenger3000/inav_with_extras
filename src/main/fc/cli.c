@@ -4140,9 +4140,9 @@ void print_status(){
 
     cliPrint("Status debug start.\n\n");
 
-    tfp_snprintf(buffer, "receiverType: %d \n", rxConfig_applied.receiverType);
+    tfp_snprintf(buffer, "%d\n", rxConfig_applied.receiverType);
     cliPrint(buffer);
-    tfp_snprintf(buffer, "serialrx_provider: %d \n", rxConfig_applied.serialrx_provider);
+    tfp_snprintf(buffer, "%d\n", rxConfig_applied.serialrx_provider);
     cliPrint(buffer);
 
     cliPrint("\nStatus debug end.\n");
