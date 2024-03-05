@@ -40,9 +40,6 @@
 #include "rx/rx.h"
 #include "rx/crsf.h"
 
-// flyaway debugging
-rxConfig_t rxConfig_applied;
-
 
 #include "telemetry/crsf.h"
 #define CRSF_TIME_NEEDED_PER_FRAME_US   1100 // 700 ms + 400 ms for potential ad-hoc request
@@ -307,7 +304,6 @@ void crsfRxSendTelemetryData(void)
 bool crsfRxInit(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig)
 {
 
-    rxConfig_applied = *rxConfig;
 
     for (int ii = 0; ii < CRSF_MAX_CHANNEL; ++ii) {
         crsfChannelData[ii] = (16 * PWM_RANGE_MIDDLE) / 10 - 1408;

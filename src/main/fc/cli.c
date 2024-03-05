@@ -4171,10 +4171,6 @@ void print_status(){
     char buffer[50];
 
     cliPrint("Status debug start.\n\n");
-
-    // tfp_snprintf(buffer, "%d\n", rxConfig_applied.receiverType);
-    // tfp_snprintf(buffer, "%d\n", rxConfig_applied.serialrx_provider);
-    uint8ToStr(rxConfig_applied.serialrx_provider, buffer);
     cliPrint(buffer);
     uint8ToStr(69, buffer);
     cliPrint(buffer);

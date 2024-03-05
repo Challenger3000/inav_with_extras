@@ -51,6 +51,7 @@
 
 #include "rx/rx.h"
 #include "rx/crsf.h"
+#include "rx/crsfx.h"
 #include "rx/ibus.h"
 #include "rx/jetiexbus.h"
 #include "rx/fport.h"
