@@ -51,7 +51,6 @@
 
 #include "rx/rx.h"
 #include "rx/crsf.h"
-#include "rx/crsfx.h"
 #include "rx/ibus.h"
 #include "rx/jetiexbus.h"
 #include "rx/fport.h"
@@ -221,8 +220,7 @@ bool serialRxInit(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig
 #endif
 #ifdef USE_SERIALRX_CRSF
     case SERIALRX_CRSF:
-        // enabled = crsfRxInit(rxConfig, rxRuntimeConfig);
-        enabled = crsfRxInitx(rxConfig, rxRuntimeConfig);
+        enabled = crsfRxInit(rxConfig, rxRuntimeConfig);
         break;
 #endif
 #ifdef USE_SERIALRX_FPORT
