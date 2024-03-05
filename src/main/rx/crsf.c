@@ -167,24 +167,25 @@ STATIC_UNIT_TESTED void crsfDataReceive(uint16_t c, void *rxCallbackData)
         if (crsfFrameDone) {
             crsfFramePosition = 0;
             if (crsfFrame.frame.type != CRSF_FRAMETYPE_RC_CHANNELS_PACKED) {
-                const uint8_t crc = crsfFrameCRC();
-                if (crc == crsfFrame.bytes[fullFrameLength - 1]) {
-                    switch (crsfFrame.frame.type)
-                    {
-#if defined(USE_MSP_OVER_TELEMETRY)
-                        case CRSF_FRAMETYPE_MSP_REQ:
-                        case CRSF_FRAMETYPE_MSP_WRITE: {
-                            uint8_t *frameStart = (uint8_t *)&crsfFrame.frame.payload + CRSF_FRAME_ORIGIN_DEST_SIZE;
-                            if (bufferCrsfMspFrame(frameStart, CRSF_FRAME_RX_MSP_FRAME_SIZE)) {
-                                crsfScheduleMspResponse();
-                            }
-                            break;
-                        }
-#endif
-                        default:
-                            break;
-                    }
-                }
+                // scam
+//                 const uint8_t crc = crsfFrameCRC();
+//                 if (crc == crsfFrame.bytes[fullFrameLength - 1]) {
+//                     switch (crsfFrame.frame.type)
+//                     {
+// #if defined(USE_MSP_OVER_TELEMETRY)
+//                         case CRSF_FRAMETYPE_MSP_REQ:
+//                         case CRSF_FRAMETYPE_MSP_WRITE: {
+//                             uint8_t *frameStart = (uint8_t *)&crsfFrame.frame.payload + CRSF_FRAME_ORIGIN_DEST_SIZE;
+//                             if (bufferCrsfMspFrame(frameStart, CRSF_FRAME_RX_MSP_FRAME_SIZE)) {
+//                                 crsfScheduleMspResponse();
+//                             }
+//                             break;
+//                         }
+// #endif
+//                         default:
+//                             break;
+//                     }
+//                 }
             }
         }
     }
