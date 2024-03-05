@@ -237,24 +237,24 @@ STATIC_UNIT_TESTED void crsfDataReceive_2(uint16_t c, void *rxCallbackData)
             crsfFramePosition_2 = 0;
             if (crsfFrame_2.frame.type != CRSF_FRAMETYPE_RC_CHANNELS_PACKED) {
                 // scam
-//                 const uint8_t crc = crsfFrameCRC();
-//                 if (crc == crsfFrame_2.bytes[fullFrameLength - 1]) {
-//                     switch (crsfFrame_2.frame.type)
-//                     {
-// #if defined(USE_MSP_OVER_TELEMETRY)
-//                         case CRSF_FRAMETYPE_MSP_REQ:
-//                         case CRSF_FRAMETYPE_MSP_WRITE: {
-//                             uint8_t *frameStart = (uint8_t *)&crsfFrame_2.frame.payload + CRSF_FRAME_ORIGIN_DEST_SIZE;
-//                             if (bufferCrsfMspFrame(frameStart, CRSF_FRAME_RX_MSP_FRAME_SIZE)) {
-//                                 crsfScheduleMspResponse();
-//                             }
-//                             break;
-//                         }
-// #endif
-//                         default:
-//                             break;
-//                     }
-//                 }
+                const uint8_t crc = crsfFrameCRC();
+                if (crc == crsfFrame_2.bytes[fullFrameLength - 1]) {
+                    switch (crsfFrame_2.frame.type)
+                    {
+#if defined(USE_MSP_OVER_TELEMETRY)
+                        case CRSF_FRAMETYPE_MSP_REQ:
+                        case CRSF_FRAMETYPE_MSP_WRITE: {
+                            uint8_t *frameStart = (uint8_t *)&crsfFrame_2.frame.payload + CRSF_FRAME_ORIGIN_DEST_SIZE;
+                            if (bufferCrsfMspFrame(frameStart, CRSF_FRAME_RX_MSP_FRAME_SIZE)) {
+                                crsfScheduleMspResponse();
+                            }
+                            break;
+                        }
+#endif
+                        default:
+                            break;
+                    }
+                }
             }
         }
     }
@@ -368,40 +368,40 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_2(rxRuntimeConfig_t *rxRuntimeConfig)
             crsfChannelData_2[15] = rcChannels->chan15;
             return RX_FRAME_COMPLETE;
         }
-//         else if (crsfFrame_2.frame.type == CRSF_FRAMETYPE_LINK_STATISTICS) {
-//             // CRC includes type and payload of each frame
-//             const uint8_t crc = crsfFrameCRC();
-//             if (crc != crsfFrame_2.frame.payload[CRSF_FRAME_LINK_STATISTICS_PAYLOAD_SIZE]) {
-//                 return RX_FRAME_PENDING;
-//             }
-//             crsfFrame_2.frame.frameLength = CRSF_FRAME_LINK_STATISTICS_PAYLOAD_SIZE + CRSF_FRAME_LENGTH_TYPE_CRC;
+        else if (crsfFrame_2.frame.type == CRSF_FRAMETYPE_LINK_STATISTICS) {
+            // CRC includes type and payload of each frame
+            const uint8_t crc = crsfFrameCRC();
+            if (crc != crsfFrame_2.frame.payload[CRSF_FRAME_LINK_STATISTICS_PAYLOAD_SIZE]) {
+                return RX_FRAME_PENDING;
+            }
+            crsfFrame_2.frame.frameLength = CRSF_FRAME_LINK_STATISTICS_PAYLOAD_SIZE + CRSF_FRAME_LENGTH_TYPE_CRC;
 
-//             const crsfPayloadLinkStatistics_t* linkStats = (crsfPayloadLinkStatistics_t*)&crsfFrame_2.frame.payload;
-//             const uint8_t crsftxpowerindex = (linkStats->uplinkTXPower < CRSF_POWER_COUNT) ? linkStats->uplinkTXPower : 0;
+            const crsfPayloadLinkStatistics_t* linkStats = (crsfPayloadLinkStatistics_t*)&crsfFrame_2.frame.payload;
+            const uint8_t crsftxpowerindex = (linkStats->uplinkTXPower < CRSF_POWER_COUNT) ? linkStats->uplinkTXPower : 0;
 
-//             rxLinkStatistics.uplinkRSSI = -1* (linkStats->activeAntenna ? linkStats->uplinkRSSIAnt2 : linkStats->uplinkRSSIAnt1);
-//             rxLinkStatistics.uplinkLQ = linkStats->uplinkLQ;
-//             rxLinkStatistics.uplinkSNR = linkStats->uplinkSNR;
-//             rxLinkStatistics.rfMode = linkStats->rfMode;
-//             rxLinkStatistics.uplinkTXPower = crsfTxPowerStatesmW[crsftxpowerindex];
-//             rxLinkStatistics.activeAntenna = linkStats->activeAntenna;
+            rxLinkStatistics.uplinkRSSI = -1* (linkStats->activeAntenna ? linkStats->uplinkRSSIAnt2 : linkStats->uplinkRSSIAnt1);
+            rxLinkStatistics.uplinkLQ = linkStats->uplinkLQ;
+            rxLinkStatistics.uplinkSNR = linkStats->uplinkSNR;
+            rxLinkStatistics.rfMode = linkStats->rfMode;
+            rxLinkStatistics.uplinkTXPower = crsfTxPowerStatesmW[crsftxpowerindex];
+            rxLinkStatistics.activeAntenna = linkStats->activeAntenna;
 
-// #ifdef USE_OSD
-//             if (rxLinkStatistics.uplinkLQ > 0) {
-//                 int16_t uplinkStrength;   // RSSI dBm converted to %
-//                 uplinkStrength = constrain((100 * sq((osdConfig()->rssi_dbm_max - osdConfig()->rssi_dbm_min)) - (100 * sq((osdConfig()->rssi_dbm_max  - rxLinkStatistics.uplinkRSSI)))) / sq((osdConfig()->rssi_dbm_max - osdConfig()->rssi_dbm_min)),0,100);
-//                 if (rxLinkStatistics.uplinkRSSI >= osdConfig()->rssi_dbm_max )
-//                     uplinkStrength = 99;
-//                 else if (rxLinkStatistics.uplinkRSSI < osdConfig()->rssi_dbm_min)
-//                     uplinkStrength = 0;
-//                 lqTrackerSet(/*rxRuntimeConfig_2*/rxRuntimeConfig->lqTracker, scaleRange(uplinkStrength, 0, 99, 0, RSSI_MAX_VALUE));
-//             } else {
-//                 lqTrackerSet(/*rxRuntimeConfig_2*/rxRuntimeConfig->lqTracker, 0);
-//             }
-// #endif
+#ifdef USE_OSD
+            if (rxLinkStatistics.uplinkLQ > 0) {
+                int16_t uplinkStrength;   // RSSI dBm converted to %
+                uplinkStrength = constrain((100 * sq((osdConfig()->rssi_dbm_max - osdConfig()->rssi_dbm_min)) - (100 * sq((osdConfig()->rssi_dbm_max  - rxLinkStatistics.uplinkRSSI)))) / sq((osdConfig()->rssi_dbm_max - osdConfig()->rssi_dbm_min)),0,100);
+                if (rxLinkStatistics.uplinkRSSI >= osdConfig()->rssi_dbm_max )
+                    uplinkStrength = 99;
+                else if (rxLinkStatistics.uplinkRSSI < osdConfig()->rssi_dbm_min)
+                    uplinkStrength = 0;
+                lqTrackerSet(/*rxRuntimeConfig_2*/rxRuntimeConfig->lqTracker, scaleRange(uplinkStrength, 0, 99, 0, RSSI_MAX_VALUE));
+            } else {
+                lqTrackerSet(/*rxRuntimeConfig_2*/rxRuntimeConfig->lqTracker, 0);
+            }
+#endif
             // This is not RC channels frame, update channel value but don't indicate frame completion
-        //     return RX_FRAME_PENDING;
-        // }
+            return RX_FRAME_PENDING;
+        }
     }
     return RX_FRAME_PENDING;
 }
