@@ -96,6 +96,7 @@ static rcChannel_t rcChannels[MAX_SUPPORTED_RC_CHANNEL_COUNT];
 
 rxLinkStatistics_t rxLinkStatistics;
 rxRuntimeConfig_t rxRuntimeConfig;
+// rxRuntimeConfig_t rxRuntimeConfig_2;
 static uint8_t rcSampleIndex = 0;
 
 PG_REGISTER_WITH_RESET_TEMPLATE(rxConfig_t, rxConfig, PG_RX_CONFIG, 12);
