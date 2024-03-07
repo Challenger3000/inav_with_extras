@@ -298,10 +298,13 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
             crsfChannelData[14] = rcChannels->chan14;
             crsfChannelData[15] = rcChannels->chan15;
 
-            if(crsfChannelData[11]!=rx_switch_old)
+            if(crsfChannelData[11]> 1500)
             {
-                rx_switch_old = crsfChannelData[11];
-                switchRX();
+                // rx_switch_old = crsfChannelData[11];
+                // switchRX();
+                rx_kind = 1;
+                rxRuntimeConfigCopy->rcReadRawFn = crsfReadRawRC_2;
+                rxRuntimeConfigCopy->rcFrameStatusFn = crsfFrameStatus_2;
             }
             return RX_FRAME_COMPLETE;
         }
@@ -376,10 +379,13 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_2(rxRuntimeConfig_t *rxRuntimeConfig)
             crsfChannelData_2[13] = rcChannels->chan13;
             crsfChannelData_2[14] = rcChannels->chan14;
             crsfChannelData_2[15] = rcChannels->chan15;
-            if(crsfChannelData[11]!=rx_switch_old)
+            if(crsfChannelData[11] < 1500)
             {
-                rx_switch_old = crsfChannelData[11];
-                switchRX();
+                // rx_switch_old = crsfChannelData[11];
+                // switchRX();
+                rx_kind = 0;
+                rxRuntimeConfigCopy->rcReadRawFn = crsfReadRawRC;
+                rxRuntimeConfigCopy->rcFrameStatusFn = crsfFrameStatus;
             }
             return RX_FRAME_COMPLETE;
         }
