@@ -65,6 +65,8 @@ static timeUs_t crsfFrameStartAt_2 = 0;
 static uint8_t telemetryBuf[CRSF_FRAME_SIZE_MAX];
 static uint8_t telemetryBufLen = 0;
 
+uint8_t rx_kind = 1;
+
 const uint16_t crsfTxPowerStatesmW[CRSF_POWER_COUNT] = {0, 10, 25, 100, 500, 1000, 2000, 250, 50};
 
 /*
@@ -517,6 +519,22 @@ bool crsfRxInit_2(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig
         );
 
     return serialPort_2 != NULL;
+}
+
+void switchRX(void)
+{
+    if (rx_kind == 0)
+    {
+        rx_kind = 1;
+        rxRuntimeConfig->rcReadRawFn = crsfReadRawRC_2;
+        rxRuntimeConfig->rcFrameStatusFn = crsfFrameStatus_2;
+    }
+    else if (rx_kind == 1)
+    {
+        rx_kind = 0;
+        rxRuntimeConfig->rcReadRawFn = crsfReadRawRC;
+        rxRuntimeConfig->rcFrameStatusFn = crsfFrameStatus;
+    }
 }
 
 bool crsfRxIsActive(void)

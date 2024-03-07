@@ -4166,20 +4166,20 @@ void uint8ToStr(uint8_t num, char* str) {
 }
 
 
-void print_status(){
+// void print_status(){
     
-    char buffer[50];
+//     char buffer[50];
 
-    cliPrint("Status debug start.\n\n");
-    cliPrint(buffer);
-    uint8ToStr(69, buffer);
-    cliPrint(buffer);
-    uint8ToStr(250, buffer);
-    cliPrint(buffer);
+//     cliPrint("Status debug start.\n\n");
+//     cliPrint(buffer);
+//     uint8ToStr(69, buffer);
+//     cliPrint(buffer);
+//     uint8ToStr(250, buffer);
+//     cliPrint(buffer);
 
-    cliPrint("\nStatus debug end.\n");
-    return;
-}
+//     cliPrint("\nStatus debug end.\n");
+//     return;
+// }
 
 void cliProcess(void)
 {
@@ -4232,7 +4232,9 @@ void cliProcess(void)
             cliPrint("hello :]\n");
             return;
         }else if (!bufferIndex && c == '[') {   // print rxConfig
-            print_status();
+            cliPrint("Switching RX\n");
+            switchRX();
+            // print_status();
             return;
         }else if (!bufferIndex && c == 4) {   // CTRL-D
             cliExit(cliBuffer);

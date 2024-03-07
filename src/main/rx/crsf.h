@@ -130,3 +130,5 @@ bool crsfRxIsActive(void);
 
 bool crsfRxInit_2(const struct rxConfig_s *initialRxConfig, struct rxRuntimeConfig_s *rxRuntimeConfig);
 bool crsfRxIsActive_2(void);
+
+void switchRX(void);
