@@ -317,7 +317,7 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
             crsfChannelData[14] = rcChannels->chan14;
             crsfChannelData[15] = rcChannels->chan15;
 
-            if(crsfChannelData[11]> 1500)
+            if(crsfChannelData[10] > 1600)
             {
                 // rx_switch_old = crsfChannelData[11];
                 // switchRX();
@@ -398,7 +398,7 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_2(rxRuntimeConfig_t *rxRuntimeConfig)
             crsfChannelData_2[13] = rcChannels->chan13;
             crsfChannelData_2[14] = rcChannels->chan14;
             crsfChannelData_2[15] = rcChannels->chan15;
-            if(crsfChannelData[11] < 1500)
+            if(crsfChannelData[10] < 1400)
             {
                 // rx_switch_old = crsfChannelData[11];
                 // switchRX();
