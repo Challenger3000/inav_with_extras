@@ -521,6 +521,24 @@ bool crsfRxInit_2(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig
     return serialPort_2 != NULL;
 }
 
+void dual_crsf_Init(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig)
+{
+    crsfRxInit(rxConfig, rxRuntimeConfig);
+    crsfRxInit_2(rxConfig, rxRuntimeConfig);
+    
+    if(rx_kind == 0)
+    {
+        rxRuntimeConfig->rcReadRawFn = crsfReadRawRC;
+        rxRuntimeConfig->rcFrameStatusFn = crsfFrameStatus;
+    }
+    else if(rx_kind == 1)
+    {
+        rxRuntimeConfig->rcReadRawFn = crsfReadRawRC_2;
+        rxRuntimeConfig->rcFrameStatusFn = crsfFrameStatus_2;
+    }
+    return serialPort_2 != NULL || serialPort != NULL;
+}
+
 void switchRX(void)
 {
     if (rx_kind == 0)
