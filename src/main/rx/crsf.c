@@ -66,6 +66,7 @@ static uint8_t telemetryBuf[CRSF_FRAME_SIZE_MAX];
 static uint8_t telemetryBufLen = 0;
 
 uint8_t rx_kind = 1;
+rxRuntimeConfig_t *rxRuntimeConfigCopy = NULL;
 
 const uint16_t crsfTxPowerStatesmW[CRSF_POWER_COUNT] = {0, 10, 25, 100, 500, 1000, 2000, 250, 50};
 
@@ -463,7 +464,8 @@ void crsfRxSendTelemetryData(void)
 
 bool crsfRxInit(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig)
 {
-
+    // stealing the pointer :D
+    rxRuntimeConfigCopy = rxRuntimeConfig;
 
     for (int ii = 0; ii < CRSF_MAX_CHANNEL; ++ii) {
         crsfChannelData[ii] = (16 * PWM_RANGE_MIDDLE) / 10 - 1408;
@@ -521,7 +523,7 @@ bool crsfRxInit_2(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig
     return serialPort_2 != NULL;
 }
 
-void dual_crsf_Init(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig)
+bool dual_crsf_Init(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig)
 {
     crsfRxInit(rxConfig, rxRuntimeConfig);
     crsfRxInit_2(rxConfig, rxRuntimeConfig);
