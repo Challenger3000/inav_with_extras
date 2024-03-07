@@ -65,7 +65,7 @@ static timeUs_t crsfFrameStartAt_2 = 0;
 static uint8_t telemetryBuf[CRSF_FRAME_SIZE_MAX];
 static uint8_t telemetryBufLen = 0;
 
-uint8_t rx_kind = 1;
+uint8_t rx_kind = 0;
 rxRuntimeConfig_t *rxRuntimeConfigCopy = NULL;
 
 const uint16_t crsfTxPowerStatesmW[CRSF_POWER_COUNT] = {0, 10, 25, 100, 500, 1000, 2000, 250, 50};
