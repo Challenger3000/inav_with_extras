@@ -66,6 +66,7 @@ static uint8_t telemetryBuf[CRSF_FRAME_SIZE_MAX];
 static uint8_t telemetryBufLen = 0;
 
 uint8_t rx_kind = 0;
+uint32_t rx_switch_old = 0;
 rxRuntimeConfig_t *rxRuntimeConfigCopy = NULL;
 
 const uint16_t crsfTxPowerStatesmW[CRSF_POWER_COUNT] = {0, 10, 25, 100, 500, 1000, 2000, 250, 50};
@@ -296,6 +297,12 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
             crsfChannelData[13] = rcChannels->chan13;
             crsfChannelData[14] = rcChannels->chan14;
             crsfChannelData[15] = rcChannels->chan15;
+
+            if(crsfChannelData[11]!=rx_switch_old)
+            {
+                rx_switch_old = crsfChannelData[11];
+                switchRX();
+            }
             return RX_FRAME_COMPLETE;
         }
         else if (crsfFrame.frame.type == CRSF_FRAMETYPE_LINK_STATISTICS) {
@@ -369,6 +376,11 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_2(rxRuntimeConfig_t *rxRuntimeConfig)
             crsfChannelData_2[13] = rcChannels->chan13;
             crsfChannelData_2[14] = rcChannels->chan14;
             crsfChannelData_2[15] = rcChannels->chan15;
+            if(crsfChannelData[11]!=rx_switch_old)
+            {
+                rx_switch_old = crsfChannelData[11];
+                switchRX();
+            }
             return RX_FRAME_COMPLETE;
         }
         else if (crsfFrame_2.frame.type == CRSF_FRAMETYPE_LINK_STATISTICS) {
