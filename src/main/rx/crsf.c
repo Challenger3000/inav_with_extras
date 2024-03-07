@@ -546,14 +546,14 @@ void switchRX(void)
     if (rx_kind == 0)
     {
         rx_kind = 1;
-        rxRuntimeConfig->rcReadRawFn = crsfReadRawRC_2;
-        rxRuntimeConfig->rcFrameStatusFn = crsfFrameStatus_2;
+        rxRuntimeConfigCopy->rcReadRawFn = crsfReadRawRC_2;
+        rxRuntimeConfigCopy->rcFrameStatusFn = crsfFrameStatus_2;
     }
     else if (rx_kind == 1)
     {
         rx_kind = 0;
-        rxRuntimeConfig->rcReadRawFn = crsfReadRawRC;
-        rxRuntimeConfig->rcFrameStatusFn = crsfFrameStatus;
+        rxRuntimeConfigCopy->rcReadRawFn = crsfReadRawRC;
+        rxRuntimeConfigCopy->rcFrameStatusFn = crsfFrameStatus;
     }
 }
 
