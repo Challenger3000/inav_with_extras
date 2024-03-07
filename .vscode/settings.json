@@ -19,7 +19,8 @@
         "crsf.h": "c",
         "esc_sensor.h": "c",
         "crsfx.h": "c",
-        "battery.h": "c"
+        "battery.h": "c",
+        "msp_shared.h": "c"
     },
     "editor.tabSize": 4,
     "editor.insertSpaces": true,

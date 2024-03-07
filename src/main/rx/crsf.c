@@ -68,6 +68,15 @@ static uint8_t telemetryBufLen = 0;
 uint8_t rx_kind = 0;
 uint32_t rx_switch_old = 0;
 rxRuntimeConfig_t *rxRuntimeConfigCopy = NULL;
+// Global function pointer declaration
+uint16_t (*functionPointer_1C)(const rxRuntimeConfig_t *, uint8_t) = NULL;
+uint16_t (*functionPointer_2C)(const rxRuntimeConfig_t *, uint8_t) = NULL;
+
+uint16_t (*functionPointer_1E)(const rxRuntimeConfig_t *, uint8_t) = NULL;
+uint16_t (*functionPointer_2E)(const rxRuntimeConfig_t *, uint8_t) = NULL;
+
+bool switch_receivers = true;
+
 
 const uint16_t crsfTxPowerStatesmW[CRSF_POWER_COUNT] = {0, 10, 25, 100, 500, 1000, 2000, 250, 50};
 
@@ -303,8 +312,8 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
                 // rx_switch_old = crsfChannelData[11];
                 // switchRX();
                 rx_kind = 1;
-                rxRuntimeConfigCopy->rcReadRawFn = crsfReadRawRC_2;
-                rxRuntimeConfigCopy->rcFrameStatusFn = crsfFrameStatus_2;
+                rxRuntimeConfigCopy->rcReadRawFn = functionPointer_1E;
+                rxRuntimeConfigCopy->rcFrameStatusFn = functionPointer_2E;
             }
             return RX_FRAME_COMPLETE;
         }
@@ -384,8 +393,8 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_2(rxRuntimeConfig_t *rxRuntimeConfig)
                 // rx_switch_old = crsfChannelData[11];
                 // switchRX();
                 rx_kind = 0;
-                rxRuntimeConfigCopy->rcReadRawFn = crsfReadRawRC;
-                rxRuntimeConfigCopy->rcFrameStatusFn = crsfFrameStatus;
+                rxRuntimeConfigCopy->rcReadRawFn = functionPointer_1C;
+                rxRuntimeConfigCopy->rcFrameStatusFn = functionPointer_2C;
             }
             return RX_FRAME_COMPLETE;
         }
@@ -543,6 +552,13 @@ bool crsfRxInit_2(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig
 
 bool dual_crsf_Init(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig)
 {
+
+    functionPointer_1C = crsfReadRawRC;
+    functionPointer_2C = crsfFrameStatus;
+
+    functionPointer_1E = crsfReadRawRC_2;
+    functionPointer_2E = crsfFrameStatus_2;
+
     crsfRxInit(rxConfig, rxRuntimeConfig);
     crsfRxInit_2(rxConfig, rxRuntimeConfig);
     
