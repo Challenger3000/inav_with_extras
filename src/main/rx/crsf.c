@@ -69,11 +69,21 @@ uint8_t rx_kind = 0;
 uint32_t rx_switch_old = 0;
 rxRuntimeConfig_t *rxRuntimeConfigCopy = NULL;
 // Global function pointer declaration
-uint16_t (*functionPointer_1C)(const rxRuntimeConfig_t *, uint8_t) = NULL;
-uint16_t (*functionPointer_2C)(const rxRuntimeConfig_t *, uint8_t) = NULL;
 
-uint16_t (*functionPointer_1E)(const rxRuntimeConfig_t *, uint8_t) = NULL;
-uint16_t (*functionPointer_2E)(const rxRuntimeConfig_t *, uint8_t) = NULL;
+typedef uint16_t (*RawFnPtr)(const rxRuntimeConfig_t *rxRuntimeConfig, uint8_t chan); // used by receiver driver to return channel data
+typedef uint8_t (*StatusFnPtr)(rxRuntimeConfig_t *rxRuntimeConfig);
+
+
+RawFnPtr functionPointer_1C = NULL;
+RawFnPtr functionPointer_1E = NULL;
+
+StatusFnPtr functionPointer_2C = NULL;
+StatusFnPtr functionPointer_2E = NULL;
+// uint16_t (*functionPointer_1C)(const rxRuntimeConfig_t *, uint8_t) = NULL;
+// uint16_t (*functionPointer_2C)(const rxRuntimeConfig_t *, uint8_t) = NULL;
+
+// uint16_t (*functionPointer_1E)(const rxRuntimeConfig_t *, uint8_t) = NULL;
+// uint16_t (*functionPointer_2E)(const rxRuntimeConfig_t *, uint8_t) = NULL;
 
 bool switch_receivers = true;
 
