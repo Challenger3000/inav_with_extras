@@ -57,18 +57,14 @@ STATIC_UNIT_TESTED bool crsfFrameDone = false;
 STATIC_UNIT_TESTED bool crsfFrameDone_2 = false;
 STATIC_UNIT_TESTED bool crsfFrameDone_3 = false;
 STATIC_UNIT_TESTED crsfFrame_t crsfFrame;
-STATIC_UNIT_TESTED crsfFrame_t crsfFrame_2;
 STATIC_UNIT_TESTED crsfFrame_t crsfFrame_3;
 
 STATIC_UNIT_TESTED uint32_t crsfChannelData[CRSF_MAX_CHANNEL];
-STATIC_UNIT_TESTED uint32_t crsfChannelData_2[CRSF_MAX_CHANNEL];
 STATIC_UNIT_TESTED uint32_t crsfChannelData_3[CRSF_MAX_CHANNEL];
 
 static serialPort_t *serialPort;
-static serialPort_t *serialPort_2;
 static serialPort_t *serialPort_3;
 static timeUs_t crsfFrameStartAt = 0;
-static timeUs_t crsfFrameStartAt_2 = 0;
 static timeUs_t crsfFrameStartAt_3 = 0;
 static uint8_t telemetryBuf[CRSF_FRAME_SIZE_MAX];
 static uint8_t telemetryBufLen = 0;
@@ -372,7 +368,11 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
                 crsfChannelData_3[13] = rcChannels->chan13;
                 crsfChannelData_3[14] = rcChannels->chan14;
                 crsfChannelData_3[15] = rcChannels->chan15;
-
+                if(crsfChannelData[10] < 700)
+                {
+                    rx_kind = 0;
+                    cliPrint("ELRS: rx_kind: 1 -> 0\n");
+                }
                 if(micros() - last_print > 1000000)
                 {
                     last_print = micros();
@@ -380,21 +380,19 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
                     char str[12]; // Buffer big enough for an integer
                     itoa(crsfChannelData_3[10], str, 10); // 10 is the base for decimal numbers
                     cliPrint(str);
-                    cliPrint("\n");
+                    if(crsfChannelData_3[10] < 800)
+                    {
+                        cliPrint(" Switching to crsf\n");
+                    }
+                    else
+                    {
+                        cliPrint(" idle\n");
+                    }
+                    // cliPrint("\n");
                 }
             }
 
-            if(crsfChannelData[10] < 700)
-            {
-                rx_kind = 0;
-                // rxRuntimeConfigCopy->rcReadRawFn = functionPointer_1E;
-                // rxRuntimeConfigCopy->rcFrameStatusFn = functionPointer_2E;
-            }
-            // else{
-            //     rx_kind = 0;
-            //     rxRuntimeConfigCopy->rcReadRawFn = functionPointer_1C;
-            //     rxRuntimeConfigCopy->rcFrameStatusFn = functionPointer_2C;
-            // }
+
             return RX_FRAME_COMPLETE;
         }
         else if (crsfFrame_3.frame.type == CRSF_FRAMETYPE_LINK_STATISTICS) {
@@ -489,15 +487,8 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
                 if(crsfChannelData[10] > 1600)
                 {
                     rx_kind = 1;
-                    // rxRuntimeConfigCopy->rcReadRawFn = functionPointer_1E;
-                    // rxRuntimeConfigCopy->rcFrameStatusFn = functionPointer_2E;
+                    cliPrint("CRSF: rx_kind: 0 -> 1\n");
                 }
-                // else if(crsfChannelData[10] < 1400)
-                // {
-                //     rx_kind = 0;
-                //     rxRuntimeConfigCopy->rcReadRawFn = functionPointer_1C;
-                //     rxRuntimeConfigCopy->rcFrameStatusFn = functionPointer_2C;
-                // }
             }
             return RX_FRAME_COMPLETE;
         }
