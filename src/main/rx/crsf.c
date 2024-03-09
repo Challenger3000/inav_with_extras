@@ -567,8 +567,8 @@ bool dual_crsf_Init(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConf
     functionPointer_1E = crsfReadRawRC_2;
     functionPointer_2E = crsfFrameStatus_2;
 
-    crsfRxInit(rxConfig, rxRuntimeConfig);
     crsfRxInit_2(rxConfig, rxRuntimeConfig);
+    crsfRxInit(rxConfig, rxRuntimeConfig);
     
     // if(rx_kind == 0)
     // {
