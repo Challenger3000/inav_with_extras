@@ -767,16 +767,19 @@ bool crsfRxInit_2(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig
 bool dual_crsf_Init(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig)
 {
 
-    // crsf
-    functionPointer_1C = crsfReadRawRC;
-    functionPointer_2C = crsfFrameStatus;
-
     // elrs
+    crsfRxInit_3(rxConfig, rxRuntimeConfig);
     functionPointer_1E = crsfReadRawRC_3;
     functionPointer_2E = crsfFrameStatus_3;
 
+    
+    // crsf
     crsfRxInit(rxConfig, rxRuntimeConfig);
-    crsfRxInit_3(rxConfig, rxRuntimeConfig);
+    functionPointer_1C = crsfReadRawRC;
+    functionPointer_2C = crsfFrameStatus;
+
+
+
     
     if(rx_kind == 0)
     {
