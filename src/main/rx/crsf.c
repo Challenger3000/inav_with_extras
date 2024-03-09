@@ -568,7 +568,7 @@ bool dual_crsf_Init(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConf
     functionPointer_2E = crsfFrameStatus_2;
 
     crsfRxInit_2(rxConfig, rxRuntimeConfig);
-    crsfRxInit(rxConfig, rxRuntimeConfig);
+    // crsfRxInit(rxConfig, rxRuntimeConfig);
     
     // if(rx_kind == 0)
     // {
@@ -580,8 +580,8 @@ bool dual_crsf_Init(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConf
     //     rxRuntimeConfig->rcReadRawFn = crsfReadRawRC_2;
     //     rxRuntimeConfig->rcFrameStatusFn = crsfFrameStatus_2;
     // }
-    rxRuntimeConfig->rcReadRawFn = crsfReadRawRC_2;
-    rxRuntimeConfig->rcFrameStatusFn = crsfFrameStatus_2;
+    // rxRuntimeConfig->rcReadRawFn = crsfReadRawRC_2;
+    // rxRuntimeConfig->rcFrameStatusFn = crsfFrameStatus_2;
     return true;
 }
 
