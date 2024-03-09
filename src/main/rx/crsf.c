@@ -52,8 +52,10 @@
 
 STATIC_UNIT_TESTED bool crsfFrameDone = false;
 STATIC_UNIT_TESTED bool crsfFrameDone_2 = false;
+STATIC_UNIT_TESTED bool crsfFrameDone_3 = false;
 STATIC_UNIT_TESTED crsfFrame_t crsfFrame;
 STATIC_UNIT_TESTED crsfFrame_t crsfFrame_2;
+STATIC_UNIT_TESTED crsfFrame_t crsfFrame_3;
 
 STATIC_UNIT_TESTED uint32_t crsfChannelData[CRSF_MAX_CHANNEL];
 STATIC_UNIT_TESTED uint32_t crsfChannelData_2[CRSF_MAX_CHANNEL];
@@ -61,8 +63,10 @@ STATIC_UNIT_TESTED uint32_t crsfChannelData_3[CRSF_MAX_CHANNEL];
 
 static serialPort_t *serialPort;
 static serialPort_t *serialPort_2;
+static serialPort_t *serialPort_3;
 static timeUs_t crsfFrameStartAt = 0;
 static timeUs_t crsfFrameStartAt_2 = 0;
+static timeUs_t crsfFrameStartAt_3 = 0;
 static uint8_t telemetryBuf[CRSF_FRAME_SIZE_MAX];
 static uint8_t telemetryBufLen = 0;
 
@@ -233,41 +237,41 @@ STATIC_UNIT_TESTED void crsfDataReceive_3(uint16_t c, void *rxCallbackData)
 {
     UNUSED(rxCallbackData);
 
-    static uint8_t crsfFramePosition = 0;
+    static uint8_t crsfFramePosition_3 = 0;
     const timeUs_t now = micros();
 
 #ifdef DEBUG_CRSF_PACKETS
-    debug[2] = now - crsfFrameStartAt;
+    debug[2] = now - crsfFrameStartAt_3;
 #endif
 
-    if (now > crsfFrameStartAt + CRSF_TIME_NEEDED_PER_FRAME_US) {
+    if (now > crsfFrameStartAt_3 + CRSF_TIME_NEEDED_PER_FRAME_US) {
         // We've received a character after max time needed to complete a frame,
         // so this must be the start of a new frame.
-        crsfFramePosition = 0;
+        crsfFramePosition_3 = 0;
     }
 
-    if (crsfFramePosition == 0) {
-        crsfFrameStartAt = now;
+    if (crsfFramePosition_3 == 0) {
+        crsfFrameStartAt_3 = now;
     }
     // assume frame is 5 bytes long until we have received the frame length
     // full frame length includes the length of the address and framelength fields
-    const int fullFrameLength = crsfFramePosition < 3 ? 5 : crsfFrame.frame.frameLength + CRSF_FRAME_LENGTH_ADDRESS + CRSF_FRAME_LENGTH_FRAMELENGTH;
+    const int fullFrameLength = crsfFramePosition_3 < 3 ? 5 : crsfFrame_3.frame.frameLength + CRSF_FRAME_LENGTH_ADDRESS + CRSF_FRAME_LENGTH_FRAMELENGTH;
 
-    if (crsfFramePosition < fullFrameLength) {
-        crsfFrame.bytes[crsfFramePosition++] = (uint8_t)c;
-        crsfFrameDone = crsfFramePosition < fullFrameLength ? false : true;
-        if (crsfFrameDone) {
-            crsfFramePosition = 0;
-            if (crsfFrame.frame.type != CRSF_FRAMETYPE_RC_CHANNELS_PACKED) {
+    if (crsfFramePosition_3 < fullFrameLength) {
+        crsfFrame_3.bytes[crsfFramePosition_3++] = (uint8_t)c;
+        crsfFrameDone_3 = crsfFramePosition_3 < fullFrameLength ? false : true;
+        if (crsfFrameDone_3) {
+            crsfFramePosition_3 = 0;
+            if (crsfFrame_3.frame.type != CRSF_FRAMETYPE_RC_CHANNELS_PACKED) {
                 // scam
                 const uint8_t crc = crsfFrameCRC();
-                if (crc == crsfFrame.bytes[fullFrameLength - 1]) {
-                    switch (crsfFrame.frame.type)
+                if (crc == crsfFrame_3.bytes[fullFrameLength - 1]) {
+                    switch (crsfFrame_3.frame.type)
                     {
 #if defined(USE_MSP_OVER_TELEMETRY)
                         case CRSF_FRAMETYPE_MSP_REQ:
                         case CRSF_FRAMETYPE_MSP_WRITE: {
-                            uint8_t *frameStart = (uint8_t *)&crsfFrame.frame.payload + CRSF_FRAME_ORIGIN_DEST_SIZE;
+                            uint8_t *frameStart = (uint8_t *)&crsfFrame_3.frame.payload + CRSF_FRAME_ORIGIN_DEST_SIZE;
                             if (bufferCrsfMspFrame(frameStart, CRSF_FRAME_RX_MSP_FRAME_SIZE)) {
                                 crsfScheduleMspResponse();
                             }
@@ -427,8 +431,8 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
 {
     UNUSED(rxRuntimeConfig);
 
-    if (crsfFrameDone) {
-        crsfFrameDone = false;
+    if (crsfFrameDone_3) {
+        crsfFrameDone_3 = false;
         if (crsfFrame.frame.type == CRSF_FRAMETYPE_RC_CHANNELS_PACKED) {
             // CRC includes type and payload of each frame
             const uint8_t crc = crsfFrameCRC();
