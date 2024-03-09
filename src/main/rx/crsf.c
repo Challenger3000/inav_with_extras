@@ -788,8 +788,8 @@ bool dual_crsf_Init(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConf
         rxRuntimeConfig->rcReadRawFn = functionPointer_1E;
         rxRuntimeConfig->rcFrameStatusFn = functionPointer_2E;
     }
-    rxRuntimeConfig->rcReadRawFn = functionPointer_1E;
-    rxRuntimeConfig->rcFrameStatusFn = functionPointer_2E;
+    // rxRuntimeConfig->rcReadRawFn = functionPointer_1E;
+    // rxRuntimeConfig->rcFrameStatusFn = functionPointer_2E;
     return true;
 }
 
