@@ -82,6 +82,8 @@ typedef uint16_t (*RawFnPtr)(const rxRuntimeConfig_t *rxRuntimeConfig, uint8_t c
 typedef uint8_t (*StatusFnPtr)(rxRuntimeConfig_t *rxRuntimeConfig);
 
 
+static timeUs_t last_print = 0;
+
 RawFnPtr functionPointer_1C = NULL;
 RawFnPtr functionPointer_1E = NULL;
 
@@ -365,7 +367,14 @@ STATIC_UNIT_TESTED uint16_t crsfReadRawRC(const rxRuntimeConfig_t *rxRuntimeConf
      * scale factor = (2012-988) / (1811-172) = 0.62477120195241
      * offset = 988 - 172 * 0.62477120195241 = 880.53935326418548
      */
-    return (crsfChannelData[chan] * 1024 / 1639) + 881;
+    if(rx_kind == 0)
+    {
+        return (crsfChannelData[chan] * 1024 / 1639) + 881;
+    }
+    else
+    {
+        return (crsfChannelData_3[chan] * 1024 / 1639) + 881;
+    }
 }
 
 STATIC_UNIT_TESTED uint16_t crsfReadRawRC_3(const rxRuntimeConfig_t *rxRuntimeConfig, uint8_t chan)
@@ -386,6 +395,8 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
 {
     UNUSED(rxRuntimeConfig);
 
+    crsfFrameStatus_3(rxRuntimeConfig);
+
     if (crsfFrameDone) {
         crsfFrameDone = false;
         if (crsfFrame.frame.type == CRSF_FRAMETYPE_RC_CHANNELS_PACKED) {
@@ -396,41 +407,49 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
             }
             crsfFrame.frame.frameLength = CRSF_FRAME_RC_CHANNELS_PAYLOAD_SIZE + CRSF_FRAME_LENGTH_TYPE_CRC;
 
-            // unpack the RC channels
-            const crsfPayloadRcChannelsPacked_t* rcChannels = (crsfPayloadRcChannelsPacked_t*)&crsfFrame.frame.payload;
-            crsfChannelData[0] = rcChannels->chan0;
-            crsfChannelData[1] = rcChannels->chan1;
-            crsfChannelData[2] = rcChannels->chan2;
-            crsfChannelData[3] = rcChannels->chan3;
-            crsfChannelData[4] = rcChannels->chan4;
-            crsfChannelData[5] = rcChannels->chan5;
-            crsfChannelData[6] = rcChannels->chan6;
-            crsfChannelData[7] = rcChannels->chan7;
-            crsfChannelData[8] = rcChannels->chan8;
-            crsfChannelData[9] = rcChannels->chan9;
-            crsfChannelData[10] = rcChannels->chan10;
-            crsfChannelData[11] = rcChannels->chan11;
-            crsfChannelData[12] = rcChannels->chan12;
-            crsfChannelData[13] = rcChannels->chan13;
-            crsfChannelData[14] = rcChannels->chan14;
-            crsfChannelData[15] = rcChannels->chan15;
-
-
-            cliPrint("CRSF: ");
-            char str[12]; // Buffer big enough for an integer
-            itoa(crsfChannelData[10], str, 10); // 10 is the base for decimal numbers
-            cliPrint(str);
-            cliPrint("\n");
-            if(crsfChannelData[10] > 1600)
+            if(rx_kind == 0)
             {
-                rx_kind = 1;
-                rxRuntimeConfigCopy->rcReadRawFn = functionPointer_1E;
-                rxRuntimeConfigCopy->rcFrameStatusFn = functionPointer_2E;
-            }else if(crsfChannelData[10] < 1400)
-            {
-                rx_kind = 0;
-                rxRuntimeConfigCopy->rcReadRawFn = functionPointer_1C;
-                rxRuntimeConfigCopy->rcFrameStatusFn = functionPointer_2C;
+                // unpack the RC channels
+                const crsfPayloadRcChannelsPacked_t* rcChannels = (crsfPayloadRcChannelsPacked_t*)&crsfFrame.frame.payload;
+                crsfChannelData[0] = rcChannels->chan0;
+                crsfChannelData[1] = rcChannels->chan1;
+                crsfChannelData[2] = rcChannels->chan2;
+                crsfChannelData[3] = rcChannels->chan3;
+                crsfChannelData[4] = rcChannels->chan4;
+                crsfChannelData[5] = rcChannels->chan5;
+                crsfChannelData[6] = rcChannels->chan6;
+                crsfChannelData[7] = rcChannels->chan7;
+                crsfChannelData[8] = rcChannels->chan8;
+                crsfChannelData[9] = rcChannels->chan9;
+                crsfChannelData[10] = rcChannels->chan10;
+                crsfChannelData[11] = rcChannels->chan11;
+                crsfChannelData[12] = rcChannels->chan12;
+                crsfChannelData[13] = rcChannels->chan13;
+                crsfChannelData[14] = rcChannels->chan14;
+                crsfChannelData[15] = rcChannels->chan15;
+
+                if(micros() - last_print > 1000000)
+                {
+                    last_print = micros();
+                    cliPrint("CRSF: ");
+                    char str[12]; // Buffer big enough for an integer
+                    itoa(crsfChannelData[10], str, 10); // 10 is the base for decimal numbers
+                    cliPrint(str);
+                    cliPrint("\n");
+                }
+
+                if(crsfChannelData[10] > 1600)
+                {
+                    rx_kind = 1;
+                    // rxRuntimeConfigCopy->rcReadRawFn = functionPointer_1E;
+                    // rxRuntimeConfigCopy->rcFrameStatusFn = functionPointer_2E;
+                }
+                // else if(crsfChannelData[10] < 1400)
+                // {
+                //     rx_kind = 0;
+                //     rxRuntimeConfigCopy->rcReadRawFn = functionPointer_1C;
+                //     rxRuntimeConfigCopy->rcFrameStatusFn = functionPointer_2C;
+                // }
             }
             return RX_FRAME_COMPLETE;
         }
@@ -441,31 +460,33 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
                 return RX_FRAME_PENDING;
             }
             crsfFrame.frame.frameLength = CRSF_FRAME_LINK_STATISTICS_PAYLOAD_SIZE + CRSF_FRAME_LENGTH_TYPE_CRC;
+            if(rx_kind == 0)
+            {
+                const crsfPayloadLinkStatistics_t* linkStats = (crsfPayloadLinkStatistics_t*)&crsfFrame.frame.payload;
+                const uint8_t crsftxpowerindex = (linkStats->uplinkTXPower < CRSF_POWER_COUNT) ? linkStats->uplinkTXPower : 0;
 
-            const crsfPayloadLinkStatistics_t* linkStats = (crsfPayloadLinkStatistics_t*)&crsfFrame.frame.payload;
-            const uint8_t crsftxpowerindex = (linkStats->uplinkTXPower < CRSF_POWER_COUNT) ? linkStats->uplinkTXPower : 0;
+                rxLinkStatistics.uplinkRSSI = -1* (linkStats->activeAntenna ? linkStats->uplinkRSSIAnt2 : linkStats->uplinkRSSIAnt1);
+                rxLinkStatistics.uplinkLQ = linkStats->uplinkLQ;
+                rxLinkStatistics.uplinkSNR = linkStats->uplinkSNR;
+                rxLinkStatistics.rfMode = linkStats->rfMode;
+                rxLinkStatistics.uplinkTXPower = crsfTxPowerStatesmW[crsftxpowerindex];
+                rxLinkStatistics.activeAntenna = linkStats->activeAntenna;
 
-            rxLinkStatistics.uplinkRSSI = -1* (linkStats->activeAntenna ? linkStats->uplinkRSSIAnt2 : linkStats->uplinkRSSIAnt1);
-            rxLinkStatistics.uplinkLQ = linkStats->uplinkLQ;
-            rxLinkStatistics.uplinkSNR = linkStats->uplinkSNR;
-            rxLinkStatistics.rfMode = linkStats->rfMode;
-            rxLinkStatistics.uplinkTXPower = crsfTxPowerStatesmW[crsftxpowerindex];
-            rxLinkStatistics.activeAntenna = linkStats->activeAntenna;
-
-#ifdef USE_OSD
-            if (rxLinkStatistics.uplinkLQ > 0) {
-                int16_t uplinkStrength;   // RSSI dBm converted to %
-                uplinkStrength = constrain((100 * sq((osdConfig()->rssi_dbm_max - osdConfig()->rssi_dbm_min)) - (100 * sq((osdConfig()->rssi_dbm_max  - rxLinkStatistics.uplinkRSSI)))) / sq((osdConfig()->rssi_dbm_max - osdConfig()->rssi_dbm_min)),0,100);
-                if (rxLinkStatistics.uplinkRSSI >= osdConfig()->rssi_dbm_max )
-                    uplinkStrength = 99;
-                else if (rxLinkStatistics.uplinkRSSI < osdConfig()->rssi_dbm_min)
-                    uplinkStrength = 0;
-                lqTrackerSet(rxRuntimeConfig->lqTracker, scaleRange(uplinkStrength, 0, 99, 0, RSSI_MAX_VALUE));
-            } else {
-                lqTrackerSet(rxRuntimeConfig->lqTracker, 0);
+    #ifdef USE_OSD
+                if (rxLinkStatistics.uplinkLQ > 0) {
+                    int16_t uplinkStrength;   // RSSI dBm converted to %
+                    uplinkStrength = constrain((100 * sq((osdConfig()->rssi_dbm_max - osdConfig()->rssi_dbm_min)) - (100 * sq((osdConfig()->rssi_dbm_max  - rxLinkStatistics.uplinkRSSI)))) / sq((osdConfig()->rssi_dbm_max - osdConfig()->rssi_dbm_min)),0,100);
+                    if (rxLinkStatistics.uplinkRSSI >= osdConfig()->rssi_dbm_max )
+                        uplinkStrength = 99;
+                    else if (rxLinkStatistics.uplinkRSSI < osdConfig()->rssi_dbm_min)
+                        uplinkStrength = 0;
+                    lqTrackerSet(rxRuntimeConfig->lqTracker, scaleRange(uplinkStrength, 0, 99, 0, RSSI_MAX_VALUE));
+                } else {
+                    lqTrackerSet(rxRuntimeConfig->lqTracker, 0);
+                }
+    #endif
+                // This is not RC channels frame, update channel value but don't indicate frame completion
             }
-#endif
-            // This is not RC channels frame, update channel value but don't indicate frame completion
             return RX_FRAME_PENDING;
         }
     }
@@ -488,39 +509,48 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
             crsfFrame_3.frame.frameLength = CRSF_FRAME_RC_CHANNELS_PAYLOAD_SIZE + CRSF_FRAME_LENGTH_TYPE_CRC;
 
             // unpack the RC channels
-            const crsfPayloadRcChannelsPacked_t* rcChannels = (crsfPayloadRcChannelsPacked_t*)&crsfFrame_3.frame.payload;
-            crsfChannelData_3[0] = rcChannels->chan0;
-            crsfChannelData_3[1] = rcChannels->chan1;
-            crsfChannelData_3[2] = rcChannels->chan2;
-            crsfChannelData_3[3] = rcChannels->chan3;
-            crsfChannelData_3[4] = rcChannels->chan4;
-            crsfChannelData_3[5] = rcChannels->chan5;
-            crsfChannelData_3[6] = rcChannels->chan6;
-            crsfChannelData_3[7] = rcChannels->chan7;
-            crsfChannelData_3[8] = rcChannels->chan8;
-            crsfChannelData_3[9] = rcChannels->chan9;
-            crsfChannelData_3[10] = rcChannels->chan10;
-            crsfChannelData_3[11] = rcChannels->chan11;
-            crsfChannelData_3[12] = rcChannels->chan12;
-            crsfChannelData_3[13] = rcChannels->chan13;
-            crsfChannelData_3[14] = rcChannels->chan14;
-            crsfChannelData_3[15] = rcChannels->chan15;
-            cliPrint("ELRS: ");
-            char str[12]; // Buffer big enough for an integer
-            itoa(crsfChannelData_3[10], str, 10); // 10 is the base for decimal numbers
-            cliPrint(str);
-            cliPrint("\n");
-            if(crsfChannelData[10] > 1600)
+            if(rx_kind == 1)
             {
-                rx_kind = 1;
-                rxRuntimeConfigCopy->rcReadRawFn = functionPointer_1E;
-                rxRuntimeConfigCopy->rcFrameStatusFn = functionPointer_2E;
-                
-            }else{
-                rx_kind = 0;
-                rxRuntimeConfigCopy->rcReadRawFn = functionPointer_1C;
-                rxRuntimeConfigCopy->rcFrameStatusFn = functionPointer_2C;
+                const crsfPayloadRcChannelsPacked_t* rcChannels = (crsfPayloadRcChannelsPacked_t*)&crsfFrame_3.frame.payload;
+                crsfChannelData_3[0] = rcChannels->chan0;
+                crsfChannelData_3[1] = rcChannels->chan1;
+                crsfChannelData_3[2] = rcChannels->chan2;
+                crsfChannelData_3[3] = rcChannels->chan3;
+                crsfChannelData_3[4] = rcChannels->chan4;
+                crsfChannelData_3[5] = rcChannels->chan5;
+                crsfChannelData_3[6] = rcChannels->chan6;
+                crsfChannelData_3[7] = rcChannels->chan7;
+                crsfChannelData_3[8] = rcChannels->chan8;
+                crsfChannelData_3[9] = rcChannels->chan9;
+                crsfChannelData_3[10] = rcChannels->chan10;
+                crsfChannelData_3[11] = rcChannels->chan11;
+                crsfChannelData_3[12] = rcChannels->chan12;
+                crsfChannelData_3[13] = rcChannels->chan13;
+                crsfChannelData_3[14] = rcChannels->chan14;
+                crsfChannelData_3[15] = rcChannels->chan15;
+
+                if(micros() - last_print > 1000000)
+                {
+                    last_print = micros();
+                    cliPrint("ELRS: ");
+                    char str[12]; // Buffer big enough for an integer
+                    itoa(crsfChannelData_3[10], str, 10); // 10 is the base for decimal numbers
+                    cliPrint(str);
+                    cliPrint("\n");
+                }
             }
+
+            if(crsfChannelData[10] < 700)
+            {
+                rx_kind = 0;
+                // rxRuntimeConfigCopy->rcReadRawFn = functionPointer_1E;
+                // rxRuntimeConfigCopy->rcFrameStatusFn = functionPointer_2E;
+            }
+            // else{
+            //     rx_kind = 0;
+            //     rxRuntimeConfigCopy->rcReadRawFn = functionPointer_1C;
+            //     rxRuntimeConfigCopy->rcFrameStatusFn = functionPointer_2C;
+            // }
             return RX_FRAME_COMPLETE;
         }
         else if (crsfFrame_3.frame.type == CRSF_FRAMETYPE_LINK_STATISTICS) {
@@ -531,15 +561,18 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
             }
             crsfFrame_3.frame.frameLength = CRSF_FRAME_LINK_STATISTICS_PAYLOAD_SIZE + CRSF_FRAME_LENGTH_TYPE_CRC;
 
-            const crsfPayloadLinkStatistics_t* linkStats = (crsfPayloadLinkStatistics_t*)&crsfFrame_3.frame.payload;
-            const uint8_t crsftxpowerindex = (linkStats->uplinkTXPower < CRSF_POWER_COUNT) ? linkStats->uplinkTXPower : 0;
+            if(rx_kind == 1)
+            {
+                const crsfPayloadLinkStatistics_t* linkStats = (crsfPayloadLinkStatistics_t*)&crsfFrame_3.frame.payload;
+                const uint8_t crsftxpowerindex = (linkStats->uplinkTXPower < CRSF_POWER_COUNT) ? linkStats->uplinkTXPower : 0;
 
-            rxLinkStatistics.uplinkRSSI = -1* (linkStats->activeAntenna ? linkStats->uplinkRSSIAnt2 : linkStats->uplinkRSSIAnt1);
-            rxLinkStatistics.uplinkLQ = linkStats->uplinkLQ;
-            rxLinkStatistics.uplinkSNR = linkStats->uplinkSNR;
-            rxLinkStatistics.rfMode = linkStats->rfMode;
-            rxLinkStatistics.uplinkTXPower = crsfTxPowerStatesmW[crsftxpowerindex];
-            rxLinkStatistics.activeAntenna = linkStats->activeAntenna;
+                rxLinkStatistics.uplinkRSSI = -1* (linkStats->activeAntenna ? linkStats->uplinkRSSIAnt2 : linkStats->uplinkRSSIAnt1);
+                rxLinkStatistics.uplinkLQ = linkStats->uplinkLQ;
+                rxLinkStatistics.uplinkSNR = linkStats->uplinkSNR;
+                rxLinkStatistics.rfMode = linkStats->rfMode;
+                rxLinkStatistics.uplinkTXPower = crsfTxPowerStatesmW[crsftxpowerindex];
+                rxLinkStatistics.activeAntenna = linkStats->activeAntenna;
+
 
 #ifdef USE_OSD
             if (rxLinkStatistics.uplinkLQ > 0) {
@@ -555,6 +588,7 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
             }
 #endif
             // This is not RC channels frame, update channel value but don't indicate frame completion
+            }
             return RX_FRAME_PENDING;
         }
     }
