@@ -403,6 +403,15 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
                 rxLinkStatistics.rfMode = linkStats->rfMode;
                 rxLinkStatistics.uplinkTXPower = crsfTxPowerStatesmW[crsftxpowerindex];
                 rxLinkStatistics.activeAntenna = linkStats->activeAntenna;
+                if(micros() - last_print > 100000)
+                {
+                    last_print = micros();
+                    cliPrint("ELRS rf mode: ");
+                    char str[12]; // Buffer big enough for an integer
+                    itoa(rxLinkStatistics.rfMode, str, 10); // 10 is the base for decimal numbers
+                    cliPrint(str);
+                    cliPrint("\n");
+                }
 
 
 #ifdef USE_OSD
@@ -503,6 +512,16 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
                     rxLinkStatistics.rfMode = linkStats->rfMode;
                     rxLinkStatistics.uplinkTXPower = crsfTxPowerStatesmW[crsftxpowerindex];
                     rxLinkStatistics.activeAntenna = linkStats->activeAntenna;
+
+                    if(micros() - last_print > 100000)
+                    {
+                        last_print = micros();
+                        cliPrint("CRSF rf mode: ");
+                        char str[12]; // Buffer big enough for an integer
+                        itoa(rxLinkStatistics.rfMode, str, 10); // 10 is the base for decimal numbers
+                        cliPrint(str);
+                        cliPrint("\n");
+                    }
 
         #ifdef USE_OSD
                     if (rxLinkStatistics.uplinkLQ > 0) {
