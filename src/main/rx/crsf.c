@@ -360,25 +360,25 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
                 if(crsfChannelData_3[10] < 700)
                 {
                     rx_kind = 0;
-                    cliPrint("ELRS: rx_kind: 1 -> 0\n");
+                    // cliPrint("ELRS: rx_kind: 1 -> 0\n");
                 }
-                if(micros() - last_print > 1000000)
-                {
-                    last_print = micros();
-                    cliPrint("ELRS: ");
-                    char str[12]; // Buffer big enough for an integer
-                    itoa(crsfChannelData_3[10], str, 10); // 10 is the base for decimal numbers
-                    cliPrint(str);
-                    if(crsfChannelData_3[10] < 800)
-                    {
-                        cliPrint(" Switching to crsf\n");
-                    }
-                    else
-                    {
-                        cliPrint(" idle\n");
-                    }
-                    // cliPrint("\n");
-                }
+                // if(micros() - last_print > 1000000)
+                // {
+                //     last_print = micros();
+                //     cliPrint("ELRS: ");
+                //     char str[12]; // Buffer big enough for an integer
+                //     itoa(crsfChannelData_3[10], str, 10); // 10 is the base for decimal numbers
+                //     cliPrint(str);
+                //     if(crsfChannelData_3[10] < 800)
+                //     {
+                //         cliPrint(" Switching to crsf\n");
+                //     }
+                //     else
+                //     {
+                //         cliPrint(" idle\n");
+                //     }
+                //     // cliPrint("\n");
+                // }
             }
 
 
@@ -463,20 +463,20 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
                 crsfChannelData[14] = rcChannels->chan14;
                 crsfChannelData[15] = rcChannels->chan15;
 
-                if(micros() - last_print > 1000000)
-                {
-                    last_print = micros();
-                    cliPrint("CRSF: ");
-                    char str[12]; // Buffer big enough for an integer
-                    itoa(crsfChannelData[10], str, 10); // 10 is the base for decimal numbers
-                    cliPrint(str);
-                    cliPrint("\n");
-                }
+                // if(micros() - last_print > 1000000)
+                // {
+                //     last_print = micros();
+                //     cliPrint("CRSF: ");
+                //     char str[12]; // Buffer big enough for an integer
+                //     itoa(crsfChannelData[10], str, 10); // 10 is the base for decimal numbers
+                //     cliPrint(str);
+                //     cliPrint("\n");
+                // }
 
                 if(crsfChannelData[10] > 1600)
                 {
                     rx_kind = 1;
-                    cliPrint("CRSF: rx_kind: 0 -> 1\n");
+                    // cliPrint("CRSF: rx_kind: 0 -> 1\n");
                 }
             }
             return RX_FRAME_COMPLETE;
