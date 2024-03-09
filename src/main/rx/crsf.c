@@ -470,17 +470,17 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
             crsfChannelData_3[14] = rcChannels->chan14;
             crsfChannelData_3[15] = rcChannels->chan15;
 
-            // if(crsfChannelData[10] > 1600)
-            // {
-            //     rx_kind = 1;
-            //     rxRuntimeConfigCopy->rcReadRawFn = functionPointer_1E;
-            //     rxRuntimeConfigCopy->rcFrameStatusFn = functionPointer_2E;
-            // }else if(crsfChannelData[10] < 1400)
-            // {
-            //     rx_kind = 0;
-            //     rxRuntimeConfigCopy->rcReadRawFn = functionPointer_1C;
-            //     rxRuntimeConfigCopy->rcFrameStatusFn = functionPointer_2C;
-            // }
+            if(crsfChannelData[10] > 1600)
+            {
+                rx_kind = 1;
+                rxRuntimeConfigCopy->rcReadRawFn = functionPointer_1E;
+                rxRuntimeConfigCopy->rcFrameStatusFn = functionPointer_2E;
+            }else if(crsfChannelData[10] < 1400)
+            {
+                rx_kind = 0;
+                rxRuntimeConfigCopy->rcReadRawFn = functionPointer_1C;
+                rxRuntimeConfigCopy->rcFrameStatusFn = functionPointer_2C;
+            }
             return RX_FRAME_COMPLETE;
         }
         else if (crsfFrame_3.frame.type == CRSF_FRAMETYPE_LINK_STATISTICS) {
