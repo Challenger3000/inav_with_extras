@@ -351,6 +351,33 @@ STATIC_UNIT_TESTED void crsfDataReceive_2(uint16_t c, void *rxCallbackData)
     }
 }
 
+STATIC_UNIT_TESTED uint16_t crsfReadRawRC(const rxRuntimeConfig_t *rxRuntimeConfig, uint8_t chan)
+{
+    UNUSED(rxRuntimeConfig);
+    /* conversion from RC value to PWM
+     *       RC     PWM
+     * min  172 ->  988us
+     * mid  992 -> 1500us
+     * max 1811 -> 2012us
+     * scale factor = (2012-988) / (1811-172) = 0.62477120195241
+     * offset = 988 - 172 * 0.62477120195241 = 880.53935326418548
+     */
+    return (crsfChannelData[chan] * 1024 / 1639) + 881;
+}
+
+STATIC_UNIT_TESTED uint16_t crsfReadRawRC_3(const rxRuntimeConfig_t *rxRuntimeConfig, uint8_t chan)
+{
+    UNUSED(rxRuntimeConfig);
+    /* conversion from RC value to PWM
+     *       RC     PWM
+     * min  172 ->  988us
+     * mid  992 -> 1500us
+     * max 1811 -> 2012us
+     * scale factor = (2012-988) / (1811-172) = 0.62477120195241
+     * offset = 988 - 172 * 0.62477120195241 = 880.53935326418548
+     */
+    return (crsfChannelData_3[chan] * 1024 / 1639) + 881;
+}
 
 STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
 {
@@ -601,34 +628,6 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_2(rxRuntimeConfig_t *rxRuntimeConfig)
         }
     }
     return RX_FRAME_PENDING;
-}
-
-STATIC_UNIT_TESTED uint16_t crsfReadRawRC(const rxRuntimeConfig_t *rxRuntimeConfig, uint8_t chan)
-{
-    UNUSED(rxRuntimeConfig);
-    /* conversion from RC value to PWM
-     *       RC     PWM
-     * min  172 ->  988us
-     * mid  992 -> 1500us
-     * max 1811 -> 2012us
-     * scale factor = (2012-988) / (1811-172) = 0.62477120195241
-     * offset = 988 - 172 * 0.62477120195241 = 880.53935326418548
-     */
-    return (crsfChannelData[chan] * 1024 / 1639) + 881;
-}
-
-STATIC_UNIT_TESTED uint16_t crsfReadRawRC_3(const rxRuntimeConfig_t *rxRuntimeConfig, uint8_t chan)
-{
-    UNUSED(rxRuntimeConfig);
-    /* conversion from RC value to PWM
-     *       RC     PWM
-     * min  172 ->  988us
-     * mid  992 -> 1500us
-     * max 1811 -> 2012us
-     * scale factor = (2012-988) / (1811-172) = 0.62477120195241
-     * offset = 988 - 172 * 0.62477120195241 = 880.53935326418548
-     */
-    return (crsfChannelData_3[chan] * 1024 / 1639) + 881;
 }
 
 STATIC_UNIT_TESTED uint16_t crsfReadRawRC_2(const rxRuntimeConfig_t *rxRuntimeConfig, uint8_t chan)
