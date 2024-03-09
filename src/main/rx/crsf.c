@@ -430,95 +430,100 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
 {
     UNUSED(rxRuntimeConfig);
 
-    crsfFrameStatus_3(&rxRuntimeConfig);
-
-    if (crsfFrameDone) {
-        crsfFrameDone = false;
-        if (crsfFrame.frame.type == CRSF_FRAMETYPE_RC_CHANNELS_PACKED) {
-            // CRC includes type and payload of each frame
-            const uint8_t crc = crsfFrameCRC();
-            if (crc != crsfFrame.frame.payload[CRSF_FRAME_RC_CHANNELS_PAYLOAD_SIZE]) {
-                return RX_FRAME_PENDING;
-            }
-            crsfFrame.frame.frameLength = CRSF_FRAME_RC_CHANNELS_PAYLOAD_SIZE + CRSF_FRAME_LENGTH_TYPE_CRC;
-
-            if(rx_kind == 0)
-            {
-                // unpack the RC channels
-                const crsfPayloadRcChannelsPacked_t* rcChannels = (crsfPayloadRcChannelsPacked_t*)&crsfFrame.frame.payload;
-                crsfChannelData[0] = rcChannels->chan0;
-                crsfChannelData[1] = rcChannels->chan1;
-                crsfChannelData[2] = rcChannels->chan2;
-                crsfChannelData[3] = rcChannels->chan3;
-                crsfChannelData[4] = rcChannels->chan4;
-                crsfChannelData[5] = rcChannels->chan5;
-                crsfChannelData[6] = rcChannels->chan6;
-                crsfChannelData[7] = rcChannels->chan7;
-                crsfChannelData[8] = rcChannels->chan8;
-                crsfChannelData[9] = rcChannels->chan9;
-                crsfChannelData[10] = rcChannels->chan10;
-                crsfChannelData[11] = rcChannels->chan11;
-                crsfChannelData[12] = rcChannels->chan12;
-                crsfChannelData[13] = rcChannels->chan13;
-                crsfChannelData[14] = rcChannels->chan14;
-                crsfChannelData[15] = rcChannels->chan15;
-
-                // if(micros() - last_print > 1000000)
-                // {
-                //     last_print = micros();
-                //     cliPrint("CRSF: ");
-                //     char str[12]; // Buffer big enough for an integer
-                //     itoa(crsfChannelData[10], str, 10); // 10 is the base for decimal numbers
-                //     cliPrint(str);
-                //     cliPrint("\n");
-                // }
-
-                if(crsfChannelData[10] > 1600)
-                {
-                    rx_kind = 1;
-                    // cliPrint("CRSF: rx_kind: 0 -> 1\n");
-                }
-            }
-            return RX_FRAME_COMPLETE;
-        }
-        else if (crsfFrame.frame.type == CRSF_FRAMETYPE_LINK_STATISTICS) {
-            // CRC includes type and payload of each frame
-            const uint8_t crc = crsfFrameCRC();
-            if (crc != crsfFrame.frame.payload[CRSF_FRAME_LINK_STATISTICS_PAYLOAD_SIZE]) {
-                return RX_FRAME_PENDING;
-            }
-            crsfFrame.frame.frameLength = CRSF_FRAME_LINK_STATISTICS_PAYLOAD_SIZE + CRSF_FRAME_LENGTH_TYPE_CRC;
-            if(rx_kind == 0)
-            {
-                const crsfPayloadLinkStatistics_t* linkStats = (crsfPayloadLinkStatistics_t*)&crsfFrame.frame.payload;
-                const uint8_t crsftxpowerindex = (linkStats->uplinkTXPower < CRSF_POWER_COUNT) ? linkStats->uplinkTXPower : 0;
-
-                rxLinkStatistics.uplinkRSSI = -1* (linkStats->activeAntenna ? linkStats->uplinkRSSIAnt2 : linkStats->uplinkRSSIAnt1);
-                rxLinkStatistics.uplinkLQ = linkStats->uplinkLQ;
-                rxLinkStatistics.uplinkSNR = linkStats->uplinkSNR;
-                rxLinkStatistics.rfMode = linkStats->rfMode;
-                rxLinkStatistics.uplinkTXPower = crsfTxPowerStatesmW[crsftxpowerindex];
-                rxLinkStatistics.activeAntenna = linkStats->activeAntenna;
-
-    #ifdef USE_OSD
-                if (rxLinkStatistics.uplinkLQ > 0) {
-                    int16_t uplinkStrength;   // RSSI dBm converted to %
-                    uplinkStrength = constrain((100 * sq((osdConfig()->rssi_dbm_max - osdConfig()->rssi_dbm_min)) - (100 * sq((osdConfig()->rssi_dbm_max  - rxLinkStatistics.uplinkRSSI)))) / sq((osdConfig()->rssi_dbm_max - osdConfig()->rssi_dbm_min)),0,100);
-                    if (rxLinkStatistics.uplinkRSSI >= osdConfig()->rssi_dbm_max )
-                        uplinkStrength = 99;
-                    else if (rxLinkStatistics.uplinkRSSI < osdConfig()->rssi_dbm_min)
-                        uplinkStrength = 0;
-                    lqTrackerSet(rxRuntimeConfig->lqTracker, scaleRange(uplinkStrength, 0, 99, 0, RSSI_MAX_VALUE));
-                } else {
-                    lqTrackerSet(rxRuntimeConfig->lqTracker, 0);
-                }
-    #endif
-                // This is not RC channels frame, update channel value but don't indicate frame completion
-            }
-            return RX_FRAME_PENDING;
-        }
+    if(rx_kind == 1){
+        return crsfFrameStatus_3(&rxRuntimeConfig);
     }
-    return RX_FRAME_PENDING;
+    else
+    {           
+
+        if (crsfFrameDone) {
+            crsfFrameDone = false;
+            if (crsfFrame.frame.type == CRSF_FRAMETYPE_RC_CHANNELS_PACKED) {
+                // CRC includes type and payload of each frame
+                const uint8_t crc = crsfFrameCRC();
+                if (crc != crsfFrame.frame.payload[CRSF_FRAME_RC_CHANNELS_PAYLOAD_SIZE]) {
+                    return RX_FRAME_PENDING;
+                }
+                crsfFrame.frame.frameLength = CRSF_FRAME_RC_CHANNELS_PAYLOAD_SIZE + CRSF_FRAME_LENGTH_TYPE_CRC;
+
+                if(rx_kind == 0)
+                {
+                    // unpack the RC channels
+                    const crsfPayloadRcChannelsPacked_t* rcChannels = (crsfPayloadRcChannelsPacked_t*)&crsfFrame.frame.payload;
+                    crsfChannelData[0] = rcChannels->chan0;
+                    crsfChannelData[1] = rcChannels->chan1;
+                    crsfChannelData[2] = rcChannels->chan2;
+                    crsfChannelData[3] = rcChannels->chan3;
+                    crsfChannelData[4] = rcChannels->chan4;
+                    crsfChannelData[5] = rcChannels->chan5;
+                    crsfChannelData[6] = rcChannels->chan6;
+                    crsfChannelData[7] = rcChannels->chan7;
+                    crsfChannelData[8] = rcChannels->chan8;
+                    crsfChannelData[9] = rcChannels->chan9;
+                    crsfChannelData[10] = rcChannels->chan10;
+                    crsfChannelData[11] = rcChannels->chan11;
+                    crsfChannelData[12] = rcChannels->chan12;
+                    crsfChannelData[13] = rcChannels->chan13;
+                    crsfChannelData[14] = rcChannels->chan14;
+                    crsfChannelData[15] = rcChannels->chan15;
+
+                    // if(micros() - last_print > 1000000)
+                    // {
+                    //     last_print = micros();
+                    //     cliPrint("CRSF: ");
+                    //     char str[12]; // Buffer big enough for an integer
+                    //     itoa(crsfChannelData[10], str, 10); // 10 is the base for decimal numbers
+                    //     cliPrint(str);
+                    //     cliPrint("\n");
+                    // }
+
+                    if(crsfChannelData[10] > 1600)
+                    {
+                        rx_kind = 1;
+                        // cliPrint("CRSF: rx_kind: 0 -> 1\n");
+                    }
+                }
+                return RX_FRAME_COMPLETE;
+            }
+            else if (crsfFrame.frame.type == CRSF_FRAMETYPE_LINK_STATISTICS) {
+                // CRC includes type and payload of each frame
+                const uint8_t crc = crsfFrameCRC();
+                if (crc != crsfFrame.frame.payload[CRSF_FRAME_LINK_STATISTICS_PAYLOAD_SIZE]) {
+                    return RX_FRAME_PENDING;
+                }
+                crsfFrame.frame.frameLength = CRSF_FRAME_LINK_STATISTICS_PAYLOAD_SIZE + CRSF_FRAME_LENGTH_TYPE_CRC;
+                if(rx_kind == 0)
+                {
+                    const crsfPayloadLinkStatistics_t* linkStats = (crsfPayloadLinkStatistics_t*)&crsfFrame.frame.payload;
+                    const uint8_t crsftxpowerindex = (linkStats->uplinkTXPower < CRSF_POWER_COUNT) ? linkStats->uplinkTXPower : 0;
+
+                    rxLinkStatistics.uplinkRSSI = -1* (linkStats->activeAntenna ? linkStats->uplinkRSSIAnt2 : linkStats->uplinkRSSIAnt1);
+                    rxLinkStatistics.uplinkLQ = linkStats->uplinkLQ;
+                    rxLinkStatistics.uplinkSNR = linkStats->uplinkSNR;
+                    rxLinkStatistics.rfMode = linkStats->rfMode;
+                    rxLinkStatistics.uplinkTXPower = crsfTxPowerStatesmW[crsftxpowerindex];
+                    rxLinkStatistics.activeAntenna = linkStats->activeAntenna;
+
+        #ifdef USE_OSD
+                    if (rxLinkStatistics.uplinkLQ > 0) {
+                        int16_t uplinkStrength;   // RSSI dBm converted to %
+                        uplinkStrength = constrain((100 * sq((osdConfig()->rssi_dbm_max - osdConfig()->rssi_dbm_min)) - (100 * sq((osdConfig()->rssi_dbm_max  - rxLinkStatistics.uplinkRSSI)))) / sq((osdConfig()->rssi_dbm_max - osdConfig()->rssi_dbm_min)),0,100);
+                        if (rxLinkStatistics.uplinkRSSI >= osdConfig()->rssi_dbm_max )
+                            uplinkStrength = 99;
+                        else if (rxLinkStatistics.uplinkRSSI < osdConfig()->rssi_dbm_min)
+                            uplinkStrength = 0;
+                        lqTrackerSet(rxRuntimeConfig->lqTracker, scaleRange(uplinkStrength, 0, 99, 0, RSSI_MAX_VALUE));
+                    } else {
+                        lqTrackerSet(rxRuntimeConfig->lqTracker, 0);
+                    }
+        #endif
+                    // This is not RC channels frame, update channel value but don't indicate frame completion
+                }
+                return RX_FRAME_PENDING;
+            }
+        }
+        return RX_FRAME_PENDING;
+    }
 }
 
 void crsfRxWriteTelemetryData(const void *data, int len)
