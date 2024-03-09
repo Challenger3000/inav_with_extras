@@ -720,7 +720,7 @@ bool crsfRxInit_3(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig
     // }
 
     // serialPort = openSerialPort(portConfig->identifier,
-    serialPort = openSerialPort(4,
+    serialPort_3 = openSerialPort(4,
         FUNCTION_RX_SERIAL,
         crsfDataReceive_3,
         NULL,
@@ -729,7 +729,7 @@ bool crsfRxInit_3(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig
         CRSF_PORT_OPTIONS | (tristateWithDefaultOffIsActive(rxConfig->halfDuplex) ? SERIAL_BIDIR : 0)
         );
         
-    return serialPort != NULL;
+    return serialPort_3 != NULL;
 }
 
 bool crsfRxInit_2(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig)
