@@ -580,7 +580,7 @@ bool dual_crsf_Init(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConf
         rxRuntimeConfig->rcReadRawFn = crsfReadRawRC_2;
         rxRuntimeConfig->rcFrameStatusFn = crsfFrameStatus_2;
     }
-    return serialPort_2 != NULL || serialPort != NULL;
+    return true;
 }
 
 void switchRX(void)
@@ -601,11 +601,11 @@ void switchRX(void)
 
 bool crsfRxIsActive(void)
 {
-    return serialPort != NULL;
+    return true;
 }
 
 bool crsfRxIsActive_2(void)
 {
-    return serialPort_2 != NULL;
+    return true;
 }
 #endif
