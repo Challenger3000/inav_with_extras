@@ -767,25 +767,27 @@ bool crsfRxInit_2(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig
 bool dual_crsf_Init(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig)
 {
 
+    // crsf
     functionPointer_1C = crsfReadRawRC;
     functionPointer_2C = crsfFrameStatus;
 
-    functionPointer_1E = crsfReadRawRC_2;
-    functionPointer_2E = crsfFrameStatus_2;
+    // elrs
+    functionPointer_1E = crsfReadRawRC_3;
+    functionPointer_2E = crsfFrameStatus_3;
 
-    crsfRxInit_2(rxConfig, rxRuntimeConfig);
-    // crsfRxInit(rxConfig, rxRuntimeConfig);
+    crsfRxInit_3(rxConfig, rxRuntimeConfig);
+    crsfRxInit(rxConfig, rxRuntimeConfig);
     
-    // if(rx_kind == 0)
-    // {
-    //     rxRuntimeConfig->rcReadRawFn = crsfReadRawRC;
-    //     rxRuntimeConfig->rcFrameStatusFn = crsfFrameStatus;
-    // }
-    // else if(rx_kind == 1)
-    // {
-    //     rxRuntimeConfig->rcReadRawFn = crsfReadRawRC_2;
-    //     rxRuntimeConfig->rcFrameStatusFn = crsfFrameStatus_2;
-    // }
+    if(rx_kind == 0)
+    {
+        rxRuntimeConfig->rcReadRawFn = functionPointer_1C;
+        rxRuntimeConfig->rcFrameStatusFn = functionPointer_2C;
+    }
+    else if(rx_kind == 1)
+    {
+        rxRuntimeConfig->rcReadRawFn = functionPointer_1E;
+        rxRuntimeConfig->rcFrameStatusFn = functionPointer_2E;
+    }
     // rxRuntimeConfig->rcReadRawFn = crsfReadRawRC_2;
     // rxRuntimeConfig->rcFrameStatusFn = crsfFrameStatus_2;
     return true;
