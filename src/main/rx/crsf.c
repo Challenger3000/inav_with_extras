@@ -433,16 +433,16 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
 
     if (crsfFrameDone_3) {
         crsfFrameDone_3 = false;
-        if (crsfFrame.frame.type == CRSF_FRAMETYPE_RC_CHANNELS_PACKED) {
+        if (crsfFrame_3.frame.type == CRSF_FRAMETYPE_RC_CHANNELS_PACKED) {
             // CRC includes type and payload of each frame
             const uint8_t crc = crsfFrameCRC();
-            if (crc != crsfFrame.frame.payload[CRSF_FRAME_RC_CHANNELS_PAYLOAD_SIZE]) {
+            if (crc != crsfFrame_3.frame.payload[CRSF_FRAME_RC_CHANNELS_PAYLOAD_SIZE]) {
                 return RX_FRAME_PENDING;
             }
-            crsfFrame.frame.frameLength = CRSF_FRAME_RC_CHANNELS_PAYLOAD_SIZE + CRSF_FRAME_LENGTH_TYPE_CRC;
+            crsfFrame_3.frame.frameLength = CRSF_FRAME_RC_CHANNELS_PAYLOAD_SIZE + CRSF_FRAME_LENGTH_TYPE_CRC;
 
             // unpack the RC channels
-            const crsfPayloadRcChannelsPacked_t* rcChannels = (crsfPayloadRcChannelsPacked_t*)&crsfFrame.frame.payload;
+            const crsfPayloadRcChannelsPacked_t* rcChannels = (crsfPayloadRcChannelsPacked_t*)&crsfFrame_3.frame.payload;
             crsfChannelData_3[0] = rcChannels->chan0;
             crsfChannelData_3[1] = rcChannels->chan1;
             crsfChannelData_3[2] = rcChannels->chan2;
@@ -473,15 +473,15 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
             // }
             return RX_FRAME_COMPLETE;
         }
-        else if (crsfFrame.frame.type == CRSF_FRAMETYPE_LINK_STATISTICS) {
+        else if (crsfFrame_3.frame.type == CRSF_FRAMETYPE_LINK_STATISTICS) {
             // CRC includes type and payload of each frame
             const uint8_t crc = crsfFrameCRC();
-            if (crc != crsfFrame.frame.payload[CRSF_FRAME_LINK_STATISTICS_PAYLOAD_SIZE]) {
+            if (crc != crsfFrame_3.frame.payload[CRSF_FRAME_LINK_STATISTICS_PAYLOAD_SIZE]) {
                 return RX_FRAME_PENDING;
             }
-            crsfFrame.frame.frameLength = CRSF_FRAME_LINK_STATISTICS_PAYLOAD_SIZE + CRSF_FRAME_LENGTH_TYPE_CRC;
+            crsfFrame_3.frame.frameLength = CRSF_FRAME_LINK_STATISTICS_PAYLOAD_SIZE + CRSF_FRAME_LENGTH_TYPE_CRC;
 
-            const crsfPayloadLinkStatistics_t* linkStats = (crsfPayloadLinkStatistics_t*)&crsfFrame.frame.payload;
+            const crsfPayloadLinkStatistics_t* linkStats = (crsfPayloadLinkStatistics_t*)&crsfFrame_3.frame.payload;
             const uint8_t crsftxpowerindex = (linkStats->uplinkTXPower < CRSF_POWER_COUNT) ? linkStats->uplinkTXPower : 0;
 
             rxLinkStatistics.uplinkRSSI = -1* (linkStats->activeAntenna ? linkStats->uplinkRSSIAnt2 : linkStats->uplinkRSSIAnt1);
