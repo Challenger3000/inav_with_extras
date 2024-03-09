@@ -357,7 +357,7 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
                 crsfChannelData_3[13] = rcChannels->chan13;
                 crsfChannelData_3[14] = rcChannels->chan14;
                 crsfChannelData_3[15] = rcChannels->chan15;
-                if(crsfChannelData[10] < 700)
+                if(crsfChannelData_3[10] < 700)
                 {
                     rx_kind = 0;
                     cliPrint("ELRS: rx_kind: 1 -> 0\n");
