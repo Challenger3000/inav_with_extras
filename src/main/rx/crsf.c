@@ -414,8 +414,12 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
             crsfChannelData[13] = rcChannels->chan13;
             crsfChannelData[14] = rcChannels->chan14;
             crsfChannelData[15] = rcChannels->chan15;
+
+
             cliPrint("CRSF: ");
-            cliPrint(crsfChannelData[10]);
+            char str[12]; // Buffer big enough for an integer
+            itoa(crsfChannelData[10], str, 10); // 10 is the base for decimal numbers
+            cliPrint(str);
             cliPrint("\n");
             if(crsfChannelData[10] > 1600)
             {
@@ -502,7 +506,9 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
             crsfChannelData_3[14] = rcChannels->chan14;
             crsfChannelData_3[15] = rcChannels->chan15;
             cliPrint("ELRS: ");
-            cliPrint(crsfChannelData_3[10]);
+            char str[12]; // Buffer big enough for an integer
+            itoa(crsfChannelData_3[10], str, 10); // 10 is the base for decimal numbers
+            cliPrint(str);
             cliPrint("\n");
             if(crsfChannelData[10] > 1600)
             {
@@ -642,38 +648,6 @@ bool crsfRxInit_3(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig
     return serialPort_3 != NULL;
 }
 
-bool crsfRxInit_2(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig)
-{
-    
-    // stealing the pointer :D
-    rxRuntimeConfigCopy = rxRuntimeConfig;
-
-    for (int ii = 0; ii < CRSF_MAX_CHANNEL; ++ii) {
-        crsfChannelData_2[ii] = (16 * PWM_RANGE_MIDDLE) / 10 - 1408;
-    }
-
-    rxRuntimeConfig->channelCount = CRSF_MAX_CHANNEL;
-    rxRuntimeConfig->rcReadRawFn = crsfReadRawRC_2;
-    rxRuntimeConfig->rcFrameStatusFn = crsfFrameStatus_2;
-
-    // const serialPortConfig_t *portConfig = findSerialPortConfig(FUNCTION_RX_SERIAL);
-    // if (!portConfig) {
-    //     return false;
-    // }
-
-    // serialPort = openSerialPort(portConfig->identifier,
-    serialPort_2 = openSerialPort(4,
-        FUNCTION_RX_SERIAL,
-        crsfDataReceive_2,
-        NULL,
-        CRSF_BAUDRATE,
-        CRSF_PORT_MODE,
-        CRSF_PORT_OPTIONS | (tristateWithDefaultOffIsActive(rxConfig->halfDuplex) ? SERIAL_BIDIR : 0)
-        );
-
-    return serialPort_2 != NULL;
-}
-
 bool dual_crsf_Init(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig)
 {
 
@@ -711,8 +685,8 @@ void switchRX(void)
     if (rx_kind == 0)
     {
         rx_kind = 1;
-        rxRuntimeConfigCopy->rcReadRawFn = crsfReadRawRC_2;
-        rxRuntimeConfigCopy->rcFrameStatusFn = crsfFrameStatus_2;
+        rxRuntimeConfigCopy->rcReadRawFn = crsfReadRawRC_3;
+        rxRuntimeConfigCopy->rcFrameStatusFn = crsfFrameStatus_3;
     }
     else if (rx_kind == 1)
     {
