@@ -317,11 +317,14 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
 
             if(crsfChannelData[10] > 1600)
             {
-                // rx_switch_old = crsfChannelData[11];
-                // switchRX();
                 rx_kind = 1;
                 rxRuntimeConfigCopy->rcReadRawFn = functionPointer_1E;
                 rxRuntimeConfigCopy->rcFrameStatusFn = functionPointer_2E;
+            }else if(crsfChannelData[10] < 1400)
+            {
+                rx_kind = 0;
+                rxRuntimeConfigCopy->rcReadRawFn = functionPointer_1C;
+                rxRuntimeConfigCopy->rcFrameStatusFn = functionPointer_2C;
             }
             return RX_FRAME_COMPLETE;
         }
@@ -396,14 +399,14 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_2(rxRuntimeConfig_t *rxRuntimeConfig)
             crsfChannelData_2[13] = rcChannels->chan13;
             crsfChannelData_2[14] = rcChannels->chan14;
             crsfChannelData_2[15] = rcChannels->chan15;
-            if(crsfChannelData[10] < 1800)
-            {
-                // rx_switch_old = crsfChannelData[11];
-                // switchRX();
-                rx_kind = 0;
-                rxRuntimeConfigCopy->rcReadRawFn = functionPointer_1C;
-                rxRuntimeConfigCopy->rcFrameStatusFn = functionPointer_2C;
-            }
+            // if(crsfChannelData[10] < 1800)
+            // {
+            //     // rx_switch_old = crsfChannelData[11];
+            //     // switchRX();
+            //     rx_kind = 0;
+            //     rxRuntimeConfigCopy->rcReadRawFn = functionPointer_1C;
+            //     rxRuntimeConfigCopy->rcFrameStatusFn = functionPointer_2C;
+            // }
             return RX_FRAME_COMPLETE;
         }
         else if (crsfFrame_2.frame.type == CRSF_FRAMETYPE_LINK_STATISTICS) {
@@ -567,8 +570,8 @@ bool dual_crsf_Init(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConf
     functionPointer_1E = crsfReadRawRC_2;
     functionPointer_2E = crsfFrameStatus_2;
 
-    // crsfRxInit_2(rxConfig, rxRuntimeConfig);
-    crsfRxInit(rxConfig, rxRuntimeConfig);
+    crsfRxInit_2(rxConfig, rxRuntimeConfig);
+    // crsfRxInit(rxConfig, rxRuntimeConfig);
     
     // if(rx_kind == 0)
     // {
