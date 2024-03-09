@@ -54,7 +54,6 @@
 #define CRSF_POWER_COUNT 9
 
 STATIC_UNIT_TESTED bool crsfFrameDone = false;
-STATIC_UNIT_TESTED bool crsfFrameDone_2 = false;
 STATIC_UNIT_TESTED bool crsfFrameDone_3 = false;
 STATIC_UNIT_TESTED crsfFrame_t crsfFrame;
 STATIC_UNIT_TESTED crsfFrame_t crsfFrame_3;
@@ -174,16 +173,6 @@ STATIC_UNIT_TESTED uint8_t crsfFrameCRC_3(void)
     uint8_t crc = crc8_dvb_s2(0, crsfFrame_3.frame.type);
     for (int ii = 0; ii < crsfFrame_3.frame.frameLength - CRSF_FRAME_LENGTH_TYPE_CRC; ++ii) {
         crc = crc8_dvb_s2(crc, crsfFrame_3.frame.payload[ii]);
-    }
-    return crc;
-}
-
-STATIC_UNIT_TESTED uint8_t crsfFrameCRC_2(void)
-{
-    // CRC includes type and payload
-    uint8_t crc = crc8_dvb_s2(0, crsfFrame_2.frame.type);
-    for (int ii = 0; ii < crsfFrame_2.frame.frameLength - CRSF_FRAME_LENGTH_TYPE_CRC; ++ii) {
-        crc = crc8_dvb_s2(crc, crsfFrame_2.frame.payload[ii]);
     }
     return crc;
 }
