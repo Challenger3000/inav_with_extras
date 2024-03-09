@@ -403,12 +403,29 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
                 rxLinkStatistics.rfMode = linkStats->rfMode;
                 rxLinkStatistics.uplinkTXPower = crsfTxPowerStatesmW[crsftxpowerindex];
                 rxLinkStatistics.activeAntenna = linkStats->activeAntenna;
-                if(micros() - last_print > 100000)
+
+                if(micros() - last_print > 100000 && micros() > 30000000)
                 {
                     last_print = micros();
-                    cliPrint("ELRS rf mode: ");
                     char str[12]; // Buffer big enough for an integer
-                    itoa(rxLinkStatistics.rfMode, str, 10); // 10 is the base for decimal numbers
+
+                    cliPrint("CRSF rf uplinkRSSI: ");
+                    itoa(rxLinkStatistics.uplinkRSSI, str, 10); // 10 is the base for decimal numbers
+                    cliPrint(str);
+                    cliPrint("\n");
+
+                    cliPrint("CRSF rf uplinkLQ: ");
+                    itoa(rxLinkStatistics.uplinkLQ, str, 10); // 10 is the base for decimal numbers
+                    cliPrint(str);
+                    cliPrint("\n");
+
+                    cliPrint("CRSF rf uplinkSNR: ");
+                    itoa(rxLinkStatistics.uplinkSNR, str, 10); // 10 is the base for decimal numbers
+                    cliPrint(str);
+                    cliPrint("\n");
+
+                    cliPrint("CRSF rf rfMode: ");
+                    itoa(rxLinkStatistics.uplinkSNR, str, 10); // 10 is the base for decimal numbers
                     cliPrint(str);
                     cliPrint("\n");
                 }
@@ -513,12 +530,28 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
                     rxLinkStatistics.uplinkTXPower = crsfTxPowerStatesmW[crsftxpowerindex];
                     rxLinkStatistics.activeAntenna = linkStats->activeAntenna;
 
-                    if(micros() - last_print > 100000)
+                    if(micros() - last_print > 100000 && micros() > 30000000)
                     {
                         last_print = micros();
-                        cliPrint("CRSF rf mode: ");
                         char str[12]; // Buffer big enough for an integer
-                        itoa(rxLinkStatistics.rfMode, str, 10); // 10 is the base for decimal numbers
+
+                        cliPrint("CRSF rf uplinkRSSI: ");
+                        itoa(rxLinkStatistics.uplinkRSSI, str, 10); // 10 is the base for decimal numbers
+                        cliPrint(str);
+                        cliPrint("\n");
+
+                        cliPrint("CRSF rf uplinkLQ: ");
+                        itoa(rxLinkStatistics.uplinkLQ, str, 10); // 10 is the base for decimal numbers
+                        cliPrint(str);
+                        cliPrint("\n");
+
+                        cliPrint("CRSF rf uplinkSNR: ");
+                        itoa(rxLinkStatistics.uplinkSNR, str, 10); // 10 is the base for decimal numbers
+                        cliPrint(str);
+                        cliPrint("\n");
+
+                        cliPrint("CRSF rf rfMode: ");
+                        itoa(rxLinkStatistics.uplinkSNR, str, 10); // 10 is the base for decimal numbers
                         cliPrint(str);
                         cliPrint("\n");
                     }
