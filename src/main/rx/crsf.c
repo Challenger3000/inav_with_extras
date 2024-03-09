@@ -409,23 +409,23 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
                     last_print = micros();
                     char str[12]; // Buffer big enough for an integer
 
-                    cliPrint("CRSF rf uplinkRSSI: ");
+                    cliPrint("ELRS rf uplinkRSSI: ");
                     itoa(rxLinkStatistics.uplinkRSSI, str, 10); // 10 is the base for decimal numbers
                     cliPrint(str);
                     cliPrint("\n");
 
-                    cliPrint("CRSF rf uplinkLQ: ");
+                    cliPrint("ELRS rf uplinkLQ: ");
                     itoa(rxLinkStatistics.uplinkLQ, str, 10); // 10 is the base for decimal numbers
                     cliPrint(str);
                     cliPrint("\n");
 
-                    cliPrint("CRSF rf uplinkSNR: ");
+                    cliPrint("ELRS rf uplinkSNR: ");
                     itoa(rxLinkStatistics.uplinkSNR, str, 10); // 10 is the base for decimal numbers
                     cliPrint(str);
                     cliPrint("\n");
 
-                    cliPrint("CRSF rf rfMode: ");
-                    itoa(rxLinkStatistics.uplinkSNR, str, 10); // 10 is the base for decimal numbers
+                    cliPrint("ELRS rf rfMode: ");
+                    itoa(rxLinkStatistics.rfMode, str, 10); // 10 is the base for decimal numbers
                     cliPrint(str);
                     cliPrint("\n");
                 }
@@ -551,7 +551,7 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
                         cliPrint("\n");
 
                         cliPrint("CRSF rf rfMode: ");
-                        itoa(rxLinkStatistics.uplinkSNR, str, 10); // 10 is the base for decimal numbers
+                        itoa(rxLinkStatistics.rfMode, str, 10); // 10 is the base for decimal numbers
                         cliPrint(str);
                         cliPrint("\n");
                     }
