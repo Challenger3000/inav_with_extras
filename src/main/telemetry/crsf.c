@@ -488,7 +488,9 @@ void initCrsfTelemetry(void)
 {
     // check if there is a serial port open for CRSF telemetry (ie opened by the CRSF RX)
     // and feature is enabled, if so, set CRSF telemetry enabled
-    crsfTelemetryEnabled = crsfRxIsActive();
+    // crsfTelemetryEnabled = crsfRxIsActive();
+    crsfTelemetryEnabled = false;
+    return;
 
     deviceInfoReplyPending = false;
 #if defined(USE_MSP_OVER_TELEMETRY)
