@@ -167,6 +167,16 @@ STATIC_UNIT_TESTED uint8_t crsfFrameCRC(void)
     return crc;
 }
 
+STATIC_UNIT_TESTED uint8_t crsfFrameCRC_3(void)
+{
+    // CRC includes type and payload
+    uint8_t crc = crc8_dvb_s2(0, crsfFrame_3.frame.type);
+    for (int ii = 0; ii < crsfFrame_3.frame.frameLength - CRSF_FRAME_LENGTH_TYPE_CRC; ++ii) {
+        crc = crc8_dvb_s2(crc, crsfFrame_3.frame.payload[ii]);
+    }
+    return crc;
+}
+
 STATIC_UNIT_TESTED uint8_t crsfFrameCRC_2(void)
 {
     // CRC includes type and payload
@@ -435,7 +445,7 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
         crsfFrameDone_3 = false;
         if (crsfFrame_3.frame.type == CRSF_FRAMETYPE_RC_CHANNELS_PACKED) {
             // CRC includes type and payload of each frame
-            const uint8_t crc = crsfFrameCRC();
+            const uint8_t crc = crsfFrameCRC_3();
             if (crc != crsfFrame_3.frame.payload[CRSF_FRAME_RC_CHANNELS_PAYLOAD_SIZE]) {
                 return RX_FRAME_PENDING;
             }
