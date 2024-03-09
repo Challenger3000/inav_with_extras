@@ -475,11 +475,11 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
                 rx_kind = 1;
                 rxRuntimeConfigCopy->rcReadRawFn = functionPointer_1E;
                 rxRuntimeConfigCopy->rcFrameStatusFn = functionPointer_2E;
-            }else if(crsfChannelData[10] < 1400)
-            {
+                
+            }else{
                 rx_kind = 0;
-                rxRuntimeConfigCopy->rcReadRawFn = functionPointer_1C;
-                rxRuntimeConfigCopy->rcFrameStatusFn = functionPointer_2C;
+                rxRuntimeConfigCopy->rcReadRawFn = crsfReadRawRC;
+                rxRuntimeConfigCopy->rcFrameStatusFn = crsfFrameStatus;
             }
             return RX_FRAME_COMPLETE;
         }
@@ -772,7 +772,7 @@ bool dual_crsf_Init(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConf
     functionPointer_1E = crsfReadRawRC_3;
     functionPointer_2E = crsfFrameStatus_3;
 
-    
+
     // crsf
     crsfRxInit(rxConfig, rxRuntimeConfig);
     functionPointer_1C = crsfReadRawRC;
