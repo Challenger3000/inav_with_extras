@@ -534,6 +534,9 @@ bool crsfRxInit(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig)
 
 bool crsfRxInit_2(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig)
 {
+    
+    // stealing the pointer :D
+    rxRuntimeConfigCopy = rxRuntimeConfig;
 
     for (int ii = 0; ii < CRSF_MAX_CHANNEL; ++ii) {
         crsfChannelData_2[ii] = (16 * PWM_RANGE_MIDDLE) / 10 - 1408;
