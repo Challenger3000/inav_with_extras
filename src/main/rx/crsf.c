@@ -513,10 +513,10 @@ bool crsfRxInit(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig)
     rxRuntimeConfig->rcReadRawFn = crsfReadRawRC;
     rxRuntimeConfig->rcFrameStatusFn = crsfFrameStatus;
 
-    const serialPortConfig_t *portConfig = findSerialPortConfig(FUNCTION_RX_SERIAL);
-    if (!portConfig) {
-        return false;
-    }
+    // const serialPortConfig_t *portConfig = findSerialPortConfig(FUNCTION_RX_SERIAL);
+    // if (!portConfig) {
+    //     return false;
+    // }
 
     // serialPort = openSerialPort(portConfig->identifier,
     serialPort = openSerialPort(1,
@@ -546,10 +546,10 @@ bool crsfRxInit_2(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig
     rxRuntimeConfig->rcReadRawFn = crsfReadRawRC_2;
     rxRuntimeConfig->rcFrameStatusFn = crsfFrameStatus_2;
 
-    const serialPortConfig_t *portConfig = findSerialPortConfig(FUNCTION_RX_SERIAL);
-    if (!portConfig) {
-        return false;
-    }
+    // const serialPortConfig_t *portConfig = findSerialPortConfig(FUNCTION_RX_SERIAL);
+    // if (!portConfig) {
+    //     return false;
+    // }
 
     // serialPort = openSerialPort(portConfig->identifier,
     serialPort_2 = openSerialPort(4,
