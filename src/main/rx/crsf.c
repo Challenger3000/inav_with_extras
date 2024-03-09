@@ -65,7 +65,7 @@ static timeUs_t crsfFrameStartAt_2 = 0;
 static uint8_t telemetryBuf[CRSF_FRAME_SIZE_MAX];
 static uint8_t telemetryBufLen = 0;
 
-uint8_t rx_kind = 0;
+uint8_t rx_kind = 1;
 uint32_t rx_switch_old = 0;
 rxRuntimeConfig_t *rxRuntimeConfigCopy = NULL;
 // Global function pointer declaration
@@ -84,8 +84,6 @@ StatusFnPtr functionPointer_2E = NULL;
 
 // uint16_t (*functionPointer_1E)(const rxRuntimeConfig_t *, uint8_t) = NULL;
 // uint16_t (*functionPointer_2E)(const rxRuntimeConfig_t *, uint8_t) = NULL;
-
-bool switch_receivers = true;
 
 
 const uint16_t crsfTxPowerStatesmW[CRSF_POWER_COUNT] = {0, 10, 25, 100, 500, 1000, 2000, 250, 50};
@@ -398,7 +396,7 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_2(rxRuntimeConfig_t *rxRuntimeConfig)
             crsfChannelData_2[13] = rcChannels->chan13;
             crsfChannelData_2[14] = rcChannels->chan14;
             crsfChannelData_2[15] = rcChannels->chan15;
-            if(crsfChannelData[10] < 1400)
+            if(crsfChannelData[10] < 1800)
             {
                 // rx_switch_old = crsfChannelData[11];
                 // switchRX();
