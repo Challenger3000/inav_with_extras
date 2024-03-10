@@ -340,8 +340,8 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
             crsfFrame_3.frame.frameLength = CRSF_FRAME_RC_CHANNELS_PAYLOAD_SIZE + CRSF_FRAME_LENGTH_TYPE_CRC;
 
                             
-            preparse_for_flyaway = (crsfPayloadRcChannelsPacked_t)crsfFrame_3.frame.payload;
-                
+            // preparse_for_flyaway = (crsfPayloadRcChannelsPacked_t)crsfFrame_3.frame.payload;
+            preparse_for_flyaway = *(crsfPayloadRcChannelsPacked_t *)crsfFrame_3.frame.payload;
             // unpack the RC channels
             if(rx_kind == 1 && preparse_for_flyaway->chan11 < 1600)
             {
@@ -486,14 +486,14 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
                     return RX_FRAME_PENDING;
                 }
                 crsfFrame.frame.frameLength = CRSF_FRAME_RC_CHANNELS_PAYLOAD_SIZE + CRSF_FRAME_LENGTH_TYPE_CRC;
-                
-                preparse_for_flyaway = (crsfPayloadRcChannelsPacked_t)crsfFrame.frame.payload;
+                // preparse_for_flyaway = (crsfPayloadRcChannelsPacked_t)crsfFrame.frame.payload;
+                preparse_for_flyaway = *(crsfPayloadRcChannelsPacked_t *)crsfFrame.frame.payload;
                 
                 if(rx_kind == 0 && preparse_for_flyaway->chan11 < 1600)
                 {
                     // unpack the RC channels
                     const crsfPayloadRcChannelsPacked_t* rcChannels = (crsfPayloadRcChannelsPacked_t*)&crsfFrame.frame.payload;
-                    
+
                     crsfChannelData[0] = rcChannels->chan0;
                     crsfChannelData[1] = rcChannels->chan1;
                     crsfChannelData[2] = rcChannels->chan2;
