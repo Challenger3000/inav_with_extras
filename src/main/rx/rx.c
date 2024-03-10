@@ -503,7 +503,8 @@ bool calculateRxChannelsAndUpdateFailsafe(timeUs_t currentTimeUs)
 
     // Update channel input value if receiver is not in failsafe mode
     // If receiver is in failsafe (not receiving signal or sending invalid channel values) - last good input values are retained
-    if (rxFlightChannelsValid && rxSignalReceived && rcStaging[11] < 1900) {
+    // if (rxFlightChannelsValid && rxSignalReceived && rcStaging[11] < 1900) {
+    if (rxFlightChannelsValid && rxSignalReceived) {
         for (int channel = 0; channel < rxChannelCount; channel++) {
             rcChannels[channel].data = rcStaging[channel];
         }
