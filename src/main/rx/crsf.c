@@ -78,6 +78,7 @@ typedef uint8_t (*StatusFnPtr)(rxRuntimeConfig_t *rxRuntimeConfig);
 
 
 static timeUs_t last_print = 0;
+static timeUs_t last_rx_switch = 0;
 
 RawFnPtr functionPointer_1C = NULL;
 RawFnPtr functionPointer_1E = NULL;
@@ -396,11 +397,11 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
             {
                 const crsfPayloadLinkStatistics_t* linkStats = (crsfPayloadLinkStatistics_t*)&crsfFrame_3.frame.payload;
                 const uint8_t crsftxpowerindex = (linkStats->uplinkTXPower < CRSF_POWER_COUNT) ? linkStats->uplinkTXPower : 0;
-                if(linkStats->uplinkLQ < 10){
-                    rx_kind = 0;
-                    return RX_FRAME_PENDING;
-                    cliPrint("ELRS: rx_kind: 1 -> 0\n");
-                }
+                // if(linkStats->uplinkLQ < 10){
+                //     rx_kind = 0;
+                //     return RX_FRAME_PENDING;
+                //     cliPrint("ELRS: rx_kind: 1 -> 0\n");
+                // }
                 rxLinkStatistics.uplinkRSSI = -1* (linkStats->activeAntenna ? linkStats->uplinkRSSIAnt2 : linkStats->uplinkRSSIAnt1);
                 rxLinkStatistics.uplinkLQ = linkStats->uplinkLQ;
                 rxLinkStatistics.uplinkSNR = linkStats->uplinkSNR;
@@ -532,11 +533,11 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
                 {
                     const crsfPayloadLinkStatistics_t* linkStats = (crsfPayloadLinkStatistics_t*)&crsfFrame.frame.payload;
                     const uint8_t crsftxpowerindex = (linkStats->uplinkTXPower < CRSF_POWER_COUNT) ? linkStats->uplinkTXPower : 0;
-                    if(linkStats->uplinkLQ < 10){
-                        rx_kind = 1;
-                        // cliPrint("CRSF: rx_kind: 0 -> 1\n");
-                        return RX_FRAME_PENDING;
-                    }
+                    // if(linkStats->uplinkLQ < 10){
+                    //     rx_kind = 1;
+                    //     // cliPrint("CRSF: rx_kind: 0 -> 1\n");
+                    //     return RX_FRAME_PENDING;
+                    // }
                     rxLinkStatistics.uplinkRSSI = -1* (linkStats->activeAntenna ? linkStats->uplinkRSSIAnt2 : linkStats->uplinkRSSIAnt1);
                     rxLinkStatistics.uplinkLQ = linkStats->uplinkLQ;
                     rxLinkStatistics.uplinkSNR = linkStats->uplinkSNR;
@@ -714,17 +715,20 @@ bool dual_crsf_Init(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConf
 
 void switchRX(void)
 {
-    if (rx_kind == 0)
-    {
-        rx_kind = 1;
-        rxRuntimeConfigCopy->rcReadRawFn = crsfReadRawRC_3;
-        rxRuntimeConfigCopy->rcFrameStatusFn = crsfFrameStatus_3;
-    }
-    else if (rx_kind == 1)
-    {
-        rx_kind = 0;
-        rxRuntimeConfigCopy->rcReadRawFn = crsfReadRawRC;
-        rxRuntimeConfigCopy->rcFrameStatusFn = crsfFrameStatus;
+    if(micros() - last_rx_switch > 150000){
+        last_rx_switch = micros();
+        if (rx_kind == 0)
+        {
+            rx_kind = 1;
+            // rxRuntimeConfigCopy->rcReadRawFn = crsfReadRawRC_3;
+            // rxRuntimeConfigCopy->rcFrameStatusFn = crsfFrameStatus_3;
+        }
+        else if (rx_kind == 1)
+        {
+            rx_kind = 0;
+            // rxRuntimeConfigCopy->rcReadRawFn = crsfReadRawRC;
+            // rxRuntimeConfigCopy->rcFrameStatusFn = crsfFrameStatus;
+        }
     }
 }
 

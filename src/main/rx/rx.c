@@ -519,6 +519,7 @@ bool calculateRxChannelsAndUpdateFailsafe(timeUs_t currentTimeUs)
     if (rxFlightChannelsValid && rxSignalReceived) {
         failsafeOnValidDataReceived();
     } else {
+        switchRX();
         failsafeOnValidDataFailed();
     }
 
