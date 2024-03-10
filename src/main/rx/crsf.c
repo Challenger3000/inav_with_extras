@@ -403,7 +403,10 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
                 rxLinkStatistics.rfMode = linkStats->rfMode;
                 rxLinkStatistics.uplinkTXPower = crsfTxPowerStatesmW[crsftxpowerindex];
                 rxLinkStatistics.activeAntenna = linkStats->activeAntenna;
-
+                if(linkStats->uplinkLQ == 0){
+                    rx_kind = 0;
+                    cliPrint("ELRS: rx_kind: 1 -> 0\n");
+                }
                 // char str[12]; // Buffer big enough for an integer
                 // cliPrint("ELRS rf uplinkLQ: ");
                 // itoa(rxLinkStatistics.uplinkLQ, str, 10); // 10 is the base for decimal numbers
@@ -535,6 +538,10 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
                     rxLinkStatistics.rfMode = linkStats->rfMode;
                     rxLinkStatistics.uplinkTXPower = crsfTxPowerStatesmW[crsftxpowerindex];
                     rxLinkStatistics.activeAntenna = linkStats->activeAntenna;
+                    if(linkStats->uplinkLQ == 0){
+                        rx_kind = 1;
+                        cliPrint("CRSF: rx_kind: 0 -> 1\n");
+                    }
 
                     // if(micros() - last_print > 100000 && micros() > 30000000)
                     // {
