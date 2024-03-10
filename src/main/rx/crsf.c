@@ -396,17 +396,17 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
             {
                 const crsfPayloadLinkStatistics_t* linkStats = (crsfPayloadLinkStatistics_t*)&crsfFrame_3.frame.payload;
                 const uint8_t crsftxpowerindex = (linkStats->uplinkTXPower < CRSF_POWER_COUNT) ? linkStats->uplinkTXPower : 0;
-
+                if(linkStats->uplinkLQ < 10){
+                    rx_kind = 0;
+                    // cliPrint("ELRS: rx_kind: 1 -> 0\n");
+                }
                 rxLinkStatistics.uplinkRSSI = -1* (linkStats->activeAntenna ? linkStats->uplinkRSSIAnt2 : linkStats->uplinkRSSIAnt1);
                 rxLinkStatistics.uplinkLQ = linkStats->uplinkLQ;
                 rxLinkStatistics.uplinkSNR = linkStats->uplinkSNR;
                 rxLinkStatistics.rfMode = linkStats->rfMode;
                 rxLinkStatistics.uplinkTXPower = crsfTxPowerStatesmW[crsftxpowerindex];
                 rxLinkStatistics.activeAntenna = linkStats->activeAntenna;
-                if(linkStats->uplinkLQ == 0){
-                    rx_kind = 0;
-                    // cliPrint("ELRS: rx_kind: 1 -> 0\n");
-                }
+
                 // char str[12]; // Buffer big enough for an integer
                 // cliPrint("ELRS rf uplinkLQ: ");
                 // itoa(rxLinkStatistics.uplinkLQ, str, 10); // 10 is the base for decimal numbers
@@ -531,17 +531,17 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
                 {
                     const crsfPayloadLinkStatistics_t* linkStats = (crsfPayloadLinkStatistics_t*)&crsfFrame.frame.payload;
                     const uint8_t crsftxpowerindex = (linkStats->uplinkTXPower < CRSF_POWER_COUNT) ? linkStats->uplinkTXPower : 0;
-
+                    if(linkStats->uplinkLQ < 10){
+                        rx_kind = 1;
+                        // cliPrint("CRSF: rx_kind: 0 -> 1\n");
+                    }
                     rxLinkStatistics.uplinkRSSI = -1* (linkStats->activeAntenna ? linkStats->uplinkRSSIAnt2 : linkStats->uplinkRSSIAnt1);
                     rxLinkStatistics.uplinkLQ = linkStats->uplinkLQ;
                     rxLinkStatistics.uplinkSNR = linkStats->uplinkSNR;
                     rxLinkStatistics.rfMode = linkStats->rfMode;
                     rxLinkStatistics.uplinkTXPower = crsfTxPowerStatesmW[crsftxpowerindex];
                     rxLinkStatistics.activeAntenna = linkStats->activeAntenna;
-                    if(rxLinkStatistics.uplinkLQ == 0){
-                        rx_kind = 1;
-                        // cliPrint("CRSF: rx_kind: 0 -> 1\n");
-                    }
+
 
                     // if(micros() - last_print > 100000 && micros() > 30000000)
                     // {
