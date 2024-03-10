@@ -404,6 +404,7 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
                 rxLinkStatistics.uplinkTXPower = crsfTxPowerStatesmW[crsftxpowerindex];
                 rxLinkStatistics.activeAntenna = linkStats->activeAntenna;
 
+                char str[12]; // Buffer big enough for an integer
                 cliPrint("ELRS rf uplinkLQ: ");
                 itoa(rxLinkStatistics.uplinkLQ, str, 10); // 10 is the base for decimal numbers
                 cliPrint(str);
