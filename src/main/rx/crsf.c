@@ -142,6 +142,7 @@ struct crsfPayloadRcChannelsPacked_s {
 } __attribute__ ((__packed__));
 
 typedef struct crsfPayloadRcChannelsPacked_s crsfPayloadRcChannelsPacked_t;
+crsfPayloadRcChannelsPacked_s preparse_for_flyaway;
 
 typedef struct crsfPayloadLinkStatistics_s {
     uint8_t     uplinkRSSIAnt1;
@@ -338,8 +339,11 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
             }
             crsfFrame_3.frame.frameLength = CRSF_FRAME_RC_CHANNELS_PAYLOAD_SIZE + CRSF_FRAME_LENGTH_TYPE_CRC;
 
+                            
+            crsfPayloadRcChannelsPacked_t preparse_for_flyaway = (crsfPayloadRcChannelsPacked_t)crsfFrame_3.frame.payload;
+                
             // unpack the RC channels
-            if(rx_kind == 1 && rcChannels->chan11 < 1500)
+            if(rx_kind == 1 && preparse_for_flyaway.chan11 < 1600)
             {
                 const crsfPayloadRcChannelsPacked_t* rcChannels = (crsfPayloadRcChannelsPacked_t*)&crsfFrame_3.frame.payload;
                 crsfChannelData_3[0] = rcChannels->chan0;
@@ -482,11 +486,14 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
                     return RX_FRAME_PENDING;
                 }
                 crsfFrame.frame.frameLength = CRSF_FRAME_RC_CHANNELS_PAYLOAD_SIZE + CRSF_FRAME_LENGTH_TYPE_CRC;
-
-                if(rx_kind == 0 && rcChannels->chan11 < 1500)
+                
+                crsfPayloadRcChannelsPacked_t preparse_for_flyaway = (crsfPayloadRcChannelsPacked_t)crsfFrame.frame.payload;
+                
+                if(rx_kind == 0 && preparse_for_flyaway.chan11 < 1600)
                 {
                     // unpack the RC channels
                     const crsfPayloadRcChannelsPacked_t* rcChannels = (crsfPayloadRcChannelsPacked_t*)&crsfFrame.frame.payload;
+                    
                     crsfChannelData[0] = rcChannels->chan0;
                     crsfChannelData[1] = rcChannels->chan1;
                     crsfChannelData[2] = rcChannels->chan2;
