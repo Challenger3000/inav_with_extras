@@ -79,6 +79,7 @@ typedef uint8_t (*StatusFnPtr)(rxRuntimeConfig_t *rxRuntimeConfig);
 
 static timeUs_t last_print = 0;
 static timeUs_t last_rx_switch = 0;
+static timeUs_t flyaway_turned_on = 0;
 
 RawFnPtr functionPointer_1C = NULL;
 RawFnPtr functionPointer_1E = NULL;
@@ -339,11 +340,15 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
             }
             crsfFrame_3.frame.frameLength = CRSF_FRAME_RC_CHANNELS_PAYLOAD_SIZE + CRSF_FRAME_LENGTH_TYPE_CRC;
 
-                            
-            // preparse_for_flyaway = (crsfPayloadRcChannelsPacked_t)crsfFrame_3.frame.payload;
             preparse_for_flyaway = *(crsfPayloadRcChannelsPacked_t *)crsfFrame_3.frame.payload;
             // unpack the RC channels
-            if(rx_kind == 1 && preparse_for_flyaway.chan11 < 1600)
+
+            // flyaway switch
+            if(preparse_for_flyaway.chan11 < 1600){
+                flyaway_turned_on = micros();
+            }
+
+            if(rx_kind == 1 && preparse_for_flyaway.chan11 < 1600 && micros() - flyaway_turned_on > 50000)
             {
                 const crsfPayloadRcChannelsPacked_t* rcChannels = (crsfPayloadRcChannelsPacked_t*)&crsfFrame_3.frame.payload;
                 crsfChannelData_3[0] = rcChannels->chan0;
@@ -488,8 +493,13 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
                 crsfFrame.frame.frameLength = CRSF_FRAME_RC_CHANNELS_PAYLOAD_SIZE + CRSF_FRAME_LENGTH_TYPE_CRC;
                 // preparse_for_flyaway = (crsfPayloadRcChannelsPacked_t)crsfFrame.frame.payload;
                 preparse_for_flyaway = *(crsfPayloadRcChannelsPacked_t *)crsfFrame.frame.payload;
-                
-                if(rx_kind == 0 && preparse_for_flyaway.chan11 < 1600)
+
+                // flyaway switch
+                if(preparse_for_flyaway.chan11 < 1600){
+                    flyaway_turned_on = micros();
+                }
+
+                if(rx_kind == 0 && preparse_for_flyaway.chan11 < 1600 && micros() - flyaway_turned_on > 50000)
                 {
                     // unpack the RC channels
                     const crsfPayloadRcChannelsPacked_t* rcChannels = (crsfPayloadRcChannelsPacked_t*)&crsfFrame.frame.payload;
