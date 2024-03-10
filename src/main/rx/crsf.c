@@ -398,7 +398,8 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
                 const uint8_t crsftxpowerindex = (linkStats->uplinkTXPower < CRSF_POWER_COUNT) ? linkStats->uplinkTXPower : 0;
                 if(linkStats->uplinkLQ < 10){
                     rx_kind = 0;
-                    // cliPrint("ELRS: rx_kind: 1 -> 0\n");
+                    return RX_FRAME_PENDING;
+                    cliPrint("ELRS: rx_kind: 1 -> 0\n");
                 }
                 rxLinkStatistics.uplinkRSSI = -1* (linkStats->activeAntenna ? linkStats->uplinkRSSIAnt2 : linkStats->uplinkRSSIAnt1);
                 rxLinkStatistics.uplinkLQ = linkStats->uplinkLQ;
@@ -534,6 +535,7 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
                     if(linkStats->uplinkLQ < 10){
                         rx_kind = 1;
                         // cliPrint("CRSF: rx_kind: 0 -> 1\n");
+                        return RX_FRAME_PENDING;
                     }
                     rxLinkStatistics.uplinkRSSI = -1* (linkStats->activeAntenna ? linkStats->uplinkRSSIAnt2 : linkStats->uplinkRSSIAnt1);
                     rxLinkStatistics.uplinkLQ = linkStats->uplinkLQ;
