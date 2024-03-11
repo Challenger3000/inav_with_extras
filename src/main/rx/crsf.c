@@ -68,7 +68,7 @@ static timeUs_t crsfFrameStartAt_3 = 0;
 static uint8_t telemetryBuf[CRSF_FRAME_SIZE_MAX];
 static uint8_t telemetryBufLen = 0;
 
-uint8_t rx_kind = 1;
+uint8_t rx_kind = 0;
 uint32_t rx_switch_old = 0;
 rxRuntimeConfig_t *rxRuntimeConfigCopy = NULL;
 // Global function pointer declaration
