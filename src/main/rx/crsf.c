@@ -618,7 +618,7 @@ STATIC_UNIT_TESTED uint8_t status_frame_manger(rxRuntimeConfig_t *rxRuntimeConfi
 
     // if(micros() > 60000000){
         char str[12]; // Buffer big enough for an integer
-        itoa(rx_kind, str, 10); // 10 is the base for decimal numbers
+        // itoa(rx_kind, str, 10); // 10 is the base for decimal numbers
     //     cliPrint(str);
     // }
 
