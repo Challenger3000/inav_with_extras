@@ -614,18 +614,18 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
 
 STATIC_UNIT_TESTED uint8_t status_frame_manger(rxRuntimeConfig_t *rxRuntimeConfig){
 
-    // if(rx_kind == 1){
-    //     crsfFrameStatus(&rxRuntimeConfig);
-    //     return crsfFrameStatus_3(&rxRuntimeConfig);
-    // }
-    // else if(rx_kind == 0)
-    // {
-    //     crsfFrameStatus_3(&rxRuntimeConfig);
-    //     return crsfFrameStatus(&rxRuntimeConfig);
-    // }
+    if(rx_kind == 1){
+        crsfFrameStatus(&rxRuntimeConfig);
+        return crsfFrameStatus_3(&rxRuntimeConfig);
+    }
+    else if(rx_kind == 0)
+    {
+        crsfFrameStatus_3(&rxRuntimeConfig);
+        return crsfFrameStatus(&rxRuntimeConfig);
+    }
 
         // crsfFrameStatus_3(&rxRuntimeConfig);
-        return crsfFrameStatus_3(&rxRuntimeConfig);
+        // return crsfFrameStatus_3(&rxRuntimeConfig);
 }
 
 void crsfRxWriteTelemetryData(const void *data, int len)
