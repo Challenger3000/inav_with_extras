@@ -614,8 +614,14 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
 }
 
 
-STATIC_UNIT_TESTED uint8_t status_frame_manger(rxRuntimeConfig_t *rxRuntimeConfig){
+uint8_t status_frame_manger(rxRuntimeConfig_t *rxRuntimeConfig){
 
+    if(micros() > 20000000){
+        char str[12]; // Buffer big enough for an integer
+        itoa(rx_kind, str, 10); // 10 is the base for decimal numbers
+        cliPrint(str);
+    }
+    
     if(rx_kind == 1){
         crsfFrameStatus(&rxRuntimeConfig);
         return crsfFrameStatus_3(&rxRuntimeConfig);
