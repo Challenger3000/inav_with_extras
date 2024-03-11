@@ -68,7 +68,7 @@ static timeUs_t crsfFrameStartAt_3 = 0;
 static uint8_t telemetryBuf[CRSF_FRAME_SIZE_MAX];
 static uint8_t telemetryBufLen = 0;
 
-uint8_t rx_kind = 0;
+uint8_t rx_kind = 1;
 uint32_t rx_switch_old = 0;
 rxRuntimeConfig_t *rxRuntimeConfigCopy = NULL;
 // Global function pointer declaration
@@ -624,8 +624,8 @@ STATIC_UNIT_TESTED uint8_t status_frame_manger(rxRuntimeConfig_t *rxRuntimeConfi
     //     return crsfFrameStatus(&rxRuntimeConfig);
     // }
 
-        crsfFrameStatus_3(&rxRuntimeConfig);
-        return crsfFrameStatus(&rxRuntimeConfig);
+        // crsfFrameStatus_3(&rxRuntimeConfig);
+        return crsfFrameStatus_3(&rxRuntimeConfig);
 }
 
 void crsfRxWriteTelemetryData(const void *data, int len)
