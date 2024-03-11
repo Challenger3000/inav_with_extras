@@ -616,9 +616,11 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
 
 uint8_t status_frame_manger(rxRuntimeConfig_t *rxRuntimeConfig){
 
-    char str[12]; // Buffer big enough for an integer
-    itoa(rx_kind, str, 10); // 10 is the base for decimal numbers
-    cliPrint(str);
+    if(micros() > 20000000){
+        char str[12]; // Buffer big enough for an integer
+        itoa(rx_kind, str, 10); // 10 is the base for decimal numbers
+        cliPrint(str);
+    }
 
     if(rx_kind == 1){
         crsfFrameStatus(&rxRuntimeConfig);
@@ -739,17 +741,17 @@ bool dual_crsf_Init(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConf
 
 
 
-    
-    if(rx_kind == 0)
-    {
-        rxRuntimeConfig->rcReadRawFn = functionPointer_1C;
-        rxRuntimeConfig->rcFrameStatusFn = functionPointer_2C;
-    }
-    else if(rx_kind == 1)
-    {
-        rxRuntimeConfig->rcReadRawFn = functionPointer_1E;
-        rxRuntimeConfig->rcFrameStatusFn = functionPointer_2E;
-    }
+
+    // if(rx_kind == 0)
+    // {
+    //     rxRuntimeConfig->rcReadRawFn = functionPointer_1C;
+    //     rxRuntimeConfig->rcFrameStatusFn = functionPointer_2C;
+    // }
+    // else if(rx_kind == 1)
+    // {
+    //     rxRuntimeConfig->rcReadRawFn = functionPointer_1E;
+    //     rxRuntimeConfig->rcFrameStatusFn = functionPointer_2E;
+    // }
     // rxRuntimeConfig->rcReadRawFn = functionPointer_1E;
     // rxRuntimeConfig->rcFrameStatusFn = functionPointer_2E;
     return true;
