@@ -335,7 +335,10 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
 
             if(preparse_for_flyaway.chan11 > 1600){
                 flyaway_active = true;
+            }else{
+                flyaway_active = false;
             }
+
             // if(rx_kind == 1 && preparse_for_flyaway.chan11 < 1600 && micros() - flyaway_turned_on > 50000)
             if(rx_kind == 1 && !flyaway_active)
             {
@@ -480,7 +483,10 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
 
             if(preparse_for_flyaway.chan11 > 1600){
                 flyaway_active = true;
+            }else{
+                flyaway_active = false;
             }
+            
             if(rx_kind == 0 && !flyaway_active)
             {
                 // unpack the RC channels
