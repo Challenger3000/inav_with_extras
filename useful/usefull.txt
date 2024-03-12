@@ -29,3 +29,8 @@ rcChannels[i].data
 If i ever need to revisit althold...
 if (IS_RC_MODE_ACTIVE(BOXNAVALTHOLD)) {
 search for this in navigation.c 
+
+
+disabling comport: 
+
+setTaskEnabled(TASK_SERIAL, false);

@@ -4183,7 +4183,7 @@ void uint8ToStr(uint8_t num, char* str) {
 
 void cliProcess(void)
 {
-    return;
+    // return;
     if (!cliWriter) {
         return;
     }
