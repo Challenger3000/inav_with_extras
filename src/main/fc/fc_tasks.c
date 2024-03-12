@@ -334,7 +334,7 @@ void fcTasksInit(void)
 
     setTaskEnabled(TASK_AUX, true);
 
-    setTaskEnabled(TASK_SERIAL, false);
+    setTaskEnabled(TASK_SERIAL, true);
 #if defined(BEEPER) || defined(USE_DSHOT)
     setTaskEnabled(TASK_BEEPER, true);
 #endif
