@@ -4281,44 +4281,45 @@ static void osdCompleteAsyncInitialization(void)
     displayBeginTransaction(osdDisplayPort, DISPLAY_TRANSACTION_OPT_RESET_DRAWING);
     displayClearScreen(osdDisplayPort);
 
-    uint8_t y = 1;
-    displayFontMetadata_t metadata;
-    bool fontHasMetadata = displayGetFontMetadata(&metadata, osdDisplayPort);
-    LOG_DEBUG(OSD, "Font metadata version %s: %u (%u chars)",
-        fontHasMetadata ? "Y" : "N", metadata.version, metadata.charCount);
+//     uint8_t y = 1;
+//     displayFontMetadata_t metadata;
+//     bool fontHasMetadata = displayGetFontMetadata(&metadata, osdDisplayPort);
+//     LOG_DEBUG(OSD, "Font metadata version %s: %u (%u chars)",
+//         fontHasMetadata ? "Y" : "N", metadata.version, metadata.charCount);
 
-    if (fontHasMetadata && metadata.charCount > 256) {
-        hasExtendedFont = true;
+//     if (fontHasMetadata && metadata.charCount > 256) {
+//         hasExtendedFont = true;
 
-        y = drawLogos(false, y);
-        y++;
-    } else if (!fontHasMetadata) {
-        const char *m = "INVALID FONT";
-        displayWrite(osdDisplayPort, OSD_CENTER_S(m), y++, m);
-    }
+//         y = drawLogos(false, y);
+//         y++;
+//     } else if (!fontHasMetadata) {
+//         const char *m = "INVALID FONT";
+//         displayWrite(osdDisplayPort, OSD_CENTER_S(m), y++, m);
+//     }
 
-    if (fontHasMetadata && metadata.version < OSD_MIN_FONT_VERSION) {
-        const char *m = "INVALID FONT VERSION";
-        displayWrite(osdDisplayPort, OSD_CENTER_S(m), y++, m);
-    }
+//     if (fontHasMetadata && metadata.version < OSD_MIN_FONT_VERSION) {
+//         const char *m = "INVALID FONT VERSION";
+//         displayWrite(osdDisplayPort, OSD_CENTER_S(m), y++, m);
+//     }
 
-    char string_buffer[30];
-    tfp_sprintf(string_buffer, "INAV VERSION: %s", FC_VERSION_STRING);
-    uint8_t xPos = (osdDisplayPort->cols - 19) / 2; // Automatically centre, regardless of resolution. In the case of odd number screens, bias to the left.
-    displayWrite(osdDisplayPort, xPos, y++, string_buffer);
-#ifdef USE_CMS
-    displayWrite(osdDisplayPort, xPos+2, y++, CMS_STARTUP_HELP_TEXT1);
-    displayWrite(osdDisplayPort, xPos+6, y++, CMS_STARTUP_HELP_TEXT2);
-    displayWrite(osdDisplayPort, xPos+6, y++, CMS_STARTUP_HELP_TEXT3);
-#endif
+//     char string_buffer[30];
+//     tfp_sprintf(string_buffer, "INAV VERSION: %s", FC_VERSION_STRING);
+//     uint8_t xPos = (osdDisplayPort->cols - 19) / 2; // Automatically centre, regardless of resolution. In the case of odd number screens, bias to the left.
+//     displayWrite(osdDisplayPort, xPos, y++, string_buffer);
+// #ifdef USE_CMS
+//     displayWrite(osdDisplayPort, xPos+2, y++, CMS_STARTUP_HELP_TEXT1);
+//     displayWrite(osdDisplayPort, xPos+6, y++, CMS_STARTUP_HELP_TEXT2);
+//     displayWrite(osdDisplayPort, xPos+6, y++, CMS_STARTUP_HELP_TEXT3);
+// #endif
 
-#ifdef USE_STATS
-    y = drawStats(++y);
-#endif
+// #ifdef USE_STATS
+//     y = drawStats(++y);
+// #endif
 
     displayCommitTransaction(osdDisplayPort);
     displayResync(osdDisplayPort);
-    osdSetNextRefreshIn(SPLASH_SCREEN_DISPLAY_TIME);
+    // osdSetNextRefreshIn(SPLASH_SCREEN_DISPLAY_TIME);
+    osdSetNextRefreshIn(100);
 }
 
 void osdInit(displayPort_t *osdDisplayPortToUse)
