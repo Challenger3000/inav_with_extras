@@ -70,8 +70,8 @@ static uint8_t telemetryBufLen = 0;
 
 uint8_t rx_kind = 0;
 uint32_t rx_switch_old = 0;
+bool flyaway_active = false;
 rxRuntimeConfig_t *rxRuntimeConfigCopy = NULL;
-// Global function pointer declaration
 
 typedef uint16_t (*RawFnPtr)(const rxRuntimeConfig_t *rxRuntimeConfig, uint8_t chan); // used by receiver driver to return channel data
 typedef uint8_t (*StatusFnPtr)(rxRuntimeConfig_t *rxRuntimeConfig);
@@ -81,16 +81,6 @@ static timeUs_t last_print = 0;
 static timeUs_t last_rx_switch = 0;
 static timeUs_t flyaway_turned_on = 0;
 
-RawFnPtr functionPointer_1C = NULL;
-RawFnPtr functionPointer_1E = NULL;
-
-StatusFnPtr functionPointer_2C = NULL;
-StatusFnPtr functionPointer_2E = NULL;
-// uint16_t (*functionPointer_1C)(const rxRuntimeConfig_t *, uint8_t) = NULL;
-// uint16_t (*functionPointer_2C)(const rxRuntimeConfig_t *, uint8_t) = NULL;
-
-// uint16_t (*functionPointer_1E)(const rxRuntimeConfig_t *, uint8_t) = NULL;
-// uint16_t (*functionPointer_2E)(const rxRuntimeConfig_t *, uint8_t) = NULL;
 
 
 const uint16_t crsfTxPowerStatesmW[CRSF_POWER_COUNT] = {0, 10, 25, 100, 500, 1000, 2000, 250, 50};
@@ -343,13 +333,11 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
             preparse_for_flyaway = *(crsfPayloadRcChannelsPacked_t *)crsfFrame_3.frame.payload;
             // unpack the RC channels
 
-            // flyaway switch
-            // if(preparse_for_flyaway.chan11 > 1600){
-            //     flyaway_turned_on = micros();
-            // }
-
+            if(preparse_for_flyaway.chan11 > 1600){
+                flyaway_active = true;
+            }
             // if(rx_kind == 1 && preparse_for_flyaway.chan11 < 1600 && micros() - flyaway_turned_on > 50000)
-            if(rx_kind == 1 && preparse_for_flyaway.chan11 < 1600)
+            if(rx_kind == 1 && !flyaway_active)
             {
                 const crsfPayloadRcChannelsPacked_t* rcChannels = (crsfPayloadRcChannelsPacked_t*)&crsfFrame_3.frame.payload;
                 crsfChannelData_3[0] = rcChannels->chan0;
@@ -407,11 +395,6 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
             {
                 const crsfPayloadLinkStatistics_t* linkStats = (crsfPayloadLinkStatistics_t*)&crsfFrame_3.frame.payload;
                 const uint8_t crsftxpowerindex = (linkStats->uplinkTXPower < CRSF_POWER_COUNT) ? linkStats->uplinkTXPower : 0;
-                // if(linkStats->uplinkLQ < 10){
-                //     rx_kind = 0;
-                //     return RX_FRAME_PENDING;
-                //     cliPrint("ELRS: rx_kind: 1 -> 0\n");
-                // }
                 rxLinkStatistics.uplinkRSSI = -1* (linkStats->activeAntenna ? linkStats->uplinkRSSIAnt2 : linkStats->uplinkRSSIAnt1);
                 rxLinkStatistics.uplinkLQ = linkStats->uplinkLQ;
                 rxLinkStatistics.uplinkSNR = linkStats->uplinkSNR;
@@ -495,13 +478,10 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
             // preparse_for_flyaway = (crsfPayloadRcChannelsPacked_t)crsfFrame.frame.payload;
             preparse_for_flyaway = *(crsfPayloadRcChannelsPacked_t *)crsfFrame.frame.payload;
 
-            // flyaway switch
-            // if(preparse_for_flyaway.chan11 > 1600){
-            //     flyaway_turned_on = micros();
-            // }
-
-            // if(rx_kind == 0 && preparse_for_flyaway.chan11 < 1600 && micros() - flyaway_turned_on > 50000)
-            if(rx_kind == 0 && preparse_for_flyaway.chan11 < 1600)
+            if(preparse_for_flyaway.chan11 > 1600){
+                flyaway_active = true;
+            }
+            if(rx_kind == 0 && !flyaway_active)
             {
                 // unpack the RC channels
                 const crsfPayloadRcChannelsPacked_t* rcChannels = (crsfPayloadRcChannelsPacked_t*)&crsfFrame.frame.payload;
@@ -552,11 +532,6 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
             {
                 const crsfPayloadLinkStatistics_t* linkStats = (crsfPayloadLinkStatistics_t*)&crsfFrame.frame.payload;
                 const uint8_t crsftxpowerindex = (linkStats->uplinkTXPower < CRSF_POWER_COUNT) ? linkStats->uplinkTXPower : 0;
-                // if(linkStats->uplinkLQ < 10){
-                //     rx_kind = 1;
-                //     // cliPrint("CRSF: rx_kind: 0 -> 1\n");
-                //     return RX_FRAME_PENDING;
-                // }
                 rxLinkStatistics.uplinkRSSI = -1* (linkStats->activeAntenna ? linkStats->uplinkRSSIAnt2 : linkStats->uplinkRSSIAnt1);
                 rxLinkStatistics.uplinkLQ = linkStats->uplinkLQ;
                 rxLinkStatistics.uplinkSNR = linkStats->uplinkSNR;
@@ -610,16 +585,15 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
         }
     }
     return RX_FRAME_PENDING;
-    // }
 }
 
 
 STATIC_UNIT_TESTED uint8_t status_frame_manger(rxRuntimeConfig_t *rxRuntimeConfig){
 
-    // if(micros() > 60000000){
-    char str[12]; // Buffer big enough for an integer
-    itoa(rx_kind, str, 10); // 10 is the base for decimal numbers
-    //     cliPrint(str);    // }
+    // magic values, DO NOT REMOVE, or everything breaks :D
+    char str[12];
+    itoa(rx_kind, str, 10);
+    // 
 
     if(rx_kind == 1){
         crsfFrameStatus(&rxRuntimeConfig);
@@ -630,9 +604,6 @@ STATIC_UNIT_TESTED uint8_t status_frame_manger(rxRuntimeConfig_t *rxRuntimeConfi
         crsfFrameStatus_3(&rxRuntimeConfig);
         return crsfFrameStatus(&rxRuntimeConfig);
     }
-
-        // crsfFrameStatus_3(&rxRuntimeConfig);
-        // return crsfFrameStatus_3(&rxRuntimeConfig);
 }
 
 void crsfRxWriteTelemetryData(const void *data, int len)
@@ -729,48 +700,26 @@ bool dual_crsf_Init(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConf
 
     // elrs
     crsfRxInit_3(rxConfig, rxRuntimeConfig);
-    // functionPointer_1E = crsfReadRawRC_3;
-    // functionPointer_2E = crsfFrameStatus_3;
-
 
     // crsf
     crsfRxInit(rxConfig, rxRuntimeConfig);
-    // functionPointer_1C = crsfReadRawRC;
-    // functionPointer_2C = crsfFrameStatus;
 
-
-
-
-    // if(rx_kind == 0)
-    // {
-    //     rxRuntimeConfig->rcReadRawFn = functionPointer_1C;
-    //     rxRuntimeConfig->rcFrameStatusFn = functionPointer_2C;
-    // }
-    // else if(rx_kind == 1)
-    // {
-    //     rxRuntimeConfig->rcReadRawFn = functionPointer_1E;
-    //     rxRuntimeConfig->rcFrameStatusFn = functionPointer_2E;
-    // }
-    // rxRuntimeConfig->rcReadRawFn = functionPointer_1E;
-    // rxRuntimeConfig->rcFrameStatusFn = functionPointer_2E;
     return true;
 }
 
 void switchRX(void)
 {
-    if(micros() - last_rx_switch > 150000){
-        last_rx_switch = micros();
-        if (rx_kind == 0)
-        {
-            rx_kind = 1;
-            // rxRuntimeConfigCopy->rcReadRawFn = crsfReadRawRC_3;
-            // rxRuntimeConfigCopy->rcFrameStatusFn = crsfFrameStatus_3;
-        }
-        else if (rx_kind == 1)
-        {
-            rx_kind = 0;
-            // rxRuntimeConfigCopy->rcReadRawFn = crsfReadRawRC;
-            // rxRuntimeConfigCopy->rcFrameStatusFn = crsfFrameStatus;
+    if(!flyaway_active){
+        if(micros() - last_rx_switch > 150000){
+            last_rx_switch = micros();
+            if (rx_kind == 0)
+            {
+                rx_kind = 1;
+            }
+            else if (rx_kind == 1)
+            {
+                rx_kind = 0;
+            }
         }
     }
 }
@@ -780,8 +729,4 @@ bool crsfRxIsActive(void)
     return true;
 }
 
-bool crsfRxIsActive_2(void)
-{
-    return true;
-}
 #endif
