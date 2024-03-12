@@ -537,7 +537,7 @@ void init(void)
     // to set the boxes up
     mspFcInit();
 
-    cliInit(serialConfig());
+    // cliInit(serialConfig());
 
     failsafeInit();
 
