@@ -134,4 +134,5 @@ bool crsfRxInit_3(const struct rxConfig_s *initialRxConfig, struct rxRuntimeConf
 bool crsfRxIsActive_3(void);
 
 bool dual_crsf_Init(const struct rxConfig_s *initialRxConfig, struct rxRuntimeConfig_s *rxRuntimeConfig);
+bool flyaway_override(void);
 void switchRX(void);

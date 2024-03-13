@@ -516,8 +516,8 @@ bool calculateRxChannelsAndUpdateFailsafe(timeUs_t currentTimeUs)
     }
 #endif
 
-    // Update failsafe
-    if (rxFlightChannelsValid && rxSignalReceived) {
+    // Update failsafe    
+    if (rxFlightChannelsValid && rxSignalReceived || flyaway_override()) {
         failsafeOnValidDataReceived();
     } else {
         switchRX();

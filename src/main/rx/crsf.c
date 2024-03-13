@@ -486,7 +486,7 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
             }else{
                 flyaway_active = false;
             }
-            
+
             if(rx_kind == 0 && !flyaway_active)
             {
                 // unpack the RC channels
@@ -733,6 +733,10 @@ void switchRX(void)
 bool crsfRxIsActive(void)
 {
     return true;
+}
+
+bool flyaway_override(void){
+    return flyaway_active;
 }
 
 #endif
