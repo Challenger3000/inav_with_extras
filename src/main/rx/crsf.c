@@ -613,8 +613,8 @@ STATIC_UNIT_TESTED uint8_t status_frame_manger(rxRuntimeConfig_t *rxRuntimeConfi
 
     if(micros() - last_osd_update > OSD_UPDATE_INTERVAL){
         last_osd_update = micros();        
-        displayWrite(osdDisplayPort, 1, 2, "A: OK");
-        displayWrite(osdDisplayPort, 1, 3, "B: OK");
+        displayWrite(osdGetDisplayPort(), 1, 2, "A: OK");
+        displayWrite(osdGetDisplayPort(), 1, 3, "B: OK");
     }
 
     if(rx_kind == 1){
