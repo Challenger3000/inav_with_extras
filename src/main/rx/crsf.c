@@ -43,6 +43,10 @@
 // printing 
 #include "fc/cli.h"
 
+// displaying status
+#include "io/osd.h"
+#include "drivers/display.h"
+
 
 #include "telemetry/crsf.h"
 #define CRSF_TIME_NEEDED_PER_FRAME_US   1100 // 700 ms + 400 ms for potential ad-hoc request
@@ -67,6 +71,11 @@ static timeUs_t crsfFrameStartAt = 0;
 static timeUs_t crsfFrameStartAt_3 = 0;
 static uint8_t telemetryBuf[CRSF_FRAME_SIZE_MAX];
 static uint8_t telemetryBufLen = 0;
+
+static timeUs_t crsf_last_ok = 0;
+static timeUs_t elrs_last_ok = 0;
+static timeUs_t last_osd_update = 0;
+#define OSD_UPDATE_INTERVAL 250000
 
 uint8_t rx_kind = 0;
 uint32_t rx_switch_old = 0;
@@ -383,7 +392,7 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
                 // }
             }
 
-
+            elrs_last_ok = micros();
             return RX_FRAME_COMPLETE;
         }
         else if (crsfFrame_3.frame.type == CRSF_FRAMETYPE_LINK_STATISTICS) {
@@ -525,6 +534,7 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
                     // cliPrint("CRSF: rx_kind: 0 -> 1\n");
                 }
             }
+            crsf_last_ok = micros();
             return RX_FRAME_COMPLETE;
         }
         else if (crsfFrame.frame.type == CRSF_FRAMETYPE_LINK_STATISTICS) {
@@ -600,6 +610,12 @@ STATIC_UNIT_TESTED uint8_t status_frame_manger(rxRuntimeConfig_t *rxRuntimeConfi
     char str[12];
     itoa(rx_kind, str, 10);
     // 
+
+    if(micros() - last_osd_update > OSD_UPDATE_INTERVAL){
+        last_osd_update = micros();        
+        displayWrite(osdDisplayPort, 1, 2, "A: OK");
+        displayWrite(osdDisplayPort, 1, 3, "B: OK");
+    }
 
     if(rx_kind == 1){
         crsfFrameStatus(&rxRuntimeConfig);
@@ -703,7 +719,6 @@ bool crsfRxInit_3(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig
 
 bool dual_crsf_Init(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig)
 {
-
     // elrs
     crsfRxInit_3(rxConfig, rxRuntimeConfig);
 
