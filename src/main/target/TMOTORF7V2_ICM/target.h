@@ -18,7 +18,7 @@
 #pragma once
 
 #define TARGET_BOARD_IDENTIFIER "TMTRF7V2_ICM"
-#define USBD_PRODUCT_STRING  "TmotorF7V2"
+#define USBD_PRODUCT_STRING  "TmotorF7V2_ICM"
 
 #define LED0                    PC14
 #define BEEPER                  PC13
