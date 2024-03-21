@@ -61,11 +61,17 @@
 #define SPI1_MISO_PIN           PA6
 #define SPI1_MOSI_PIN           PA7
 
-#define MPU6000_CS_PIN          PA4
-#define MPU6000_SPI_BUS         BUS_SPI1
+// #define MPU6000_CS_PIN          PA4
+// #define MPU6000_SPI_BUS         BUS_SPI1
 
-#define USE_IMU_MPU6000
-#define IMU_MPU6000_ALIGN       CW0_DEG
+// #define USE_IMU_MPU6000
+// #define IMU_MPU6000_ALIGN       CW0_DEG
+
+// ICM42605/ICM42688P
+#define USE_IMU_ICM42605
+#define IMU_ICM42605_ALIGN      CW0_DEG
+#define ICM42605_CS_PIN         PA4
+#define ICM42605_SPI_BUS        BUS_SPI1
 
 // OSD -- SPI2
 #define USE_SPI_DEVICE_2
