@@ -33,7 +33,7 @@ tables:
   - name: servo_protocol
     values: ["PWM", "SBUS", "SBUS_PWM"]
   - name: failsafe_procedure
-    values: ["LAND", "DROP", "RTH", "NONE"]
+    values: ["HAVEN", "DROP", "RTH", "NONE"]
   - name: current_sensor
     values: ["NONE", "ADC", "VIRTUAL", "FAKE", "ESC"]
     enum: currentSensor_e
