@@ -69,7 +69,6 @@ PG_RESET_TEMPLATE(telemetryConfig_t, telemetryConfig,
 #endif
     .ibusTelemetryType = SETTING_IBUS_TELEMETRY_TYPE_DEFAULT,
     .ltmUpdateRate = SETTING_LTM_UPDATE_RATE_DEFAULT,    
-    .disableSerial = 0,
 
 #ifdef USE_TELEMETRY_SIM
     .simTransmitInterval = SETTING_SIM_TRANSMIT_INTERVAL_DEFAULT,
