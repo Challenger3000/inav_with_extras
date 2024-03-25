@@ -322,7 +322,7 @@ static const OSD_Entry cmsx_menuRateProfileEntries[] =
     OSD_BACK_AND_END_ENTRY,
 };
 
-static const CMS_Menu cmsx_menuRateProfile = {
+const CMS_Menu cmsx_menuRateProfile = {
 #ifdef CMS_MENU_DEBUG
     .GUARD_text = "MENURATE",
     .GUARD_type = OME_MENU,
