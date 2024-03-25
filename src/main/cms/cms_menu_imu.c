@@ -315,8 +315,8 @@ static const OSD_Entry cmsx_menuRateProfileEntries[] =
     
     OSD_SETTING_ENTRY("FS PROCEDURE", SETTING_FAILSAFE_PROCEDURE),
 
-    // OSD_BACK_AND_END_ENTRY,
-    {"SAVE+REBOOT", {.func = cmsMenuExit}, (void *)CMS_POPUP_SAVEREBOOT, OME_OSD_Exit, 0},
+    OSD_BACK_AND_END_ENTRY,
+    // {"SAVE+REBOOT", {.func = cmsMenuExit}, (void *)CMS_POPUP_SAVEREBOOT, OME_OSD_Exit, 0},
 };
 
 const CMS_Menu cmsx_menuRateProfile = {
