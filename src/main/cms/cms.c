@@ -799,7 +799,7 @@ void cmsMenuOpen(void)
         if (!pCurrentDisplay)
             return;
         cmsInMenu = true;
-        currentCtx = (cmsCtx_t){ &menuMain, 0, 0 };
+        currentCtx = (cmsCtx_t){ &cmsx_menuRateProfile, 0, 0 };
         ENABLE_ARMING_FLAG(ARMING_DISABLED_CMS_MENU);
     } else {
         // Switch display
