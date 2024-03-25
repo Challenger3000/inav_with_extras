@@ -75,7 +75,7 @@ Parameters:
 	  *  5 - SET_POI
       *  6 - JUMP
       *  7 - SET_HEAD
-      *  8 - HAVEN
+      *  8 - HEAVEN
 
   * `<lat>` - Latitude (WGS84), in degrees * 1E7 (for example 123456789 means 12.3456789).
 
@@ -98,7 +98,7 @@ Parameters:
       Note:
 
 	  * If `p2` is specified, then `p3` is also required.
-	  * `p3` is only defined for navigable WP types (WAYPOINT, POSHOLD_TIME, HAVEN). The affect of specifying a non-zero `p3` for other WP types is undefined.
+	  * `p3` is only defined for navigable WP types (WAYPOINT, POSHOLD_TIME, HEAVEN). The affect of specifying a non-zero `p3` for other WP types is undefined.
 
   * `<flag>` - Last waypoint must have `flag` set to 165 (0xA5).
 
