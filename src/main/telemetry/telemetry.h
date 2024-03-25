@@ -53,7 +53,6 @@ typedef struct telemetryConfig_s {
     uint8_t ibusTelemetryType;
     uint8_t ltmUpdateRate;
     
-    uint8_t disableSerial;
 
 #ifdef USE_TELEMETRY_SIM
     int16_t simLowAltitude;
