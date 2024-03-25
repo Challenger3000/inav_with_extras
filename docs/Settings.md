@@ -1078,7 +1078,7 @@ What failsafe procedure to initiate in Stage 2. See [Failsafe documentation](Fai
 
 | Default | Min | Max |
 | --- | --- | --- |
-| LAND |  |  |
+| HAVEN |  |  |
 
 ---
 
