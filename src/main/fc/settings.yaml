@@ -2987,6 +2987,11 @@ groups:
         default_value: "0000"
         field: simPin
         condition: USE_TELEMETRY_SIM
+      - name: disable_serial
+        description: "Disable serial port"
+        default_value: 0
+        field: disableSerial
+        condition: USE_TELEMETRY
       - name: sim_transmit_interval
         description: "Text message transmission interval in seconds for SIM module. Minimum value: 10"
         default_value: 60
