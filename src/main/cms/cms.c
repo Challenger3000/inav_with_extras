@@ -801,6 +801,7 @@ void cmsMenuOpen(void)
         cmsInMenu = true;
         currentCtx = (cmsCtx_t){ &cmsx_menuRateProfile, 0, 0 };
         ENABLE_ARMING_FLAG(ARMING_DISABLED_CMS_MENU);
+        
     } else {
         // Switch display
         displayPort_t *pNextDisplay = cmsDisplayPortSelectNext();
