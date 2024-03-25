@@ -92,6 +92,8 @@
 
 #include "config/feature.h"
 
+#include "telemetry/sim.h"
+
 void taskHandleSerial(timeUs_t currentTimeUs)
 {
     UNUSED(currentTimeUs);
@@ -334,7 +336,14 @@ void fcTasksInit(void)
 
     setTaskEnabled(TASK_AUX, true);
 
-    setTaskEnabled(TASK_SERIAL, true);
+
+    if (strncmp(telemetryConfig()->simPin, "0000", 4) == 0) {
+        setTaskEnabled(TASK_SERIAL, true);
+    }else{
+        setTaskEnabled(TASK_SERIAL, false);
+    }
+
+
 #if defined(BEEPER) || defined(USE_DSHOT)
     setTaskEnabled(TASK_BEEPER, true);
 #endif
