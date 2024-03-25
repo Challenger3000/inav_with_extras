@@ -801,7 +801,7 @@ groups:
         max: 300
       - name: failsafe_procedure
         description: "What failsafe procedure to initiate in Stage 2. See [Failsafe documentation](Failsafe.md#failsafe_throttle)."
-        default_value: "LAND"
+        default_value: "HAVEN"
         table: failsafe_procedure
       - name: failsafe_stick_threshold
         description: "Threshold for stick motion to consider failsafe condition resolved. If non-zero failsafe won't clear even if RC link is restored - you have to move sticks to exit failsafe."

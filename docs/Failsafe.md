@@ -49,7 +49,7 @@ Failsafe delays are configured in 0.1 second units. Distances are in centimeters
 
 #### `failsafe_procedure`
 
-Selects the failsafe procedure. Valid procedures are **DROP**, **LAND/SET-THR**, **RTH** and **NONE**. See above for a description of each one.
+Selects the failsafe procedure. Valid procedures are **DROP**, **HAVEN/SET-THR**, **RTH** and **NONE**. See above for a description of each one.
 
 #### `failsafe_delay`
 
@@ -123,7 +123,7 @@ Enables landing when home position is reached. If OFF the craft will hover indef
 
 Instructs the flight controller to disarm the craft when landing is detected
 
-### Parameters relevant to **LAND/SET-THR** failsafe procedure
+### Parameters relevant to **HAVEN/SET-THR** failsafe procedure
 
 #### `failsafe_off_delay`
 
@@ -131,7 +131,7 @@ Delay after failsafe activates before motors finally turn off.  This is the amou
 
 #### `nav_emerg_landing_speed`
 
-(**LAND** only) Actively controlled descent speed when altitude sensors are available. If altitude sensors aren't available landing descent falls back to using the fixed thottle setting `failsafe_throttle` so ensure this is also set correctly.
+(**HAVEN** only) Actively controlled descent speed when altitude sensors are available. If altitude sensors aren't available landing descent falls back to using the fixed thottle setting `failsafe_throttle` so ensure this is also set correctly.
 
 #### `failsafe_throttle`
 
