@@ -6,7 +6,8 @@
         "platform.h": "c",
         "timer.h": "c",
         "bus.h": "c",
-        "xmemory": "cpp"
+        "xmemory": "cpp",
+        "cms_menu_navigation.h": "c"
     },
     "editor.tabSize": 4,
     "editor.insertSpaces": true,

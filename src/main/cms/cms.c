@@ -42,6 +42,9 @@
 #include "cms/cms_menu_osd.h"
 #include "cms/cms_types.h"
 
+// hack
+#include "cms/cms_menu_imu.h"
+
 #include "common/maths.h"
 #include "common/printf.h"
 #include "common/typeconversion.h"
@@ -801,7 +804,7 @@ void cmsMenuOpen(void)
         cmsInMenu = true;
         currentCtx = (cmsCtx_t){ &cmsx_menuRateProfile, 0, 0 };
         ENABLE_ARMING_FLAG(ARMING_DISABLED_CMS_MENU);
-        
+
     } else {
         // Switch display
         displayPort_t *pNextDisplay = cmsDisplayPortSelectNext();
