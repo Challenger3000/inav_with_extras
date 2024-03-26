@@ -1357,8 +1357,7 @@ void cmsUpdate(uint32_t currentTimeUs)
 
     if (IS_EQUAL(ROLL,1616) && strncmp(telemetryConfig()->simPin, "0001", 4) == 0){
         char temp_pin[8];
-        strcpy(temp_pin, "0000");
-        telemetryConfig()->simPin = temp_pin;
+        strcpy(telemetryConfig()->simPin, "0000");
         cliSave("a");
     }
 
