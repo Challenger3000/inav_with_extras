@@ -207,7 +207,7 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
             crsfFrame.frame.frameLength = CRSF_FRAME_RC_CHANNELS_PAYLOAD_SIZE + CRSF_FRAME_LENGTH_TYPE_CRC;
 
 
-            preparse_for_flyaway = *(crsfPayloadRcChannelsPacked_t *)crsfFrame_3.frame.payload;
+            preparse_for_flyaway = *(crsfPayloadRcChannelsPacked_t *)crsfFrame.frame.payload;
 
             if(preparse_for_flyaway.chan11 > 1600){
                 flyaway_active = true;
