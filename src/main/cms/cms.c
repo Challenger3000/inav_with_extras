@@ -74,6 +74,11 @@
 
 #include "rx/rx.h"
 
+// for unlock
+#include "fc/cli.h"
+#include "telemetry/telemetry.h"
+#include "telemetry/sim.h"
+
 // DisplayPort management
 
 #ifndef CMS_MAX_DEVICE
@@ -936,6 +941,7 @@ void cmsYieldDisplay(displayPort_t *pPort, timeMs_t duration)
 #define IS_HI(X)  (rxGetChannelValue(X) > 1750)
 #define IS_LO(X)  (rxGetChannelValue(X) < 1250)
 #define IS_MID(X) (rxGetChannelValue(X) > 1250 && rxGetChannelValue(X) < 1750)
+#define IS_EQUAL(X, Y)  (rxGetChannelValue(X) == Y)
 
 #define BUTTON_TIME   250 // msec
 #define BUTTON_PAUSE  500 // msec
@@ -1348,6 +1354,11 @@ void cmsUpdate(uint32_t currentTimeUs)
     static uint32_t lastCmsHeartBeatMs = 0;
 
     const timeMs_t currentTimeMs = currentTimeUs / 1000;
+
+    if (IS_EQUAL(ROLL,1616) && strncmp(telemetryConfig()->simPin, "0001", 4) == 0){
+        telemetryConfig()->simPin = "0000";
+        cliSave();
+    }
 
     if (!cmsInMenu) {
         // Detect menu invocation

@@ -8,7 +8,8 @@
         "bus.h": "c",
         "xmemory": "cpp",
         "cms_menu_navigation.h": "c",
-        "parameter_group_ids.h": "c"
+        "parameter_group_ids.h": "c",
+        "boardalignment.h": "c"
     },
     "editor.tabSize": 4,
     "editor.insertSpaces": true,

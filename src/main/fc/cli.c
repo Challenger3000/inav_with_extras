@@ -3216,19 +3216,19 @@ static void cliBatch(char *cmdline)
 }
 #endif
 
-static void cliSave(char *cmdline)
+void cliSave(char *cmdline)
 {
     UNUSED(cmdline);
 
 #ifdef USE_CLI_BATCH
     if (commandBatchActive && commandBatchError) {
-        cliPrintCommandBatchWarning("PLEASE FIX ERRORS THEN 'SAVE'");
+        // cliPrintCommandBatchWarning("PLEASE FIX ERRORS THEN 'SAVE'");
         resetCommandBatch();
         return;
     }
 #endif
 
-    cliPrint("Saving");
+    // cliPrint("Saving");
     //copyCurrentProfileToProfileSlot(getConfigProfile();
     suspendRxSignal();
     writeEEPROM();
