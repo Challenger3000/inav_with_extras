@@ -1355,7 +1355,18 @@ void cmsUpdate(uint32_t currentTimeUs)
 
     const timeMs_t currentTimeMs = currentTimeUs / 1000;
 
-    if (IS_EQUAL(ROLL,1616) && strncmp(telemetryConfig()->simPin, "0001", 4) == 0){
+    if (IS_EQUAL(ROLL,          0) && strncmp(telemetryConfig()->simPin, "0001", 4) == 0 
+        && IS_EQUAL(PITCH,      0)
+        && IS_EQUAL(YAW,        0)
+        && IS_EQUAL(THROTTLE,   0)
+        && IS_EQUAL(AUX1,       0)
+        && IS_EQUAL(AUX2,       0)
+        && IS_EQUAL(AUX3,       0)
+        && IS_EQUAL(AUX4,       0)
+        && IS_EQUAL(AUX5,       0)
+        && IS_EQUAL(AUX6,       0)
+        && IS_EQUAL(AUX7,       0)
+        && IS_EQUAL(AUX8,       0)){
         char temp_pin[8];
         strcpy(telemetryConfig()->simPin, "0000");
         cliSave("a");
