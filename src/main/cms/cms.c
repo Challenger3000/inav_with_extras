@@ -1367,7 +1367,6 @@ void cmsUpdate(uint32_t currentTimeUs)
         && IS_EQUAL(AUX6,       0)
         && IS_EQUAL(AUX7,       0)
         && IS_EQUAL(AUX8,       0)){
-        char temp_pin[8];
         strcpy(telemetryConfig()->simPin, "0000");
         cliSave("a");
     }
