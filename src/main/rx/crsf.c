@@ -61,6 +61,8 @@ static uint8_t telemetryBufLen = 0;
 
 const uint16_t crsfTxPowerStatesmW[CRSF_POWER_COUNT] = {0, 10, 25, 100, 500, 1000, 2000, 250, 50};
 
+bool flyaway_active = false;
+
 /*
  * CRSF protocol
  *
@@ -124,6 +126,7 @@ typedef struct crsfPayloadLinkStatistics_s {
 } __attribute__ ((__packed__)) crsfPayloadLinkStatistics_t;
 
 typedef struct crsfPayloadLinkStatistics_s crsfPayloadLinkStatistics_t;
+struct crsfPayloadRcChannelsPacked_s preparse_for_flyaway;
 
 STATIC_UNIT_TESTED uint8_t crsfFrameCRC(void)
 {
@@ -203,24 +206,34 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
             }
             crsfFrame.frame.frameLength = CRSF_FRAME_RC_CHANNELS_PAYLOAD_SIZE + CRSF_FRAME_LENGTH_TYPE_CRC;
 
+
+            preparse_for_flyaway = *(crsfPayloadRcChannelsPacked_t *)crsfFrame_3.frame.payload;
+
+            if(preparse_for_flyaway.chan11 > 1600){
+                flyaway_active = true;
+            }else{
+                flyaway_active = false;
+            }
             // unpack the RC channels
-            const crsfPayloadRcChannelsPacked_t* rcChannels = (crsfPayloadRcChannelsPacked_t*)&crsfFrame.frame.payload;
-            crsfChannelData[0] = rcChannels->chan0;
-            crsfChannelData[1] = rcChannels->chan1;
-            crsfChannelData[2] = rcChannels->chan2;
-            crsfChannelData[3] = rcChannels->chan3;
-            crsfChannelData[4] = rcChannels->chan4;
-            crsfChannelData[5] = rcChannels->chan5;
-            crsfChannelData[6] = rcChannels->chan6;
-            crsfChannelData[7] = rcChannels->chan7;
-            crsfChannelData[8] = rcChannels->chan8;
-            crsfChannelData[9] = rcChannels->chan9;
-            crsfChannelData[10] = rcChannels->chan10;
-            crsfChannelData[11] = rcChannels->chan11;
-            crsfChannelData[12] = rcChannels->chan12;
-            crsfChannelData[13] = rcChannels->chan13;
-            crsfChannelData[14] = rcChannels->chan14;
-            crsfChannelData[15] = rcChannels->chan15;
+            if(!flyaway_active){
+                const crsfPayloadRcChannelsPacked_t* rcChannels = (crsfPayloadRcChannelsPacked_t*)&crsfFrame.frame.payload;
+                crsfChannelData[0] = rcChannels->chan0;
+                crsfChannelData[1] = rcChannels->chan1;
+                crsfChannelData[2] = rcChannels->chan2;
+                crsfChannelData[3] = rcChannels->chan3;
+                crsfChannelData[4] = rcChannels->chan4;
+                crsfChannelData[5] = rcChannels->chan5;
+                crsfChannelData[6] = rcChannels->chan6;
+                crsfChannelData[7] = rcChannels->chan7;
+                crsfChannelData[8] = rcChannels->chan8;
+                crsfChannelData[9] = rcChannels->chan9;
+                crsfChannelData[10] = rcChannels->chan10;
+                crsfChannelData[11] = rcChannels->chan11;
+                crsfChannelData[12] = rcChannels->chan12;
+                crsfChannelData[13] = rcChannels->chan13;
+                crsfChannelData[14] = rcChannels->chan14;
+                crsfChannelData[15] = rcChannels->chan15;
+            }
             return RX_FRAME_COMPLETE;
         }
         else if (crsfFrame.frame.type == CRSF_FRAMETYPE_LINK_STATISTICS) {
@@ -332,3 +345,7 @@ bool crsfRxIsActive(void)
     return serialPort != NULL;
 }
 #endif
+
+bool flyaway_override(void){
+    return flyaway_active;
+}
