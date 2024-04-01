@@ -4733,11 +4733,11 @@ static void osdShowArmed(void)
 {
     displayClearScreen(osdDisplayPort);
 
-    if (osdDisplayIsHD()) {
-        osdShowHDArmScreen();
-    } else {
-        osdShowSDArmScreen();
-    }
+    // if (osdDisplayIsHD()) {
+    //     osdShowHDArmScreen();
+    // } else {
+    //     osdShowSDArmScreen();
+    // }
 }
 
 static void osdFilterData(timeUs_t currentTimeUs) {
