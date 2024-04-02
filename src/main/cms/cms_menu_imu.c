@@ -32,6 +32,9 @@
 #include "cms/cms_types.h"
 #include "cms/cms_menu_imu.h"
 
+#include "cms/cms_menu_osd.h"
+
+
 #include "common/axis.h"
 
 #include "flight/pid.h"
