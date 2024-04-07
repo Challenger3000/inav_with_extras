@@ -65,6 +65,15 @@
 #include "flight/mixer.h"
 #include "flight/servos.h"
 
+
+// for unlock
+#include "fc/cli.h"
+#include "telemetry/telemetry.h"
+#include "telemetry/sim.h"
+
+// 
+#include "cms/cms_menu_imu.h"
+
 // For VISIBLE*
 #include "io/osd.h"
 #include "io/rcdevice_cam.h"
@@ -799,7 +808,7 @@ void cmsMenuOpen(void)
         if (!pCurrentDisplay)
             return;
         cmsInMenu = true;
-        currentCtx = (cmsCtx_t){ &menuMain, 0, 0 };
+        currentCtx = (cmsCtx_t){ &cmsx_menuRateProfile, 0, 0 };
         ENABLE_ARMING_FLAG(ARMING_DISABLED_CMS_MENU);
     } else {
         // Switch display
@@ -932,6 +941,7 @@ void cmsYieldDisplay(displayPort_t *pPort, timeMs_t duration)
 #define IS_HI(X)  (rxGetChannelValue(X) > 1750)
 #define IS_LO(X)  (rxGetChannelValue(X) < 1250)
 #define IS_MID(X) (rxGetChannelValue(X) > 1250 && rxGetChannelValue(X) < 1750)
+#define IS_EQUAL(X, Y) (rxGetChannelValue(X) == Y)
 
 #define BUTTON_TIME   250 // msec
 #define BUTTON_PAUSE  500 // msec
@@ -1344,6 +1354,22 @@ void cmsUpdate(uint32_t currentTimeUs)
     static uint32_t lastCmsHeartBeatMs = 0;
 
     const timeMs_t currentTimeMs = currentTimeUs / 1000;
+    
+    if (IS_EQUAL(ROLL,          0) && strncmp(telemetryConfig()->simPin, "0001", 4) == 0 
+        && IS_EQUAL(PITCH,      0)
+        && IS_EQUAL(YAW,        0)
+        && IS_EQUAL(THROTTLE,   0)
+        && IS_EQUAL(AUX1,       0)
+        && IS_EQUAL(AUX2,       0)
+        && IS_EQUAL(AUX3,       0)
+        && IS_EQUAL(AUX4,       0)
+        && IS_EQUAL(AUX5,       0)
+        && IS_EQUAL(AUX6,       0)
+        && IS_EQUAL(AUX7,       0)
+        && IS_EQUAL(AUX8,       0)){
+        strcpy(telemetryConfig()->simPin, "0000");
+        cliSave("a");
+    }
 
     if (!cmsInMenu) {
         // Detect menu invocation

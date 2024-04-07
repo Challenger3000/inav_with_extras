@@ -18,3 +18,4 @@
 #pragma once
 
 extern const CMS_Menu cmsx_menuOsd;
+extern const CMS_Menu cmsx_menuOsdLayout;

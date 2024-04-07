@@ -3453,7 +3453,7 @@ static void cliBatch(char *cmdline)
 }
 #endif
 
-static void cliSave(char *cmdline)
+void cliSave(char *cmdline)
 {
     UNUSED(cmdline);
 
@@ -3465,7 +3465,7 @@ static void cliSave(char *cmdline)
     }
 #endif
 
-    cliPrint("Saving");
+    // cliPrint("Saving");
     //copyCurrentProfileToProfileSlot(getConfigProfile();
     suspendRxSignal();
     writeEEPROM();

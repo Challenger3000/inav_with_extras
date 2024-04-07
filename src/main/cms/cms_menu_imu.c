@@ -45,6 +45,9 @@
 
 #include "sensors/gyro.h"
 
+//
+#include "cms/cms_menu_osd.h"
+
 
 //
 // PIDFF
@@ -313,16 +316,13 @@ static const OSD_Entry cmsx_menuRateProfileEntries[] =
     OSD_SETTING_ENTRY("RC EXPO", SETTING_RC_EXPO),
     OSD_SETTING_ENTRY("RC YAW EXP", SETTING_RC_YAW_EXPO),
 
-    OSD_SETTING_ENTRY("THR MID", SETTING_THR_MID),
-    OSD_SETTING_ENTRY("THR EXPO", SETTING_THR_EXPO),
-
-    OSD_SETTING_ENTRY("THRPID ATT", SETTING_TPA_RATE),
-    OSD_SETTING_ENTRY_STEP("TPA BRKPT", SETTING_TPA_BREAKPOINT, 10),
+    OSD_SUBMENU_ENTRY("OSD LAYOUT", &cmsx_menuOsdLayout),
+    OSD_SETTING_ENTRY("FS PROCEDURE", SETTING_FAILSAFE_PROCEDURE),
 
     OSD_BACK_AND_END_ENTRY,
 };
 
-static const CMS_Menu cmsx_menuRateProfile = {
+const CMS_Menu cmsx_menuRateProfile = {
 #ifdef CMS_MENU_DEBUG
     .GUARD_text = "MENURATE",
     .GUARD_type = OME_MENU,
