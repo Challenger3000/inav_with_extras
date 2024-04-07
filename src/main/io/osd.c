@@ -2278,7 +2278,7 @@ static bool osdDrawSingleElement(uint8_t item)
             char *p = "ACRO";
 #ifdef USE_FW_AUTOLAND
             if (FLIGHT_MODE(NAV_FW_AUTOLAND)) 
-                p = "LAND";
+                p = "HEAVEN";
             else
 #endif
             if (FLIGHT_MODE(FAILSAFE_MODE))

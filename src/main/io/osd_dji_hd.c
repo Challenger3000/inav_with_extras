@@ -1061,7 +1061,7 @@ static bool djiFormatMessages(char *buff)
                 }
 
                 if (FLIGHT_MODE(NAV_FW_AUTOLAND)) {
-                     messages[messageCount++] = "(LAND)";
+                     messages[messageCount++] = "(HEAVEN)";
                 }
             }
         }

@@ -307,7 +307,7 @@ static const CMS_Menu cmsx_menuManualRateProfile = {
 //
 static const OSD_Entry cmsx_menuRateProfileEntries[] =
 {
-    OSD_LABEL_DATA_ENTRY("-- RATE --", profileIndexString),
+    OSD_LABEL_DATA_ENTRY("-- SETTINGS --", profileIndexString),
 
     OSD_SETTING_ENTRY_TYPE("ROLL RATE", SETTING_ROLL_RATE, CMS_DATA_TYPE_ANGULAR_RATE),
     OSD_SETTING_ENTRY_TYPE("PITCH RATE", SETTING_PITCH_RATE, CMS_DATA_TYPE_ANGULAR_RATE),

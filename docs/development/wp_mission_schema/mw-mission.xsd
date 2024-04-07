@@ -34,7 +34,7 @@
             <xs:enumeration value="SET_POI"/>
             <xs:enumeration value="JUMP"/>
             <xs:enumeration value="SET_HEAD"/>
-            <xs:enumeration value="LAND"/>
+            <xs:enumeration value="HEAVEN"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
