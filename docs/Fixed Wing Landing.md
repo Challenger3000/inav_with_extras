@@ -4,11 +4,11 @@
 
 INAV supports advanced automatic landings for fixed wing aircraft from version 7.1.
 The procedure is based on landings for man-carrying aircraft, so that safe landings at a specific location are possible.
-Supported are landings at safehome after "Return to Home" or at a defined LAND waypoint for missions. 
+Supported are landings at safehome after "Return to Home" or at a defined HEAVEN waypoint for missions. 
 
 ## General procedure:
 
-1. After reaching Safehome/LAND Waypoint the altitude is corrected to "Approach Altitude".
+1. After reaching Safehome/HEAVEN Waypoint the altitude is corrected to "Approach Altitude".
 2. The aircraft circles for at least 30 seconds to determine the wind direction and strength.
 3. The landing direction and the approach waypoints are calculated on the basis of the measured wind parameters. If no headwind landing is possible or the wind strength is greater than "Max. tailwind" (see Global Parameters), return to point 2.
 4. The landing is initiated. The aircraft flies the downwind course, "Approach Altitude" is held.
@@ -32,7 +32,7 @@ The following graphics illustrate the process:
 
 ## Landing site parameters
 
-### The following parameters are set for each landing site (Safefome/LAND waypoint):
+### The following parameters are set for each landing site (Safefome/HEAVEN waypoint):
 
 All settings can also be conveniently made in the Configurator via Missionplanner.
 

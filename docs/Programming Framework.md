@@ -211,7 +211,7 @@ The flight mode operands return `true` when the mode is active. These are modes 
 | SET_POI       | 5     |
 | JUMP          | 6     |
 | SET_HEAD      | 7     |
-| LAND          | 8     |
+| HEAVEN        | 8     |
     
 ### Flags
 

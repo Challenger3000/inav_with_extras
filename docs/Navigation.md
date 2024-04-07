@@ -75,7 +75,7 @@ Parameters:
 	  *  5 - SET_POI
       *  6 - JUMP
       *  7 - SET_HEAD
-      *  8 - LAND
+      *  8 - HEAVEN
 
   * `<lat>` - Latitude (WGS84), in degrees * 1E7 (for example 123456789 means 12.3456789).
 
