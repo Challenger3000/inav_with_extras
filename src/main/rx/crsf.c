@@ -361,11 +361,11 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus_3(rxRuntimeConfig_t *rxRuntimeConfig)
                 crsfChannelData_3[13] = rcChannels->chan13;
                 crsfChannelData_3[14] = rcChannels->chan14;
                 crsfChannelData_3[15] = rcChannels->chan15;
-                if(crsfChannelData_3[10] < 700)
-                {
-                    rx_kind = 0;
-                    // cliPrint("ELRS: rx_kind: 1 -> 0\n");
-                }
+                // if(crsfChannelData_3[10] < 700)
+                // {
+                //     rx_kind = 0;
+                //     // cliPrint("ELRS: rx_kind: 1 -> 0\n");
+                // }
                 // if(micros() - last_print > 1000000)
                 // {
                 //     last_print = micros();
@@ -521,11 +521,11 @@ STATIC_UNIT_TESTED uint8_t crsfFrameStatus(rxRuntimeConfig_t *rxRuntimeConfig)
                 //     cliPrint("\n");
                 // }
 
-                if(crsfChannelData[10] > 1600)
-                {
-                    rx_kind = 1;
-                    // cliPrint("CRSF: rx_kind: 0 -> 1\n");
-                }
+                // if(crsfChannelData[10] > 1600)
+                // {
+                //     rx_kind = 1;
+                //     // cliPrint("CRSF: rx_kind: 0 -> 1\n");
+                // }
             }
             return RX_FRAME_COMPLETE;
         }
