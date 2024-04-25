@@ -62,7 +62,9 @@ STATIC_UNIT_TESTED uint32_t crsfChannelData[CRSF_MAX_CHANNEL];
 STATIC_UNIT_TESTED uint32_t crsfChannelData_3[CRSF_MAX_CHANNEL];
 
 static serialPort_t *serialPort;
+static serialPort_t *serialPort_3;
 static timeUs_t crsfFrameStartAt = 0;
+static timeUs_t crsfFrameStartAt_3 = 0;
 static uint8_t telemetryBuf[CRSF_FRAME_SIZE_MAX];
 static uint8_t telemetryBufLen = 0;
 
