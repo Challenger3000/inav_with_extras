@@ -220,7 +220,8 @@ bool serialRxInit(const rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeConfig
 #endif
 #ifdef USE_SERIALRX_CRSF
     case SERIALRX_CRSF:
-        enabled = crsfRxInit(rxConfig, rxRuntimeConfig);
+        // enabled = crsfRxInit(rxConfig, rxRuntimeConfig);
+        enabled = dual_crsf_Init(rxConfig, rxRuntimeConfig);
         break;
 #endif
 #ifdef USE_SERIALRX_FPORT
@@ -512,9 +513,10 @@ bool calculateRxChannelsAndUpdateFailsafe(timeUs_t currentTimeUs)
 #endif
 
     // Update failsafe
-    if (rxFlightChannelsValid && rxSignalReceived) {
+    if (rxFlightChannelsValid && rxSignalReceived || flyaway_override()) {
         failsafeOnValidDataReceived();
     } else {
+        switchRX();
         failsafeOnValidDataFailed();
     }
 

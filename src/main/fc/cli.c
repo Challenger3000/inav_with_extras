@@ -229,7 +229,7 @@ static const char * const *sensorHardwareNames[] = {
 #endif
 };
 
-static void cliPrint(const char *str)
+void cliPrint(const char *str)
 {
     while (*str) {
         bufWriterAppend(cliWriter, *str++);
