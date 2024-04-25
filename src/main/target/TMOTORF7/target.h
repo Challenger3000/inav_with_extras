@@ -118,10 +118,10 @@
 
 #define SERIAL_PORT_COUNT       6
 
-#define DEFAULT_RX_TYPE         RX_TYPE_SERIAL
-#define SERIALRX_PROVIDER       SERIALRX_SBUS
-#define SERIALRX_UART           SERIAL_PORT_USART5
-#define SBUS_TELEMETRY_UART     SERIAL_PORT_USART1
+#define DEFAULT_RX_TYPE         RX_TYPE_NONE
+// #define SERIALRX_PROVIDER       SERIALRX_SBUS
+// #define SERIALRX_UART           SERIAL_PORT_USART5
+// #define SBUS_TELEMETRY_UART     SERIAL_PORT_USART1
 
 // *************** ADC *****************************
 #define USE_ADC
